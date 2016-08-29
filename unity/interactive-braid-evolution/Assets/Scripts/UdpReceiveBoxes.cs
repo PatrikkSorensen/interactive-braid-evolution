@@ -54,7 +54,6 @@ public class UdpReceiveBoxes : MonoBehaviour
 
 	void Update ()
 	{
-
 		//code for creating the 4 boxes 
 
 		//if the message has changed and the user is over a box with the mouse cursor
@@ -90,19 +89,17 @@ public class UdpReceiveBoxes : MonoBehaviour
 	private void ReceiveData ()
 	{
 		client = new UdpClient (port);
-
 		while (true) {
 			try {
-				// receive bytes
+                // receive bytes
 
 				IPEndPoint anyIP = new IPEndPoint (IPAddress.Any, 0);
 				byte[] data = client.Receive (ref anyIP);
 			
 				// decode UTF8-coded bytes to text format
 				string text = Encoding.UTF8.GetString (data);
-				
-				// show received message
-				print (">> " + text);
+                // show received message
+                Debug.Log (">> " + text);
 				
 				// store new message as latest message
 				previousPacket = lastReceivedPacket;

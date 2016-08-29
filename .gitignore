@@ -33,3 +33,13 @@ sysinfo.txt
 # ================= #
 # Plugins generated #
 # ================= #
+
+# ================= #
+# CPPN Bins         #
+# ================= #
+
+cppn/src/ConsoleApplication1/bin 
+cppn/src/Experiments/SharpNeatExperiments/bin/
+cppn/src/SharpNeatLib/bin/
+cppn/src/UpgradeLog.htm
+cppn/src/Backup
