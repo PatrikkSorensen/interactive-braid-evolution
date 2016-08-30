@@ -24,7 +24,7 @@ public class UDPContinousBoxes : MonoBehaviour
 	void Start ()
 	{
 
-		IP = "192.168.0.11";
+		IP = "172.20.10.3";
 		port = 8051;
 		
 
