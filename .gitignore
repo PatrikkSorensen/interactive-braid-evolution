@@ -34,6 +34,11 @@ sysinfo.txt
 # Plugins generated #
 # ================= #
 
+unity/interactive-braid-evolution/Assets/ObjReader
+unity/interactive-braid-evolution/Assets/ObjReader.meta
+unity/interactive-braid-evolution/Assets/Plugins
+unity/interactive-braid-evolution/Assets/Plugins.meta
+
 # ================= #
 # CPPN Bins         #
 # ================= #
