@@ -7,7 +7,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 
-public class UDPContinousBoxes : MonoBehaviour
+public class UDPSender : MonoBehaviour
 {
 
 	public int port;

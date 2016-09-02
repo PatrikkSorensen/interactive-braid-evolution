@@ -48,3 +48,9 @@ cppn/src/Experiments/SharpNeatExperiments/bin/
 cppn/src/SharpNeatLib/bin/
 cppn/src/UpgradeLog.htm
 cppn/src/Backup
+
+# ================= #
+# Specifics         #
+# ================= #
+
+unity/interactive-braid-evolution/Assets/Geometry

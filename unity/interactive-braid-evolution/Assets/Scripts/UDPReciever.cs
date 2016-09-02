@@ -7,7 +7,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 
-public class UdpReceiveBoxes : MonoBehaviour
+public class UDPReciever : MonoBehaviour
 {
 
 
