@@ -11,16 +11,12 @@ public class UDPSender : MonoBehaviour
 {
 
 	public int port;
-    private string IP;
+    public string IP;
     private IPEndPoint remoteEndPoint;
 	private UdpClient client;
 
 	void Start ()
 	{
-        // Has to be declared in start 
-        IP = "10.13.1.52";
-        port = 8051;
-
         remoteEndPoint = new IPEndPoint (IPAddress.Parse (IP), port);
         client = new UdpClient();
 		Debug.Log ("Sending to " + IP + " : " + port);
@@ -29,13 +25,9 @@ public class UDPSender : MonoBehaviour
 	void Update ()
 	{
 
-        //TODO: Make this send user interaction 
-        if(Input.GetKeyDown(KeyCode.X)) { 
-            sendString("Message from Unity!");
-        }
 	}
 
-	private void sendString (string message)
+	public void SendString (string message)
 	{
 		try {
 			// encode string to UTF8-coded bytes

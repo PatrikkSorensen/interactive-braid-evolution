@@ -8,17 +8,18 @@ public class ObjImporter : MonoBehaviour {
 
     void Start()
     {
-        objFileName = Application.dataPath + "/ObjReader/Sample Files/" + objFileName;
-        ObjReader.use.ConvertFile(objFileName, false); 
+        objFileName = Application.dataPath + "/Geometrys/" + objFileName;
+
+        if (ObjReader.use.ConvertFile(objFileName, false) == null)
+            Debug.Log("No models loaded");
+        else
+            Debug.Log("models was loaded");  
     }
 
-    void Update()
+    public void LoadModel(string fileName)
     {
-        if(Input.GetKey(KeyCode.Y))
-        {
-            objFileName = "";
-            objFileName = Application.dataPath + "/ObjReader/Sample Files/" + objFileName2;
-            ObjReader.use.ConvertFile(objFileName, false);
-        }
+        objFileName = "";
+        objFileName = Application.dataPath + "/Geometry/" + objFileName2;
+        ObjReader.use.ConvertFile(objFileName, false);
     }
 }
