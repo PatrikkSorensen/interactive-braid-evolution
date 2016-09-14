@@ -16,9 +16,6 @@ public class ModelMessager : MonoBehaviour {
 
     void Start () {
         sender = Camera.main.GetComponent<UDPSender>();
-
-
-
     }
 	
 	void Update () {

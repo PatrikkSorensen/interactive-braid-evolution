@@ -6,12 +6,17 @@ public class ObjImporter : MonoBehaviour {
     public string objFileName;
     public string objFileName2;
 
+    private UIMsgWindow msgWindow; 
+
     void Start()
     {
+        msgWindow = GameObject.FindGameObjectWithTag("UIManager").GetComponent<UIMsgWindow>();
+
         objFileName = Application.dataPath + "/Geometrys/" + objFileName;
+        msgWindow.AddMessage("Filepath: " + Application.dataPath + "/Geometrys/");
 
         if (ObjReader.use.ConvertFile(objFileName, false) == null)
-            Debug.Log("No models loaded");
+            msgWindow.AddMessage("No models loaded"); 
         else
             Debug.Log("models was loaded");  
     }

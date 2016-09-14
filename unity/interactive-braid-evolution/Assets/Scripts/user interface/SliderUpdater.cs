@@ -4,14 +4,16 @@ using UnityEngine.UI;
 
 public class SliderUpdater : MonoBehaviour {
 
-    private Text txt; 
-	// Use this for initialization
-	void Start () {
-        txt = GetComponentInChildren<Text>(); 
-	}
-	
-	// Update is called once per frame
-	void Update () {
-        txt.text = "hello world"; 
-	}
+    private Text txt;
+    private Slider sl;
+    private UIMsgDraftWindow draftWindow;
+
+    void Start () {
+        draftWindow = GameObject.FindGameObjectWithTag("UIManager").GetComponent<UIMsgDraftWindow>();
+
+        sl = GetComponentInChildren<Slider>(); 
+        txt = GetComponentInChildren<Text>();
+
+        draftWindow.AddMessage(sl.value.ToString());
+    }
 }

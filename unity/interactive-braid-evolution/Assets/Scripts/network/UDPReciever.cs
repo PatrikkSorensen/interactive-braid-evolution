@@ -9,19 +9,22 @@ using System.Threading;
 
 public class UDPReciever : MonoBehaviour
 {
-
-
 	public int port = 8050;
 
     private Thread readThread;
     private UdpClient client;
-	
-	void Start ()
+    private UINetworkWindow networkWindow;
+
+    void Start ()
 	{
 		readThread = new Thread (new ThreadStart (ReceiveData));
 		readThread.IsBackground = true;
 		readThread.Start ();
-	}
+
+        networkWindow = GameObject.FindGameObjectWithTag("UIManager").GetComponent<UINetworkWindow>();
+        networkWindow.AddMessage("Listening to any IP on this machine");
+
+    }
 	
 	
 	// Unity Application Quit Function
