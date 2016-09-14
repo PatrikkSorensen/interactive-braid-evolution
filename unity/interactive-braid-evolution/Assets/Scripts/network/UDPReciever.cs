@@ -14,7 +14,10 @@ public class UDPReciever : MonoBehaviour
     private Thread readThread;
     private UdpClient client;
     private UINetworkWindow networkWindow;
+    private UIMsgWindow msgWindow;
 
+    private bool recievedMessage = false;
+    private string newMessage = ""; 
     void Start ()
 	{
 		readThread = new Thread (new ThreadStart (ReceiveData));
@@ -22,10 +25,21 @@ public class UDPReciever : MonoBehaviour
 		readThread.Start ();
 
         networkWindow = GameObject.FindGameObjectWithTag("UIManager").GetComponent<UINetworkWindow>();
-        networkWindow.AddMessage("Listening to any IP on this machine");
+        msgWindow = GameObject.FindGameObjectWithTag("UIManager").GetComponent<UIMsgWindow>();
 
+        networkWindow.AddMessage("listening to any IP on this machine");
+        msgWindow.AddMessage("Initialized network");
     }
 	
+    void Update()
+    {
+        if (recievedMessage)
+        {
+            recievedMessage = false;
+            msgWindow.AddMessage("Recieved message: " + newMessage);
+
+        }
+    }
 	
 	// Unity Application Quit Function
 	void OnApplicationQuit ()
@@ -45,7 +59,7 @@ public class UDPReciever : MonoBehaviour
 	// receive thread function
 	private void ReceiveData ()
 	{
-		client = new UdpClient (port);
+        client = new UdpClient (port);
 		while (true) {
 			try {
 				IPEndPoint anyIP = new IPEndPoint (IPAddress.Any, 0);
@@ -54,15 +68,13 @@ public class UDPReciever : MonoBehaviour
 				// decode UTF8-coded bytes to text format
 				string text = Encoding.UTF8.GetString (data);
                 Debug.Log (">> " + text);
-			} catch (Exception err) {
+                recievedMessage = true;
+                newMessage = text; 
+            } catch (Exception err) {
 				print (err.ToString ());
 			}
 		}
-	}
 
-	//parse the string message from Grasshopper into coordiantes and dimensions for the 4 boxes
-	private void parseData (string msg)
-	{
-        //TODO: Implement 
+
     }
 }

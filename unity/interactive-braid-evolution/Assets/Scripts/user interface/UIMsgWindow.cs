@@ -11,7 +11,7 @@ public class UIMsgWindow : MonoBehaviour {
     private Text text;  
 	
     //TODO: Export as logfile
-	void Start () {
+	void Awake () {
         msgWindow = GameObject.FindGameObjectWithTag("UIMsgWindow");
         text = msgWindow.GetComponentInChildren<Text>();
         text.text += "\n";
@@ -28,6 +28,9 @@ public class UIMsgWindow : MonoBehaviour {
 
     public void AddMessage(string v)
     {
-        text.text += v + "\n";
+        if (!text)
+            return; 
+        
+        text.text += "- " + v + "\n";
     }
 }

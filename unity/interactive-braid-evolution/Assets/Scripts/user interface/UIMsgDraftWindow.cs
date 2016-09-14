@@ -13,7 +13,7 @@ public class UIMsgDraftWindow : MonoBehaviour {
     private int[] pValues;
     private int NUM_ELEMENTS = 3;
 
-    void Start()
+    void Awake()
     {
         pValues = new int[NUM_ELEMENTS];
         pValues[0] = 0;

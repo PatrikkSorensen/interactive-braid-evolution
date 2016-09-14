@@ -12,7 +12,7 @@ public class UINetworkWindow : MonoBehaviour {
     private Text text;
 
     //TODO: Export as logfile
-    void Start()
+    void Awake()
     {
         networkWindow = GameObject.FindGameObjectWithTag("UINetworkWindow");
         text = networkWindow.GetComponentInChildren<Text>();
@@ -28,7 +28,7 @@ public class UINetworkWindow : MonoBehaviour {
         }
     }
 
-    internal void AddMessage(string v)
+    public void AddMessage(string v)
     {
         text.text += v + "\n"; 
     }

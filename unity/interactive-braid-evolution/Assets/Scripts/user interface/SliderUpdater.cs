@@ -25,5 +25,6 @@ public class SliderUpdater : MonoBehaviour {
     public void OnValueChange()
     {
         draftWindow.AddParam(key, (int)sl.value);
+        txt.text = key + " : " + sl.value;
     }
 }
