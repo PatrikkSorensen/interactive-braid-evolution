@@ -4,30 +4,44 @@ using System.Collections;
 public class ModelMessager : MonoBehaviour {
 
     private UDPSender sender;
-    private UDPMessage msg; 
+    private UDPMessage msg;
+
+    private UIMsgWindow msgWindow;
+    private UIMsgDraftWindow msgDraftWindow; 
+
 
     [Serializable]
     public class UDPMessage
     {
-        public string name;
-        public bool sucess; 
-        public int generation;
+        public int spreading;
+        public int thickness; 
+        public int novelty;
     }
 
     void Start () {
+        msgWindow = GameObject.FindGameObjectWithTag("UIManager").GetComponent<UIMsgWindow>(); 
+        msgDraftWindow = GameObject.FindGameObjectWithTag("UIManager").GetComponent<UIMsgDraftWindow>();
         sender = Camera.main.GetComponent<UDPSender>();
     }
 	
 	void Update () {
         if (Input.GetKeyDown(KeyCode.X))
         {
-            UDPMessage msg = new UDPMessage();
-            msg.name = "SomeName";
-            msg.sucess = true;
-            msg.generation = 1;
-            string s = JsonUtility.ToJson(msg);
-            Debug.Log("ModelMsg: " + s);
-            sender.SendString(s);
+            SendMessageToGH();
         }
+    }
+
+    public void SendMessageToGH()
+    {
+        UDPMessage msg = new UDPMessage();
+        int[] values = msgDraftWindow.GetParams();
+        msg.spreading = values[0];
+        msg.novelty = values[1];
+        msg.thickness = values[2];
+        string s = JsonUtility.ToJson(msg);
+
+        msgWindow.AddMessage("Message sent to GH");
+        Debug.Log("ModelMsg: " + s);
+        sender.SendString(s);
     }
 }

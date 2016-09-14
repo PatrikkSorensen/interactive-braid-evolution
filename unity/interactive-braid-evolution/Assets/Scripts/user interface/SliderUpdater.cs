@@ -4,6 +4,8 @@ using UnityEngine.UI;
 
 public class SliderUpdater : MonoBehaviour {
 
+    public string key; 
+
     private Text txt;
     private Slider sl;
     private UIMsgDraftWindow draftWindow;
@@ -11,9 +13,17 @@ public class SliderUpdater : MonoBehaviour {
     void Start () {
         draftWindow = GameObject.FindGameObjectWithTag("UIManager").GetComponent<UIMsgDraftWindow>();
 
-        sl = GetComponentInChildren<Slider>(); 
-        txt = GetComponentInChildren<Text>();
+        sl = GetComponentInChildren<Slider>();
+        sl.onValueChanged.AddListener(delegate { OnValueChange(); });
 
-        draftWindow.AddMessage(sl.value.ToString());
+        txt = GetComponentInChildren<Text>();
+        txt.text = key + " : " + sl.value; 
+
+        draftWindow.AddParam(key, (int)sl.value);
+    }
+
+    public void OnValueChange()
+    {
+        draftWindow.AddParam(key, (int)sl.value);
     }
 }
