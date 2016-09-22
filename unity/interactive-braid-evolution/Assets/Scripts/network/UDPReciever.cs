@@ -75,6 +75,7 @@ public class UDPReciever : MonoBehaviour
 
                 // hot model import object
                 objImporter.StartModelImporting("test.obj");
+                
             } catch (Exception err) {
 				print (err.ToString ());
 			}

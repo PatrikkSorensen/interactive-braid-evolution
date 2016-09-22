@@ -54,5 +54,4 @@ cppn/src/Backup
 # ================= #
 
 unity/interactive-braid-evolution/Assets/Geometry
-*.ttf
-*.ttf.meta
+unity/interactive-braid-evolution/Assets/Fonts
