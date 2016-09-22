@@ -5,26 +5,55 @@ public class ObjImporter : MonoBehaviour {
 
     public string objFileName;
     public string objFileName2;
+    public bool shouldImport;
 
+    private string filePathToGeometry;
+    private string currFileName; 
     private UIMsgWindow msgWindow; 
 
     void Start()
     {
-        msgWindow = GameObject.FindGameObjectWithTag("UIManager").GetComponent<UIMsgWindow>();
+        // ObjImporter variables
+        filePathToGeometry = Application.dataPath + "/Geometrys/";
+        objFileName = filePathToGeometry + objFileName;
+        shouldImport = false;
+        currFileName = null; 
 
-        objFileName = Application.dataPath + "/Geometrys/" + objFileName;
-        msgWindow.AddMessage("Filepath: " + Application.dataPath + "/Geometrys/");
-
-        if (ObjReader.use.ConvertFile(objFileName, false) == null)
-            msgWindow.AddMessage("No models loaded"); 
-        else
-            Debug.Log("models was loaded");  
+        // UI Message window
+        if (GameObject.FindGameObjectWithTag("UIManager")) {
+            msgWindow = GameObject.FindGameObjectWithTag("UIManager").GetComponent<UIMsgWindow>();
+            msgWindow.AddMessage("Filepath: " + filePathToGeometry);
+        } else {
+            Debug.LogWarning("No UI Messenger found");
+        }
     }
 
-    public void LoadModel(string fileName)
+    IEnumerator LoadModel(string fileName)
     {
-        objFileName = "";
-        objFileName = Application.dataPath + "/Geometry/" + objFileName2;
+        Debug.Log("Trying to load model: " + fileName);
+        objFileName = filePathToGeometry + fileName;
         ObjReader.use.ConvertFile(objFileName, false);
+        yield return null; 
+    }
+
+    void Update()
+    {
+        if (shouldImport) {
+            shouldImport = false; 
+            StartCoroutine(ImportModel(currFileName));
+        }
+    }
+
+    public void StartModelImporting(string fileName)
+    {
+        shouldImport = true;
+        currFileName = fileName; 
+    }
+
+    IEnumerator ImportModel(string fileName)
+    {
+        objFileName = Application.dataPath + "/Geometry/" + fileName;
+        ObjReader.use.ConvertFile(objFileName, true);
+        yield return null;
     }
 }

@@ -15,7 +15,7 @@ public class UDPReciever : MonoBehaviour
     private UdpClient client;
     private UINetworkWindow networkWindow;
     private UIMsgWindow msgWindow;
-
+    private ObjImporter objImporter; 
     private bool recievedMessage = false;
     private string newMessage = ""; 
     void Start ()
@@ -29,15 +29,15 @@ public class UDPReciever : MonoBehaviour
 
         networkWindow.AddMessage("listening to any IP on this machine");
         msgWindow.AddMessage("Initialized network");
+
+        objImporter = GameObject.FindGameObjectWithTag("ObjImporter").GetComponent<ObjImporter>();
     }
 	
     void Update()
     {
-        if (recievedMessage)
-        {
+        if (recievedMessage) {
             recievedMessage = false;
             msgWindow.AddMessage("Recieved message: " + newMessage);
-
         }
     }
 	
@@ -68,8 +68,13 @@ public class UDPReciever : MonoBehaviour
 				// decode UTF8-coded bytes to text format
 				string text = Encoding.UTF8.GetString (data);
                 Debug.Log (">> " + text);
+
+                // show any relevant messages in the ui 
                 recievedMessage = true;
-                newMessage = text; 
+                newMessage = text;
+
+                // hot model import object
+                objImporter.StartModelImporting("test.obj");
             } catch (Exception err) {
 				print (err.ToString ());
 			}

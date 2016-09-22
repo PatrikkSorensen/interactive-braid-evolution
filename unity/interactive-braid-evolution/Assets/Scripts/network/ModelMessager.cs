@@ -13,8 +13,8 @@ public class ModelMessager : MonoBehaviour {
     [Serializable]
     public class UDPMessage
     {
-        public int spreading;
-        public int thickness; 
+        public int thickness;
+        public int height; 
         public int novelty;
     }
 
@@ -35,7 +35,7 @@ public class ModelMessager : MonoBehaviour {
     {
         UDPMessage msg = new UDPMessage();
         int[] values = msgDraftWindow.GetParams();
-        msg.spreading = values[0];
+        msg.height = values[0];
         msg.novelty = values[1];
         msg.thickness = values[2];
         string s = JsonUtility.ToJson(msg);
