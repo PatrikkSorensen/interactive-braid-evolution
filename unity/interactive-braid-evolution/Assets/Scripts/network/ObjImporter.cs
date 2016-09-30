@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
-using DG.Tweening; 
+using DG.Tweening;
+using System.Collections.Generic;
+
 public class ObjImporter : MonoBehaviour {
 
     public bool shouldImport;
@@ -15,7 +17,7 @@ public class ObjImporter : MonoBehaviour {
         // ObjImporter variables
         filePathToGeometry = Application.dataPath + "/Geometrys/";
         shouldImport = false;
-        currFileName = null; 
+        currFileName = null;
 
         // UI Message window
         if (GameObject.FindGameObjectWithTag("UIManager")) {
@@ -66,7 +68,6 @@ public class ObjImporter : MonoBehaviour {
     {
         int index = Random.Range(0, spawnPositions.Length);
         Vector3 position = spawnPositions[index].position;
-
         return position; 
     }
 }
