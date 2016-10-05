@@ -5,12 +5,14 @@ using System.Collections.Generic;
 
 public class ObjImporter : MonoBehaviour {
 
-    public bool shouldImport;
+    public bool shouldImportAll;
+    public bool shouldImportSingle; 
     public Transform[] spawnPositions; 
 
     private string filePathToGeometry;
     private string currFileName;
-    private int m_num_models; 
+    private int m_num_models;
+    private int m_curr_index;
 
     private UIMsgWindow msgWindow;
 
@@ -18,7 +20,8 @@ public class ObjImporter : MonoBehaviour {
     {
         // ObjImporter variables
         filePathToGeometry = Application.dataPath + "/Geometry/Models/";
-        shouldImport = false;
+        shouldImportAll = false;
+        shouldImportSingle = false; 
         currFileName = null;
 
         // UI Message window
@@ -32,23 +35,32 @@ public class ObjImporter : MonoBehaviour {
 
     void Update()
     {
-        if (shouldImport) {
-            StartCoroutine(ImportModel());
+        if (shouldImportAll) {
+            StartCoroutine(ImportAllModels());
+        } else if (shouldImportSingle)
+        {
+            StartCoroutine(ImportModel(m_curr_index)); 
         }
     }
 
     // Raises flag to start importing model. Assumses folder path and model has been created. 
-    public void StartModelImporting(int num_models)
+    public void StartImportingAllModels(int num_models)
     {
         m_num_models = num_models;
-        shouldImport = true; 
+        shouldImportAll = true;
+    }
+
+    public void StartImportSingleModel(int i)
+    {
+        shouldImportSingle = true; 
+        m_curr_index = i; 
     }
 
     // Assumes file prefix is "braid_" and that models have been exported 
-    IEnumerator ImportModel()
+    IEnumerator ImportAllModels()
     {
-        Debug.Log("Starting to importing models..."); 
-        shouldImport = false;
+        Debug.Log("Starting to importing models...");
+        shouldImportAll = false;
         for(int i = 0; i < m_num_models; i++)
         {
             string objFileName = Application.dataPath + "/Geometry/Models/braid_" + i.ToString() + ".obj";
@@ -73,25 +85,34 @@ public class ObjImporter : MonoBehaviour {
             }
             yield return new WaitForSeconds(1.0f); 
         }
+    }
 
-        /*string objFileName = Application.dataPath + "/Geometry/Models/" + fileName;
-        GameObject[] models = ObjReader.use.ConvertFile(objFileName, true);
+    IEnumerator ImportModel(int index)
+    {
+        Debug.Log("Starting to import a single model with index: " + index);
+        shouldImportSingle = false;
+            string objFileName = Application.dataPath + "/Geometry/Models/braid_" + index.ToString() + ".obj";
+            GameObject[] curr_model = ObjReader.use.ConvertFile(objFileName, true); // Has to be an array because...? 
 
-        if (models != null) {
-            // position
-            Transform testModel = models[0].transform;
-            testModel.position = FindSpawnPosition();
+            if (curr_model != null)
+            {
+                Debug.Log(objFileName + " was found");
 
-            // rotation
-            Vector3 rotationVector = testModel.rotation.eulerAngles;
-            rotationVector.x = -90.0f;
-            testModel.rotation = Quaternion.Euler(rotationVector);
-        } else {
-            Debug.LogWarning("No models imported, though a request for it was recieved!");
-        }
+                // position
+                Transform testModel = curr_model[0].transform;
+                testModel.position = FindSpawnPosition();
 
-        yield return new WaitForSeconds(1.0f);*/
+                // rotation
+                Vector3 rotationVector = testModel.rotation.eulerAngles;
+                rotationVector.x = -90.0f;
+                testModel.rotation = Quaternion.Euler(rotationVector);
 
+            }
+            else
+            {
+                Debug.LogError("The model " + objFileName + " could not be found.");
+            }
+            yield return new WaitForSeconds(1.0f);
     }
 
     Vector3 FindSpawnPosition()

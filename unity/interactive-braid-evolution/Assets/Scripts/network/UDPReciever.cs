@@ -19,11 +19,14 @@ public class UDPReciever : MonoBehaviour
     private bool recievedMessage = false;
     private string newMessage = "";
 
+    private int num_models_imported;
+
     [Serializable]
     public class UDPRecievedMessage
     {
         public int should_import;
-        public int num_models; 
+        public int num_models;
+        public int models_created; 
     }
 
     void Start ()
@@ -39,6 +42,7 @@ public class UDPReciever : MonoBehaviour
         msgWindow.AddMessage("Initialized network");
 
         objImporter = GameObject.FindGameObjectWithTag("ObjImporter").GetComponent<ObjImporter>();
+        num_models_imported = 0; 
     }
 	
     void Update()
@@ -56,8 +60,17 @@ public class UDPReciever : MonoBehaviour
         UDPRecievedMessage msg = new UDPRecievedMessage();
         msg = JsonUtility.FromJson<UDPRecievedMessage>(jsonString);
 
+        //TODO: Tighten this up! 
         if (msg.should_import != 0)
-            objImporter.StartModelImporting(msg.num_models);
+        {
+            //objImporter.StartImportingAllModels(msg.num_models);
+        }
+        else if (msg.num_models > num_models_imported)
+        {
+            Debug.Log("exported models: " + msg.models_created + " , imported models: " + num_models_imported);
+            objImporter.StartImportSingleModel(num_models_imported); 
+            num_models_imported++;
+        }
     }
 
     // Unity Application Quit Function
@@ -93,8 +106,6 @@ public class UDPReciever : MonoBehaviour
                 newMessage = text;
 
                 // hot model import object
-                
-                //
                 DecodeJSON(text); 
                 
             } catch (Exception err) {

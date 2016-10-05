@@ -15,6 +15,7 @@ public class ModelMessager : MonoBehaviour {
     {
         public int height; 
         public int population_size;
+        public Vector3[] vectors; 
     }
 
     void Start () {
@@ -32,10 +33,21 @@ public class ModelMessager : MonoBehaviour {
 
     public void SendMessageToGH()
     {
+
         UDPMessage msg = new UDPMessage();
         int[] values = msgDraftWindow.GetParams();
         msg.height = values[0];
         msg.population_size = values[1];
+
+        Vector3[] vects = {
+            new Vector3(0, 0, 0),
+            new Vector3(1, 0, 2),
+            new Vector3(1, 0, 4),
+            new Vector3(3, 0, 6)
+        };
+
+        msg.vectors = vects; 
+
         string s = JsonUtility.ToJson(msg);
 
         msgWindow.AddMessage("Message sent to GH");
