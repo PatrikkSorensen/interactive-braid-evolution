@@ -17,7 +17,15 @@ public class UDPReciever : MonoBehaviour
     private UIMsgWindow msgWindow;
     private ObjImporter objImporter; 
     private bool recievedMessage = false;
-    private string newMessage = ""; 
+    private string newMessage = "";
+
+    [Serializable]
+    public class UDPRecievedMessage
+    {
+        public int should_import;
+        public int num_models; 
+    }
+
     void Start ()
 	{
 		readThread = new Thread (new ThreadStart (ReceiveData));
@@ -38,11 +46,22 @@ public class UDPReciever : MonoBehaviour
         if (recievedMessage) {
             recievedMessage = false;
             msgWindow.AddMessage("Recieved message: " + newMessage);
+
         }
     }
-	
-	// Unity Application Quit Function
-	void OnApplicationQuit ()
+
+    private void DecodeJSON(string jsonString)
+    {
+        // TODO: Send message to debug windows, e.g. "Made braid x out of y"
+        UDPRecievedMessage msg = new UDPRecievedMessage();
+        msg = JsonUtility.FromJson<UDPRecievedMessage>(jsonString);
+
+        if (msg.should_import != 0)
+            objImporter.StartModelImporting(msg.num_models);
+    }
+
+    // Unity Application Quit Function
+    void OnApplicationQuit ()
 	{
 		stopThread ();
 	}
@@ -74,7 +93,9 @@ public class UDPReciever : MonoBehaviour
                 newMessage = text;
 
                 // hot model import object
-                objImporter.StartModelImporting("test.obj");
+                
+                //
+                DecodeJSON(text); 
                 
             } catch (Exception err) {
 				print (err.ToString ());

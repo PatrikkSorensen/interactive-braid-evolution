@@ -13,9 +13,8 @@ public class ModelMessager : MonoBehaviour {
     [Serializable]
     public class UDPMessage
     {
-        public int thickness;
         public int height; 
-        public int novelty;
+        public int population_size;
     }
 
     void Start () {
@@ -36,8 +35,7 @@ public class ModelMessager : MonoBehaviour {
         UDPMessage msg = new UDPMessage();
         int[] values = msgDraftWindow.GetParams();
         msg.height = values[0];
-        msg.novelty = values[1];
-        msg.thickness = values[2];
+        msg.population_size = values[1];
         string s = JsonUtility.ToJson(msg);
 
         msgWindow.AddMessage("Message sent to GH");

@@ -41,9 +41,9 @@ public class UIMsgDraftWindow : MonoBehaviour {
 
     public void AddParam(string key, int value)
     {
-        if (key == "thickness")
+        if (key == "Height")
             pValues[0] = value;
-        else if (key == "roundness")
+        else if (key == "Population size")
             pValues[1] = value;
         else if (key == "novelty")
             pValues[2] = value;
