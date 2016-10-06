@@ -7,7 +7,9 @@ public class ObjImporter : MonoBehaviour {
 
     public bool shouldImportAll;
     public bool shouldImportSingle; 
-    public Transform[] spawnPositions; 
+    public Transform[] spawnPositions;
+    public float tweenDuration = 2.0f;
+    public float offsetY = 5.0f; 
 
     private string filePathToGeometry;
     private string currFileName;
@@ -91,28 +93,33 @@ public class ObjImporter : MonoBehaviour {
     {
         Debug.Log("Starting to import a single model with index: " + index);
         shouldImportSingle = false;
-            string objFileName = Application.dataPath + "/Geometry/Models/braid_" + index.ToString() + ".obj";
-            GameObject[] curr_model = ObjReader.use.ConvertFile(objFileName, true); // Has to be an array because...? 
+        string objFileName = Application.dataPath + "/Geometry/Models/braid_" + index.ToString() + ".obj";
+        GameObject curr_model = ObjReader.use.ConvertFile(objFileName, true)[0]; // Has to be an array because...? 
 
-            if (curr_model != null)
-            {
-                Debug.Log(objFileName + " was found");
+        if (curr_model != null)
+        {
+            // position
+            Transform testModel = curr_model.transform;
+            Vector3 v = FindSpawnPosition();
 
-                // position
-                Transform testModel = curr_model[0].transform;
-                testModel.position = FindSpawnPosition();
+            // tweening
+            testModel.position = v + Vector3.up * offsetY;
+            testModel.DOMove(v, tweenDuration);
 
-                // rotation
-                Vector3 rotationVector = testModel.rotation.eulerAngles;
-                rotationVector.x = -90.0f;
-                testModel.rotation = Quaternion.Euler(rotationVector);
+            // rotation
+            Vector3 rotationVector = testModel.rotation.eulerAngles;
+            rotationVector.x = -90.0f;
+            testModel.rotation = Quaternion.Euler(rotationVector);
 
-            }
-            else
-            {
-                Debug.LogError("The model " + objFileName + " could not be found.");
-            }
-            yield return new WaitForSeconds(1.0f);
+            // components and other scripts
+            curr_model.AddComponent<Rotate>(); 
+            
+        }
+        else
+        {
+            Debug.LogError("The model " + objFileName + " could not be found.");
+        }
+        yield return new WaitForSeconds(1.0f);
     }
 
     Vector3 FindSpawnPosition()
