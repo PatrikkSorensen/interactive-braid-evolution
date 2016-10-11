@@ -12,7 +12,6 @@ public class ObjImporter : MonoBehaviour {
     public float offsetY = 5.0f; 
 
     private string filePathToGeometry;
-    private string currFileName;
     private int m_num_models;
     private int m_curr_index;
 
@@ -24,7 +23,6 @@ public class ObjImporter : MonoBehaviour {
         filePathToGeometry = Application.dataPath + "/Geometry/Models/";
         shouldImportAll = false;
         shouldImportSingle = false; 
-        currFileName = null;
 
         // UI Message window
         if (GameObject.FindGameObjectWithTag("UIManager")) {

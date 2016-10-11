@@ -21,8 +21,15 @@ public class UDPSender : MonoBehaviour
         remoteEndPoint = new IPEndPoint (IPAddress.Parse (IP), port);
         client = new UdpClient();
 
-        networkWindow = GameObject.FindGameObjectWithTag("UIManager").GetComponent<UINetworkWindow>();
-        networkWindow.AddMessage("Sending to " + IP + " with " + port);
+        if(GameObject.FindGameObjectWithTag("UIManager"))
+        {
+            networkWindow = GameObject.FindGameObjectWithTag("UIManager").GetComponent<UINetworkWindow>();
+            networkWindow.AddMessage("Sending to " + IP + " with " + port);
+        } else
+        {
+            Debug.LogWarning("No networkwindow detected for displaying messages."); 
+        }
+
 	}
 
 	public void SendString (string message)

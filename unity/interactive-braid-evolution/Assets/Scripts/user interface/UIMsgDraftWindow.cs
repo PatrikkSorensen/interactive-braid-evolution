@@ -43,12 +43,12 @@ public class UIMsgDraftWindow : MonoBehaviour {
     {
         if (key == "Height")
             pValues[0] = value;
-        else if (key == "Population size")
+        else if (key == "Thickness")
             pValues[1] = value;
-        else if (key == "novelty")
+        else if (key == "Material Variation")
             pValues[2] = value;
         else
-            Debug.LogWarning("No matching key found!");
+            Debug.LogWarning("No matching key found for " + key + "!");
 
         // beggining of key + key length + char ':' + char ' ' gives position of value
         int index = text.text.IndexOf(key + ':') + key.Length + 1 + 1; 
