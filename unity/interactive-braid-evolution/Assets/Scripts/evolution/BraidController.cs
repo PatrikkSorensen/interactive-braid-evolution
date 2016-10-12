@@ -13,6 +13,7 @@ public class BraidController : UnitController
     private float fitness = 0.0f;
 
     // Message variables 
+    ModelMessager messenger;
     Vector3[] MessageVectors; 
 
     // Debugging variables
@@ -23,6 +24,8 @@ public class BraidController : UnitController
     public override void Activate(IBlackBox box)
     {
         neat = box;
+        messenger = GameObject.FindObjectOfType<ModelMessager>(); 
+
         // Set up inputs as array and feed it to the network
         ISignalArray inputArr = neat.InputSignalArray;
 
@@ -44,6 +47,8 @@ public class BraidController : UnitController
             i++; 
             //DebugNetwork(inputArr, outputArr);
         }
+
+        messenger.SetupVectors(MessageVectors); 
 
         PrintMessageVectors();
     }

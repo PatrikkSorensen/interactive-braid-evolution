@@ -7,7 +7,9 @@ public class ModelMessager : MonoBehaviour {
     private UDPMessage msg;
 
     private UIMsgWindow msgWindow;
-    private UIMsgDraftWindow msgDraftWindow; 
+    private UIMsgDraftWindow msgDraftWindow;
+
+    private Vector3[] m_messageVectors; 
 
 
     [Serializable]
@@ -31,6 +33,15 @@ public class ModelMessager : MonoBehaviour {
         }
     }
 
+    public void SetupVectors(Vector3[] vectors)
+    {
+        m_messageVectors = vectors;
+        Debug.Log("Vectors have been set up for the message, and m_messageVectors is now: ");
+
+        foreach (Vector3 v in m_messageVectors)
+            Debug.Log(v); 
+    }
+
     public void SendMessageToGH()
     {
 
@@ -39,14 +50,14 @@ public class ModelMessager : MonoBehaviour {
         msg.height = values[0];
         msg.population_size = values[1];
 
-        Vector3[] vects = {
-            new Vector3(0, 0, 0),
-            new Vector3(1, 0, 2),
-            new Vector3(1, 0, 4),
-            new Vector3(3, 0, 6)
-        };
+        //Vector3[] vects = {
+        //    new Vector3(0, 0, 0),
+        //    new Vector3(1, 0, 2),
+        //    new Vector3(1, 0, 4),
+        //    new Vector3(3, 0, 6)
+        //};
 
-        msg.vectors = vects; 
+        msg.vectors = m_messageVectors; 
 
         string s = JsonUtility.ToJson(msg);
 
