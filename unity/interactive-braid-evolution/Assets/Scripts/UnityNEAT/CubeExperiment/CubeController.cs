@@ -50,45 +50,11 @@ public class CubeController : UnitController {
 
             float outputX = (float)outputArr[0] * 10.0f;
             float outputZ = (float)outputArr[1] * 10.0f;
-            //Debug.Log("Out X: " + outputX + "\nOut Z: " + outputZ);
             rb.AddForce(new Vector3( outputX, 0.0f, outputZ)); 
 
             //DebugNetwork(inputArr, outputArr); 
         }
 
-        //Vector3 DebugVector = Vector3.zero;
-        //DebugVector.x = 0.5f * 20.0f;
-        //rb.AddForce(DebugVector);
-
-    }
-
-    //TODO: Make the normalized values be in range of -1 and 1
-    public double NormalizeValues (double max, double min, double value)
-    {
-        double newVal = 0.0f; 
-        //Debug.Log("Normalizing values with params: min[" + min + "], max[" + max + "], val[" + value + "]");
-
-        newVal = (value - min) / (max - min); 
-
-        //Debug.Log("Final result: " + newVal); 
-        return newVal;
-    }
-
-    public void DebugNetwork(ISignalArray inputs, ISignalArray outputs)
-    {
-        // For debugging
-        if (time + 1.0f < Time.time && !hasPrinted)
-        {
-            PrintInputs(inputs);
-            PrintOutputs(outputs);
-            hasPrinted = true;
-            time = Time.time;
-
-            //Debug.Log((time + 1.0f) + " < " + Time.time + ", hasPrinted:" + hasPrinted);
-        }
-
-        if (hasPrinted)
-            hasPrinted = !hasPrinted;
     }
 
     public override void Activate(IBlackBox box)
@@ -121,6 +87,19 @@ public class CubeController : UnitController {
         isRunning = false; 
     }
 
+    //TODO: Make the normalized values be in range of -1 and 1
+    public double NormalizeValues(double max, double min, double value)
+    {
+        double newVal = 0.0f;
+        //Debug.Log("Normalizing values with params: min[" + min + "], max[" + max + "], val[" + value + "]");
+
+        newVal = (value - min) / (max - min);
+
+        //Debug.Log("Final result: " + newVal); 
+        return newVal;
+    }
+
+
     // DEBUGGING FUNCTIONS: 
     public void PrintInputs(ISignalArray inputs)
     {
@@ -139,5 +118,22 @@ public class CubeController : UnitController {
         {
             Debug.Log("[" + i + "]" + " : [" + outputs[i] + "]");
         }
+    }
+
+    public void DebugNetwork(ISignalArray inputs, ISignalArray outputs)
+    {
+        // For debugging
+        if (time + 1.0f < Time.time && !hasPrinted)
+        {
+            PrintInputs(inputs);
+            PrintOutputs(outputs);
+            hasPrinted = true;
+            time = Time.time;
+
+            //Debug.Log((time + 1.0f) + " < " + Time.time + ", hasPrinted:" + hasPrinted);
+        }
+
+        if (hasPrinted)
+            hasPrinted = !hasPrinted;
     }
 }

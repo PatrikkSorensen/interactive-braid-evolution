@@ -11,8 +11,8 @@ using System.IO;
 public class Optimizer : MonoBehaviour {
 
     // Neural Networks
-    public int NUM_INPUTS = 2;
-    public int NUM_OUTPUTS = 2;
+    public int NUM_INPUTS = 3;
+    public int NUM_OUTPUTS = 3;
 
     // Neat parameters
     SimpleExperiment experiment;
@@ -30,6 +30,7 @@ public class Optimizer : MonoBehaviour {
     public float evolutionSpeed = 1.0f;
     public bool LoadPopulation = true;
     public GameObject Unit;
+    private GameObject UnitContainer;
     private DateTime startTime;
     //private float timeLeft;
     //private float accum;
@@ -37,7 +38,9 @@ public class Optimizer : MonoBehaviour {
     //private float updateInterval = 12;
     private string popFileSavePath = null; 
     private string champFileSavePath = null;
-   
+
+
+
     void Start () {
         // load in XML
         XmlDocument xmlConfig = new XmlDocument();
@@ -57,6 +60,11 @@ public class Optimizer : MonoBehaviour {
 
         startTime = DateTime.Now;
 
+        UnitContainer = GameObject.Find("UnitContainer");
+        if (!UnitContainer)
+            UnitContainer = new GameObject("UnitContainer");
+
+
     }
 
     public void StartEA()
@@ -75,6 +83,7 @@ public class Optimizer : MonoBehaviour {
 
         Fitness = _ea.Statistics._maxFitness;
         Generation = _ea.CurrentGeneration;
+        
     }
 
     void ea_PauseEvent(object sender, EventArgs e)
@@ -97,6 +106,9 @@ public class Optimizer : MonoBehaviour {
     {
         GameObject obj = Instantiate(Unit, Unit.transform.position, Unit.transform.rotation) as GameObject;
         UnitController controller = obj.GetComponent<UnitController>();
+
+        obj.transform.parent = UnitContainer.transform;
+        obj.name = "unit_" + Generation.ToString() + "_" + UnitContainer.transform.childCount; 
 
         ControllerMap.Add(phenome, controller);
         controller.Activate(phenome);
