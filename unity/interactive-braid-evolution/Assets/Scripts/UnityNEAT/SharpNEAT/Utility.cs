@@ -33,7 +33,7 @@ public class Utility : MonoBehaviour {
         return Time.deltaTime;
     }
 
-    public static float GetDistance(Vector3 A, Vector3 B)
+    /*public static float GetDistance(Vector3 A, Vector3 B)
     {
         if (A != null && B != null)
         {
@@ -52,7 +52,7 @@ public class Utility : MonoBehaviour {
                 throw new ArgumentNullException("GameObject B is null");
             }
         } 
-    }
+    }*/
 
     public static float GetDistance(GameObject A, GameObject B)
     {
@@ -73,7 +73,6 @@ public class Utility : MonoBehaviour {
                 throw new ArgumentNullException("GameObject B is null");
             }
         }
-        return 0.0f;
     }
 
     /// <summary>

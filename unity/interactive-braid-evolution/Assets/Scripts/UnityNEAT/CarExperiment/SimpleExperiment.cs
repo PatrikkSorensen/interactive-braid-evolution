@@ -174,8 +174,8 @@ public class SimpleExperiment : INeatExperiment
 
         IGenomeListEvaluator<NeatGenome> innerEvaluator = new UnityParallelListEvaluator<NeatGenome, IBlackBox>(genomeDecoder, evaluator, _optimizer);
 
-        IGenomeListEvaluator<NeatGenome> selectiveEvaluator = new SelectiveGenomeListEvaluator<NeatGenome>(innerEvaluator,
-            SelectiveGenomeListEvaluator<NeatGenome>.CreatePredicate_OnceOnly());
+        //IGenomeListEvaluator<NeatGenome> selectiveEvaluator = new SelectiveGenomeListEvaluator<NeatGenome>(innerEvaluator,
+            //SelectiveGenomeListEvaluator<NeatGenome>.CreatePredicate_OnceOnly());
 
         //ea.Initialize(selectiveEvaluator, genomeFactory, genomeList);
         ea.Initialize(innerEvaluator, genomeFactory, genomeList);

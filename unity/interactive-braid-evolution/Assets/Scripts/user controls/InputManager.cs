@@ -3,18 +3,18 @@ using System.Collections;
 
 public class InputManager : MonoBehaviour {
 
-    Camera camera;
+    Camera m_camera;
 
     void Start()
     {
-        camera = Camera.main;
+        m_camera = Camera.main;
     }
 
     void Update()
     {
         RaycastHit hit;
 
-        if (!Physics.Raycast(camera.ScreenPointToRay(Input.mousePosition), out hit))
+        if (!Physics.Raycast(m_camera.ScreenPointToRay(Input.mousePosition), out hit))
             return;
 
         MeshCollider meshCollider = hit.collider as MeshCollider;

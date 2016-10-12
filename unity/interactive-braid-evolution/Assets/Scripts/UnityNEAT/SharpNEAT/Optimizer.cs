@@ -11,8 +11,8 @@ using System.IO;
 public class Optimizer : MonoBehaviour {
 
     // Neural Networks
-    const int NUM_INPUTS = 5;
-    const int NUM_OUTPUTS = 2;
+    public int NUM_INPUTS = 2;
+    public int NUM_OUTPUTS = 2;
 
     // Neat parameters
     SimpleExperiment experiment;
@@ -31,10 +31,10 @@ public class Optimizer : MonoBehaviour {
     public bool LoadPopulation = true;
     public GameObject Unit;
     private DateTime startTime;
-    private float timeLeft;
-    private float accum;
-    private int frames;
-    private float updateInterval = 12;
+    //private float timeLeft;
+    //private float accum;
+    //private int frames;
+    //private float updateInterval = 12;
     private string popFileSavePath = null; 
     private string champFileSavePath = null;
    
@@ -54,7 +54,10 @@ public class Optimizer : MonoBehaviour {
         if(LoadPopulation)
             popFileSavePath = Application.persistentDataPath + string.Format("/{0}.pop.xml", "car");
         print(champFileSavePath);
-	}
+
+        startTime = DateTime.Now;
+
+    }
 
     public void StartEA()
     {
@@ -70,10 +73,8 @@ public class Optimizer : MonoBehaviour {
     {
         Debug.Log("Generation: " + _ea.CurrentGeneration + ", best fitness: " + _ea.Statistics._maxFitness);
 
-        //Fitness = _ea.Statistics._maxFitness;
-        //Generation = _ea.CurrentGeneration;
-
-    
+        Fitness = _ea.Statistics._maxFitness;
+        Generation = _ea.CurrentGeneration;
     }
 
     void ea_PauseEvent(object sender, EventArgs e)
