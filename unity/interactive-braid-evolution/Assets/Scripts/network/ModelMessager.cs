@@ -3,14 +3,21 @@ using System.Collections;
 
 public class ModelMessager : MonoBehaviour {
 
+    // Network variables
     private UDPSender sender;
     private UDPMessage msg;
 
+    // UI
+    //TODO: Tidu up this ui 
     private UIMsgWindow msgWindow;
     private UIMsgDraftWindow msgDraftWindow;
+    private bool hasUI;
 
+    // Message variables
+    private int m_populationSize = 1;
+    private int m_height = 1; 
     private Vector3[] m_messageVectors;
-    private bool hasUI; 
+
 
     [Serializable]
     public class UDPMessage
@@ -43,6 +50,13 @@ public class ModelMessager : MonoBehaviour {
         }
     }
 
+    public void SetupEvolutionParameters(int populationSize, int height)
+    {
+        m_populationSize = populationSize;
+        m_height = height;
+        Debug.Log("Evolution parameters set in network messsenger");
+    }
+
     public void SetupVectors(Vector3[] vectors)
     {
         m_messageVectors = vectors;
@@ -56,19 +70,18 @@ public class ModelMessager : MonoBehaviour {
     {
 
         UDPMessage msg = new UDPMessage();
-        //int[] values = msgDraftWindow.GetParams();
 
-        msg.height = 5;
-        msg.population_size = 8;
+        msg.height = m_height;
+        msg.population_size = m_populationSize;
 
-        Vector3[] vects = {
-            new Vector3(0, 0, 0),
-            new Vector3(1, 0, 2),
-            new Vector3(1, 0, 4),
-            new Vector3(3, 0, 6)
-        };
+        //Vector3[] vects = {
+        //    new Vector3(0, 0, 0),
+        //    new Vector3(1, 0, 2),
+        //    new Vector3(1, 0, 4),
+        //    new Vector3(3, 0, 6)
+        //};
 
-        msg.vectors = vects; 
+        msg.vectors = m_messageVectors; 
 
         string s = JsonUtility.ToJson(msg);
 

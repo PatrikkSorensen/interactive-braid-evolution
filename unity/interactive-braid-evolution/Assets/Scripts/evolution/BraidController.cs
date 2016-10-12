@@ -48,6 +48,7 @@ public class BraidController : UnitController
             //DebugNetwork(inputArr, outputArr);
         }
 
+
         messenger.SetupVectors(MessageVectors); 
 
         PrintMessageVectors();
@@ -66,10 +67,11 @@ public class BraidController : UnitController
     /********************* NORMALIZING AND ULITIY FUNCTIONS **********************/
     public Vector3 NormalizeToVector (ISignalArray outputs, int vectorCounter)
     {
+        // Note, Rhino has the "up/y" direction on an vectors z axis 
         float mulitplier = 10.0f; 
         double x = outputs[0] * mulitplier;
-        double y = vectorCounter; 
-        double z = outputs[2] * mulitplier;                                          
+        double y = outputs[2] * mulitplier;
+        double z = vectorCounter;
 
         return (new Vector3((float) x, (float) y, (float) z)); 
     }

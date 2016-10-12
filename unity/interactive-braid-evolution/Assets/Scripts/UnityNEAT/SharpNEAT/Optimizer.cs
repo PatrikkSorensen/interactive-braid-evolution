@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using SharpNeat.Phenomes;
+using SharpNeat.Domains;
 using System.Collections.Generic;
 using SharpNeat.EvolutionAlgorithms;
 using SharpNeat.Genomes.Neat;
@@ -26,6 +27,9 @@ public class Optimizer : MonoBehaviour {
     public float TrialDuration;
     public float StoppingFitness;
 
+    // Network variables 
+    ModelMessager messenger; 
+
     // Utility
     public float evolutionSpeed = 1.0f;
     public bool LoadPopulation = true;
@@ -47,10 +51,21 @@ public class Optimizer : MonoBehaviour {
         TextAsset textAsset = (TextAsset)Resources.Load("experiment.config");
         xmlConfig.LoadXml(textAsset.text);
 
-        // setup experiment
+        // set up experiment
         experiment = new SimpleExperiment();
         experiment.Initialize("Car Experiment", xmlConfig.DocumentElement, NUM_INPUTS, NUM_OUTPUTS);
         experiment.SetOptimizer(this);
+
+        // set up network variables 
+        messenger = GameObject.FindObjectOfType<ModelMessager>();
+        if (messenger)
+        {
+            int populationSize = XmlUtils.GetValueAsInt(xmlConfig.DocumentElement, "PopulationSize");
+            messenger.SetupEvolutionParameters(populationSize, 5);
+        } else
+        {
+            Debug.LogError("No network messenge found in scene!");
+        }
 
         // set up utility variables
         champFileSavePath = Application.persistentDataPath + string.Format("/{0}.champ.xml", "car");
@@ -70,6 +85,7 @@ public class Optimizer : MonoBehaviour {
     public void StartEA()
     {
         SetTimeScale();
+       //essenger.SetupEvolutionParameters(_)
 
         _ea = experiment.CreateEvolutionAlgorithm(popFileSavePath);
         _ea.UpdateEvent += new EventHandler(ea_UpdateEvent);
