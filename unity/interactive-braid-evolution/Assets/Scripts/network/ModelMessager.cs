@@ -9,8 +9,8 @@ public class ModelMessager : MonoBehaviour {
     private UIMsgWindow msgWindow;
     private UIMsgDraftWindow msgDraftWindow;
 
-    private Vector3[] m_messageVectors; 
-
+    private Vector3[] m_messageVectors;
+    private bool hasUI; 
 
     [Serializable]
     public class UDPMessage
@@ -21,8 +21,18 @@ public class ModelMessager : MonoBehaviour {
     }
 
     void Start () {
-        msgWindow = GameObject.FindGameObjectWithTag("UIManager").GetComponent<UIMsgWindow>(); 
-        msgDraftWindow = GameObject.FindGameObjectWithTag("UIManager").GetComponent<UIMsgDraftWindow>();
+
+        if(GameObject.FindGameObjectWithTag("UIManager"))
+        {
+            msgWindow = GameObject.FindGameObjectWithTag("UIManager").GetComponent<UIMsgWindow>();
+            msgDraftWindow = GameObject.FindGameObjectWithTag("UIManager").GetComponent<UIMsgDraftWindow>();
+            hasUI = true; 
+        } else
+        {
+            hasUI = false; 
+            Debug.LogWarning("No UI interface detected"); 
+        }
+
         sender = Camera.main.GetComponent<UDPSender>();
     }
 	
@@ -46,22 +56,25 @@ public class ModelMessager : MonoBehaviour {
     {
 
         UDPMessage msg = new UDPMessage();
-        int[] values = msgDraftWindow.GetParams();
-        msg.height = values[0];
-        msg.population_size = values[1];
+        //int[] values = msgDraftWindow.GetParams();
 
-        //Vector3[] vects = {
-        //    new Vector3(0, 0, 0),
-        //    new Vector3(1, 0, 2),
-        //    new Vector3(1, 0, 4),
-        //    new Vector3(3, 0, 6)
-        //};
+        msg.height = 5;
+        msg.population_size = 8;
 
-        msg.vectors = m_messageVectors; 
+        Vector3[] vects = {
+            new Vector3(0, 0, 0),
+            new Vector3(1, 0, 2),
+            new Vector3(1, 0, 4),
+            new Vector3(3, 0, 6)
+        };
+
+        msg.vectors = vects; 
 
         string s = JsonUtility.ToJson(msg);
 
-        msgWindow.AddMessage("Message sent to GH");
+        if(hasUI)
+            msgWindow.AddMessage("Message sent to GH");
+
         Debug.Log("ModelMsg: " + s);
         sender.SendString(s);
     }

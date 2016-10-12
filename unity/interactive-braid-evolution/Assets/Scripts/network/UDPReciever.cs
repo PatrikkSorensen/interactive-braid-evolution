@@ -35,13 +35,15 @@ public class UDPReciever : MonoBehaviour
 		readThread.IsBackground = true;
 		readThread.Start ();
 
-        networkWindow = GameObject.FindGameObjectWithTag("UIManager").GetComponent<UINetworkWindow>();
-        msgWindow = GameObject.FindGameObjectWithTag("UIManager").GetComponent<UIMsgWindow>();
+        if(GameObject.FindGameObjectWithTag("UIManager")) { 
+            networkWindow = GameObject.FindGameObjectWithTag("UIManager").GetComponent<UINetworkWindow>();
+            msgWindow = GameObject.FindGameObjectWithTag("UIManager").GetComponent<UIMsgWindow>();
+            networkWindow.AddMessage("listening to any IP on this machine");
+            msgWindow.AddMessage("Initialized network");
+        }
+        
 
-        networkWindow.AddMessage("listening to any IP on this machine");
-        msgWindow.AddMessage("Initialized network");
-
-        objImporter = GameObject.FindGameObjectWithTag("ObjImporter").GetComponent<ObjImporter>();
+        objImporter = GameObject.FindObjectOfType<ObjImporter>();
         num_models_imported = 0; 
     }
 	
@@ -49,7 +51,9 @@ public class UDPReciever : MonoBehaviour
     {
         if (recievedMessage) {
             recievedMessage = false;
-            msgWindow.AddMessage("Recieved message: " + newMessage);
+
+            if(msgWindow)
+                msgWindow.AddMessage("Recieved message: " + newMessage);
 
         }
     }
@@ -65,11 +69,14 @@ public class UDPReciever : MonoBehaviour
         {
             //objImporter.StartImportingAllModels(msg.num_models);
         }
-        else if (msg.num_models > num_models_imported)
+        else if (msg.models_created > num_models_imported)
         {
             Debug.Log("exported models: " + msg.models_created + " , imported models: " + num_models_imported);
             objImporter.StartImportSingleModel(num_models_imported); 
             num_models_imported++;
+        } else
+        {
+            Debug.Log("Nothing to do..."); 
         }
     }
 

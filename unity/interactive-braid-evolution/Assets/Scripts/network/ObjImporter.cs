@@ -59,7 +59,7 @@ public class ObjImporter : MonoBehaviour {
     // Assumes file prefix is "braid_" and that models have been exported 
     IEnumerator ImportAllModels()
     {
-        Debug.Log("Starting to importing models...");
+        Debug.Log("Starting to import models...");
         shouldImportAll = false;
         for(int i = 0; i < m_num_models; i++)
         {
