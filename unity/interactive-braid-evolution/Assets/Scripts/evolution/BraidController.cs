@@ -13,13 +13,28 @@ public class BraidController : UnitController
     private float fitness = 0.0f;
 
     // Message variables 
+    private int braidId; 
     ModelMessager messenger;
     Vector3[] MessageVectors; 
 
     // Debugging variables
     private float time = 0.0f;
     private bool hasPrinted = false;
-    private string unitName; 
+    private string unitName;
+
+    // Braid specific variables
+    public int BraidId
+    {
+        get
+        {
+            return braidId;
+        }
+
+        set
+        {
+            braidId = value;
+        }
+    }
 
     public override void Activate(IBlackBox box)
     {
@@ -48,11 +63,12 @@ public class BraidController : UnitController
             //DebugNetwork(inputArr, outputArr);
         }
 
+        messenger.AddVectors(braidId - 1, MessageVectors); 
+        //PrintMessageVectors();
 
-        messenger.SetupVectors(MessageVectors); 
-
-        PrintMessageVectors();
     }
+
+    
 
     public override float GetFitness()
     {
@@ -63,6 +79,8 @@ public class BraidController : UnitController
     {
         Debug.Log("Stop braidController called"); 
     }
+
+    
 
     /********************* NORMALIZING AND ULITIY FUNCTIONS **********************/
     public Vector3 NormalizeToVector (ISignalArray outputs, int vectorCounter)
@@ -80,12 +98,12 @@ public class BraidController : UnitController
 
     public void PrintMessageVectors ()
     {
-        Debug.Log("******** MESSAGE VECTORS FOR" + gameObject.name + ": ********");
+        Debug.Log("******** BRAID VECTORS FOR " + gameObject.name + ": ********");
         foreach (Vector3 v in MessageVectors)
         {
             Debug.Log("Vector" + v);
         }
-        Debug.Log("*********************************************************");
+        Debug.Log("*********************************************");
     }
 
     public void PrintInputs(ISignalArray inputs)

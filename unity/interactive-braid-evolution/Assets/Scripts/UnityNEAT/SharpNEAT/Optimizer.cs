@@ -85,12 +85,13 @@ public class Optimizer : MonoBehaviour {
     public void StartEA()
     {
         SetTimeScale();
-       //essenger.SetupEvolutionParameters(_)
-
+        //essenger.SetupEvolutionParameters(_)
+        Debug.Log("-----------------------------------  STARTING EA -----------------------------------");
         _ea = experiment.CreateEvolutionAlgorithm(popFileSavePath);
         _ea.UpdateEvent += new EventHandler(ea_UpdateEvent);
         _ea.PausedEvent += new EventHandler(ea_PauseEvent);
         _ea.StartContinue();
+        Debug.Log("-----------------------------------  FINISHED EA -----------------------------------");
     }
 
     void ea_UpdateEvent(object sender, EventArgs e)
@@ -121,10 +122,13 @@ public class Optimizer : MonoBehaviour {
     public void Evaluate(IBlackBox phenome)
     {
         GameObject obj = Instantiate(Unit, Unit.transform.position, Unit.transform.rotation) as GameObject;
-        UnitController controller = obj.GetComponent<UnitController>();
+        BraidController controller = obj.GetComponent<BraidController>();
 
+        /* SPECIFIC TO THE BRAID CONTROLLER EXPERIMENT */ 
         obj.transform.parent = UnitContainer.transform;
-        obj.name = "unit_" + Generation.ToString() + "_" + UnitContainer.transform.childCount; 
+        obj.name = "unit_" + Generation.ToString() + "_" + UnitContainer.transform.childCount;
+        controller.BraidId = UnitContainer.transform.childCount;
+        /* END OF SPECIFIC OPERATIONS TO THE BRAID EXPERIMENT */
 
         ControllerMap.Add(phenome, controller);
         controller.Activate(phenome);

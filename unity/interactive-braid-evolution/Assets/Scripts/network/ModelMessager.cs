@@ -16,7 +16,7 @@ public class ModelMessager : MonoBehaviour {
     // Message variables
     private int m_populationSize = 1;
     private int m_height = 1; 
-    private Vector3[] m_messageVectors;
+    private Vector3[][] m_messageVectors;
 
 
     [Serializable]
@@ -24,12 +24,14 @@ public class ModelMessager : MonoBehaviour {
     {
         public int height; 
         public int population_size;
-        public Vector3[] vectors; 
+        public Vector3[][] vectors; 
     }
 
     void Start () {
 
-        if(GameObject.FindGameObjectWithTag("UIManager"))
+       
+
+        if (GameObject.FindGameObjectWithTag("UIManager"))
         {
             msgWindow = GameObject.FindGameObjectWithTag("UIManager").GetComponent<UIMsgWindow>();
             msgDraftWindow = GameObject.FindGameObjectWithTag("UIManager").GetComponent<UIMsgDraftWindow>();
@@ -54,16 +56,42 @@ public class ModelMessager : MonoBehaviour {
     {
         m_populationSize = populationSize;
         m_height = height;
+        m_messageVectors = new Vector3[populationSize][];
         Debug.Log("Evolution parameters set in network messsenger");
     }
 
-    public void SetupVectors(Vector3[] vectors)
+    public void PrintCurrentVectors()
     {
-        m_messageVectors = vectors;
-        Debug.Log("Vectors have been set up for the message, and m_messageVectors is now: ");
+        int listIndex = 0;
+        Debug.Log("************* MESSAGEOBJECT VECTOR3[][] *****************");
+        foreach (Vector3[] vList in m_messageVectors) {
 
-        foreach (Vector3 v in m_messageVectors)
-            Debug.Log(v); 
+            if (vList != null)
+            {
+                Debug.Log("************* LIST " + listIndex + " *****************");
+                foreach (Vector3 v in vList)
+                    Debug.Log(v);
+            }
+            else
+            {
+                Debug.Log("No vectors in list " + listIndex);
+            }
+            listIndex++; 
+        }
+        Debug.Log("************* MESSAGEOBJECT END ****************");
+        Debug.Log(" "); 
+
+    }
+
+    public void AddVectors(int index, Vector3[] vectors)
+    {
+        Debug.Log("recieved vectors: ");
+        foreach (Vector3 v in vectors)
+            Debug.Log(v);
+
+        m_messageVectors[index] = vectors;
+
+        PrintCurrentVectors(); 
     }
 
     public void SendMessageToGH()
@@ -80,6 +108,7 @@ public class ModelMessager : MonoBehaviour {
         //    new Vector3(1, 0, 4),
         //    new Vector3(3, 0, 6)
         //};
+
 
         msg.vectors = m_messageVectors; 
 

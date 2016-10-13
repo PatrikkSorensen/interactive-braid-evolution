@@ -123,7 +123,7 @@ namespace SharpNeat.Core
         private IEnumerator Evaluate_NonCaching(IList<TGenome> genomeList)
         {
             // Decode and evaluate each genome in turn.
-            foreach(TGenome genome in genomeList)
+            foreach (TGenome genome in genomeList)
             {
                 TPhenome phenome = _genomeDecoder.Decode(genome);
                 if(null == phenome)
