@@ -90,7 +90,9 @@ public class Optimizer : MonoBehaviour {
         _ea = experiment.CreateEvolutionAlgorithm(popFileSavePath);
         _ea.UpdateEvent += new EventHandler(ea_UpdateEvent);
         _ea.PausedEvent += new EventHandler(ea_PauseEvent);
+        // TODO: Make something pause until braids have been made here...
         _ea.StartContinue();
+        messenger.PrintCurrentVectors();
         Debug.Log("-----------------------------------  FINISHED EA -----------------------------------");
     }
 
