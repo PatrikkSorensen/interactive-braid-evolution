@@ -87,6 +87,7 @@ public class Optimizer : MonoBehaviour {
         SetTimeScale();
         //essenger.SetupEvolutionParameters(_)
         Debug.Log("-----------------------------------  STARTING EA -----------------------------------");
+        StatusWindow.SetStatus(StatusWindow.STATUS.EVOLVING);
         _ea = experiment.CreateEvolutionAlgorithm(popFileSavePath);
         _ea.UpdateEvent += new EventHandler(ea_UpdateEvent);
         _ea.PausedEvent += new EventHandler(ea_PauseEvent);

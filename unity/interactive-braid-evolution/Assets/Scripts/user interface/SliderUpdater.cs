@@ -11,15 +11,16 @@ public class SliderUpdater : MonoBehaviour {
     private UIMsgDraftWindow draftWindow;
 
     void Start () {
-        draftWindow = GameObject.FindGameObjectWithTag("UIManager").GetComponent<UIMsgDraftWindow>();
+
+        //draftWindow = GameObject.FindGameObjectWithTag("UIManager").GetComponent<UIMsgDraftWindow>();
 
         sl = GetComponentInChildren<Slider>();
-        sl.onValueChanged.AddListener(delegate { OnValueChange(); });
+        //sl.onValueChanged.AddListener(delegate { OnValueChange(); });
 
         txt = GetComponentInChildren<Text>();
         txt.text = key + " : " + sl.value; 
 
-        draftWindow.AddParam(key, (int)sl.value);
+        //draftWindow.AddParam(key, (int)sl.value);
     }
 
     public void OnValueChange()
