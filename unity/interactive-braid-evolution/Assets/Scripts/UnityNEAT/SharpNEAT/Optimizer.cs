@@ -21,6 +21,7 @@ public class Optimizer : MonoBehaviour {
     Dictionary<IBlackBox, UnitController> ControllerMap = new Dictionary<IBlackBox, UnitController>();
 
     // Evolution parameters
+    private int PopulationSize;
     private uint Generation;
     private double Fitness;
     public int Trials;
@@ -60,8 +61,8 @@ public class Optimizer : MonoBehaviour {
         messenger = GameObject.FindObjectOfType<ModelMessager>();
         if (messenger)
         {
-            int populationSize = XmlUtils.GetValueAsInt(xmlConfig.DocumentElement, "PopulationSize");
-            messenger.SetupEvolutionParameters(populationSize, 5);
+            PopulationSize = XmlUtils.GetValueAsInt(xmlConfig.DocumentElement, "PopulationSize");
+            messenger.SetupEvolutionParameters(PopulationSize, SliderUpdater.GetValue("Height"));
         } else
         {
             Debug.LogError("No network messenge found in scene!");
@@ -87,6 +88,7 @@ public class Optimizer : MonoBehaviour {
         SetTimeScale();
         //essenger.SetupEvolutionParameters(_)
         Debug.Log("-----------------------------------  STARTING EA -----------------------------------");
+        messenger.SetupEvolutionParameters(PopulationSize, SliderUpdater.GetValue("Height"));
         StatusWindow.SetStatus(StatusWindow.STATUS.EVOLVING);
         _ea = experiment.CreateEvolutionAlgorithm(popFileSavePath);
         _ea.UpdateEvent += new EventHandler(ea_UpdateEvent);
@@ -183,19 +185,20 @@ public class Optimizer : MonoBehaviour {
 
     void OnGUI()
     {
-        if (GUI.Button(new Rect(10, 10, 100, 40), "Start EA"))
-        {
-            StartEA();
-        }
-        if (GUI.Button(new Rect(10, 60, 100, 40), "Stop EA"))
-        {
-            StopEA();
-        }
-        if (GUI.Button(new Rect(10, 110, 100, 40), "Run best"))
-        {
-            RunBest();
-        }
+        //if (GUI.Button(new Rect(10, 10, 100, 40), "Start EA"))
+        //{
+        //    StartEA();
+        //}
+        //if (GUI.Button(new Rect(10, 60, 100, 40), "Stop EA"))
+        //{
+        //    StopEA();
+        //}
+        //if (GUI.Button(new Rect(10, 110, 100, 40), "Run best"))
+        //{
+        //    RunBest();
+        //}
 
+        //TODO: Integrate this in your Unity UI 
         GUI.Button(new Rect(10, Screen.height - 70, 100, 60), string.Format("Generation: {0}\nFitness: {1:0.00}", Generation, Fitness));
     }
 

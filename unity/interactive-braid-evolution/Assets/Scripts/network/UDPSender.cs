@@ -14,22 +14,11 @@ public class UDPSender : MonoBehaviour
     public string IP;
     private IPEndPoint remoteEndPoint;
 	private UdpClient client;
-    private UINetworkWindow networkWindow; 
 
 	void Start ()
 	{
         remoteEndPoint = new IPEndPoint (IPAddress.Parse (IP), port);
         client = new UdpClient();
-
-        if(GameObject.FindGameObjectWithTag("UIManager"))
-        {
-            networkWindow = GameObject.FindGameObjectWithTag("UIManager").GetComponent<UINetworkWindow>();
-            networkWindow.AddMessage("Sending to " + IP + " with " + port);
-        } else
-        {
-            Debug.LogWarning("No networkwindow detected for displaying messages."); 
-        }
-
 	}
 
 	public void SendString (string message)
@@ -41,7 +30,6 @@ public class UDPSender : MonoBehaviour
 			// send the data
 			client.Send (data, data.Length, remoteEndPoint);
             Debug.Log("Message sent to GH: " + message);
-            networkWindow.AddMessage("Message sent to GH: " + message);
 
         } catch (Exception err) {
 			print (err.ToString ());

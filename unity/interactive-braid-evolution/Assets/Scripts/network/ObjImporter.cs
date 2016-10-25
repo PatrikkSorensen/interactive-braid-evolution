@@ -15,22 +15,12 @@ public class ObjImporter : MonoBehaviour {
     private int m_num_models;
     private int m_curr_index;
 
-    private UIMsgWindow msgWindow;
-
     void Start()
     {
         // ObjImporter variables
         filePathToGeometry = Application.dataPath + "/Geometry/Models/";
         shouldImportAll = false;
         shouldImportSingle = false; 
-
-        // UI Message window
-        if (GameObject.FindGameObjectWithTag("UIManager")) {
-            msgWindow = GameObject.FindGameObjectWithTag("UIManager").GetComponent<UIMsgWindow>();
-            msgWindow.AddMessage("Filepath: " + filePathToGeometry);
-        } else {
-            Debug.LogWarning("No UI Messenger found");
-        }
     }
 
     void Update()
@@ -64,7 +54,7 @@ public class ObjImporter : MonoBehaviour {
         shouldImportAll = false;
         for(int i = 0; i < m_num_models; i++)
         {
-            string objFileName = Application.dataPath + "/Geometry/Models/braid_" + i.ToString() + ".obj";
+            string objFileName = filePathToGeometry + "/braid_" + i.ToString() + ".obj";
             GameObject[] curr_model = ObjReader.use.ConvertFile(objFileName, true); // Has to be an array because...? 
 
             if(curr_model != null)

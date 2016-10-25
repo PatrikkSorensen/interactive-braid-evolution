@@ -7,12 +7,6 @@ public class ModelMessager : MonoBehaviour {
     private UDPSender sender;
     private UDPMessage msg;
 
-    // UI
-    //TODO: Tidu up this ui 
-    private UIMsgWindow msgWindow;
-    private UIMsgDraftWindow msgDraftWindow;
-    private bool hasUI;
-
     // Message variables
     private int m_populationSize = 1;
     private int m_height = 1; 
@@ -29,21 +23,7 @@ public class ModelMessager : MonoBehaviour {
     }
 
     void Start () {
-
-       
-
-        if (GameObject.FindGameObjectWithTag("UIManager"))
-        {
-            msgWindow = GameObject.FindGameObjectWithTag("UIManager").GetComponent<UIMsgWindow>();
-            msgDraftWindow = GameObject.FindGameObjectWithTag("UIManager").GetComponent<UIMsgDraftWindow>();
-            hasUI = true; 
-        } else
-        {
-            hasUI = false; 
-            Debug.LogWarning("No UI interface detected"); 
-        }
-
-        sender = Camera.main.GetComponent<UDPSender>();
+        sender = GameObject.FindObjectOfType<UDPSender>(); 
     }
 	
 	void Update () {
@@ -112,9 +92,6 @@ public class ModelMessager : MonoBehaviour {
         //msg.vectors = m_messageVectors; 
         msg.vectors = vects;
         string s = JsonUtility.ToJson(msg);
-
-        if(hasUI)
-            msgWindow.AddMessage("Message sent to GH");
 
         Debug.Log("ModelMsg: " + s);
         sender.SendString(s);

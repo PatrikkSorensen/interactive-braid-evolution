@@ -13,12 +13,7 @@ public class UDPReciever : MonoBehaviour
 
     private Thread readThread;
     private UdpClient client;
-    private UINetworkWindow networkWindow;
-    private UIMsgWindow msgWindow;
     private ObjImporter objImporter; 
-    private bool recievedMessage = false;
-    private string newMessage = "";
-
     private int num_models_imported;
 
     [Serializable]
@@ -35,27 +30,8 @@ public class UDPReciever : MonoBehaviour
 		readThread.IsBackground = true;
 		readThread.Start ();
 
-        if(GameObject.FindGameObjectWithTag("UIManager")) { 
-            networkWindow = GameObject.FindGameObjectWithTag("UIManager").GetComponent<UINetworkWindow>();
-            msgWindow = GameObject.FindGameObjectWithTag("UIManager").GetComponent<UIMsgWindow>();
-            networkWindow.AddMessage("listening to any IP on this machine");
-            msgWindow.AddMessage("Initialized network");
-        }
-        
-
         objImporter = GameObject.FindObjectOfType<ObjImporter>();
         num_models_imported = 0; 
-    }
-	
-    void Update()
-    {
-        if (recievedMessage) {
-            recievedMessage = false;
-
-            if(msgWindow)
-                msgWindow.AddMessage("Recieved message: " + newMessage);
-
-        }
     }
 
     private void DecodeJSON(string jsonString)
@@ -64,7 +40,7 @@ public class UDPReciever : MonoBehaviour
         UDPRecievedMessage msg = new UDPRecievedMessage();
         msg = JsonUtility.FromJson<UDPRecievedMessage>(jsonString);
 
-        //TODO: Tighten this up! 
+        //TODO: Tighten this up! Potential bug here...
         if (msg.should_import != 0)
         {
             //objImporter.StartImportingAllModels(msg.num_models);
@@ -107,10 +83,6 @@ public class UDPReciever : MonoBehaviour
 				// decode UTF8-coded bytes to text format
 				string text = Encoding.UTF8.GetString (data);
                 Debug.Log (">> " + text);
-
-                // show any relevant messages in the ui 
-                recievedMessage = true;
-                newMessage = text;
 
                 // hot model import object
                 DecodeJSON(text); 

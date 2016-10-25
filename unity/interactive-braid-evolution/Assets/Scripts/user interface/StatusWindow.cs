@@ -7,6 +7,7 @@ public class StatusWindow : MonoBehaviour
 
     public enum STATUS
     {
+        UNINITIALIZED,
         MODELLING,
         EVOLVING,
         IMPORTING,
@@ -18,6 +19,7 @@ public class StatusWindow : MonoBehaviour
     void Start()
     {
          t = GameObject.Find("StatusText").GetComponent<Text>();
+        m_st = STATUS.UNINITIALIZED; 
     }
 
     void Update()
@@ -31,6 +33,10 @@ public class StatusWindow : MonoBehaviour
             t.text = "IMPORTING";
         }
         else if (m_st == STATUS.EVOLVING)
+        {
+            t.text = "EVOLVING";
+        }
+        else if (m_st == STATUS.UNINITIALIZED)
         {
             t.text = "EVOLVING";
         }

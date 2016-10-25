@@ -18,8 +18,6 @@ public class BraidController : UnitController
     Vector3[] MessageVectors; 
 
     // Debugging variables
-    private float time = 0.0f;
-    private bool hasPrinted = false;
     private string unitName;
 
     // Braid specific variables
