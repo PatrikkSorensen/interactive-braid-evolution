@@ -39,7 +39,6 @@ public class UDPReciever : MonoBehaviour
         UDPRecievedMessage msg = new UDPRecievedMessage();
         msg = JsonUtility.FromJson<UDPRecievedMessage>(jsonString);
 
-        
         if (msg.models_created > num_models_imported)
         {
             Debug.Log("exported models: " + msg.models_created + " , imported models: " + num_models_imported);

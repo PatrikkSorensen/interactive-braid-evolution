@@ -18,7 +18,7 @@ public class ModelMessager : MonoBehaviour {
     {
         public int height; 
         public int population_size;
-        //public Vector3[][] vectors;
+        public Vector3[,] multi_vectors;
         public Vector3[] vectors;
     }
 
@@ -86,11 +86,19 @@ public class ModelMessager : MonoBehaviour {
             new Vector3(0, 0, 0),
             new Vector3(1, 0, 2),
             new Vector3(1, 0, 4),
-            new Vector3(3, 0, 6)
+            new Vector3(5, 0, 6)
         };
 
+        Vector3[,] array2D = new Vector3[4, 2] { 
+            { Vector3.zero, Vector3.zero }, 
+            { Vector3.zero, Vector3.up }, 
+            { Vector3.zero, Vector3.zero }, 
+            { Vector3.zero, Vector3.zero }
+        };
 
-        //msg.vectors = m_messageVectors; 
+        msg.multi_vectors = array2D; 
+        //msg.vectors = m_messageVectors[0]; 
+
         msg.vectors = vects;
         string s = JsonUtility.ToJson(msg);
 
