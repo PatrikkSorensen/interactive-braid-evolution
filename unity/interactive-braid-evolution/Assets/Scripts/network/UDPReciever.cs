@@ -36,16 +36,11 @@ public class UDPReciever : MonoBehaviour
 
     private void DecodeJSON(string jsonString)
     {
-        // TODO: Send message to debug windows, e.g. "Made braid x out of y"
         UDPRecievedMessage msg = new UDPRecievedMessage();
         msg = JsonUtility.FromJson<UDPRecievedMessage>(jsonString);
 
-        //TODO: Tighten this up! Potential bug here...
-        if (msg.should_import != 0)
-        {
-            //objImporter.StartImportingAllModels(msg.num_models);
-        }
-        else if (msg.models_created > num_models_imported)
+        
+        if (msg.models_created > num_models_imported)
         {
             Debug.Log("exported models: " + msg.models_created + " , imported models: " + num_models_imported);
             objImporter.StartImportSingleModel(num_models_imported); 

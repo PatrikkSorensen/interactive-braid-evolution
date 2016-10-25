@@ -89,7 +89,7 @@ public class ObjImporter : MonoBehaviour {
         {
             // position
             Transform testModel = curr_model.transform;
-            Vector3 v = FindSpawnPosition();
+            Vector3 v = FindSpawnPosition(index);
 
             // tweening
             testModel.position = v + Vector3.up * offsetY;
@@ -116,5 +116,10 @@ public class ObjImporter : MonoBehaviour {
         int index = Random.Range(0, spawnPositions.Length);
         Vector3 position = spawnPositions[index].position;
         return position; 
+    }
+
+    Vector3 FindSpawnPosition(int index)
+    {
+        return spawnPositions[index].position; 
     }
 }

@@ -39,6 +39,7 @@ public class ModelMessager : MonoBehaviour {
         m_height = height;
         m_messageVectors = new Vector3[populationSize][];
         Debug.Log("Evolution parameters set in network messsenger");
+        
     }
 
     public void PrintCurrentVectors()
