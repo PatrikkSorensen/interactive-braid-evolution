@@ -1,26 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+
 public class ModelMessager : MonoBehaviour {
 
     // Network variables
     private UDPSender sender;
-    private UDPMessage msg;
 
     // Message variables
     private int m_populationSize = 1;
     private int m_height = 1; 
     private Vector3[][] m_messageVectors;
-
-
-    [Serializable]
-    public class UDPMessage
-    {
-        public int height; 
-        public int population_size;
-        public Vector3[,] multi_vectors;
-        public Vector3[] vectors;
-    }
 
     void Start () {
         sender = GameObject.FindObjectOfType<UDPSender>(); 
@@ -38,7 +28,7 @@ public class ModelMessager : MonoBehaviour {
         m_populationSize = populationSize;
         m_height = height;
         m_messageVectors = new Vector3[populationSize][];
-        Debug.Log("Evolution parameters set in network messsenger");
+        //Debug.Log("Evolution parameters set in network messsenger");
         
     }
 
@@ -76,33 +66,33 @@ public class ModelMessager : MonoBehaviour {
 
     public void SendMessageToGH()
     {
-        StatusWindow.SetStatus(StatusWindow.STATUS.MODELLING); 
-        UDPMessage msg = new UDPMessage();
+        StatusWindow.SetStatus(StatusWindow.STATUS.MODELLING);
+        Braid[] braids = CreateBraidArray(m_messageVectors);
 
-        msg.height = m_height;
-        msg.population_size = m_populationSize;
-
-        Vector3[] vects = {
-            new Vector3(0, 0, 0),
-            new Vector3(1, 0, 2),
-            new Vector3(1, 0, 4),
-            new Vector3(5, 0, 6)
-        };
-
-        Vector3[,] array2D = new Vector3[4, 2] { 
-            { Vector3.zero, Vector3.zero }, 
-            { Vector3.zero, Vector3.up }, 
-            { Vector3.zero, Vector3.zero }, 
-            { Vector3.zero, Vector3.zero }
-        };
-
-        msg.multi_vectors = array2D; 
-        //msg.vectors = m_messageVectors[0]; 
-
-        msg.vectors = vects;
-        string s = JsonUtility.ToJson(msg);
+    
+        string s = JsonHelper.CreateJSONFromBraids(m_height, m_populationSize, braids); 
 
         Debug.Log("ModelMsg: " + s);
         sender.SendString(s);
+    }
+
+    public Braid[] CreateBraidArray(Vector3[][] braidVectors)
+    {
+        Braid[] braids = new Braid[m_populationSize];
+
+        if (m_messageVectors.Length == 0)
+        {
+            Debug.LogError("No message vectors found to populate braids."); 
+            return braids; 
+        } else
+        {
+            for (int i = 0; i < braids.Length; i++)
+            {
+                Braid b = new Braid("braid_" + i.ToString(), braidVectors[i]);
+                braids[i] = b;
+            }
+
+        }
+        return braids; 
     }
 }

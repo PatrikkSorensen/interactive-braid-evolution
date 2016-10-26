@@ -28,7 +28,7 @@ public class SliderUpdater : MonoBehaviour {
 
     internal static int GetValue(string v)
     {
-        Debug.Log("Returning height: " + sl.value);
+        //Debug.Log("Returning height: " + sl.value);
         
         return (int) sl.value; 
     }
