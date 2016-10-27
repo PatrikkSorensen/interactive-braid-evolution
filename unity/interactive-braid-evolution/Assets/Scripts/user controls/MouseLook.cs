@@ -25,12 +25,12 @@ public class MouseLook : MonoBehaviour {
 	
 	void Update ()
 	{
-        //if (InDeadzone())
-        //{
-        //    return;
-        //}
+        if (InDeadzone())
+        {
+            return;
+        }
 
-		if (axes == RotationAxes.MouseXAndY)
+        if (axes == RotationAxes.MouseXAndY)
 		{
 			//float rotationX = transform.localEulerAngles.y + Input.GetAxis("Mouse X") * sensitivityX;
 			rotationX += Input.GetAxis("Mouse X") * sensitivityX;

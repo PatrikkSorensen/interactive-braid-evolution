@@ -126,6 +126,7 @@ public class Optimizer : MonoBehaviour {
 
     public void Evaluate(IBlackBox phenome)
     {
+        // TODO: Setup ids and stuff in the message object
         GameObject obj = Instantiate(Unit, Unit.transform.position, Unit.transform.rotation) as GameObject;
         BraidController controller = obj.GetComponent<BraidController>();
 

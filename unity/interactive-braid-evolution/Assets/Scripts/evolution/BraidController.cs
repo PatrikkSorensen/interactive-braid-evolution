@@ -17,9 +17,6 @@ public class BraidController : UnitController
     ModelMessager messenger;
     Vector3[] MessageVectors; 
 
-    // Debugging variables
-    private string unitName;
-
     // Braid specific variables
     public int BraidId
     {
@@ -38,6 +35,7 @@ public class BraidController : UnitController
     {
         neat = box;
         messenger = GameObject.FindObjectOfType<ModelMessager>(); 
+        //TODO: There is no test vectors? Should be 0.0f all the way in the start
 
         // Set up inputs as array and feed it to the network
         ISignalArray inputArr = neat.InputSignalArray;
@@ -47,6 +45,8 @@ public class BraidController : UnitController
         int i = 0; 
         foreach(Vector3 v in testVectors)
         {
+            Debug.Log("vector:" + v); 
+
             inputArr[0] = v.x;
             inputArr[1] = v.y;
             inputArr[2] = v.z;
@@ -61,15 +61,20 @@ public class BraidController : UnitController
             //DebugNetwork(inputArr, outputArr);
         }
 
+        Debug.Log("vector?");
         messenger.AddVectors(braidId - 1, MessageVectors); 
         //PrintMessageVectors();
 
     }
 
-    
+    public void SetFitness(float newFitness)
+    {
+        fitness = newFitness;
+    }
 
     public override float GetFitness()
     {
+        Debug.Log("Returning fitness: " + fitness + " for gameobject: " + gameObject.name); 
         return fitness;
     }
 
