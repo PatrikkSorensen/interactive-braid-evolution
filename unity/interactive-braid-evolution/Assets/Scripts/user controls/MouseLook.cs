@@ -23,11 +23,13 @@ public class MouseLook : MonoBehaviour {
 	float rotationY = 0F;
 	float rotationX = 0F;
 	
-	
-	
-	
 	void Update ()
 	{
+        //if (InDeadzone())
+        //{
+        //    return;
+        //}
+
 		if (axes == RotationAxes.MouseXAndY)
 		{
 			//float rotationX = transform.localEulerAngles.y + Input.GetAxis("Mouse X") * sensitivityX;
@@ -83,4 +85,25 @@ public class MouseLook : MonoBehaviour {
 		minimumSmoothX = minimumX + minimumX / (-5);
 		
 	}
+
+    bool InDeadzone()
+    {
+        //calculate two points:
+        //  - center of screen
+        //  - mouse position
+        Vector3 centerPos = new Vector3(Screen.width / 2f, Screen.height / 2f, 0f);
+        Vector3 mousePos = Input.mousePosition;
+        //calculate mouse's position RELATIVE TO center of screen
+        Vector3 mouseFromCenter = mousePos - centerPos;
+
+        //"dead zone" in center some % of screen's width
+        float clampDistance = Screen.width * 0.05f;
+        if (mouseFromCenter.magnitude < clampDistance)
+        {
+            //mouseFromCenter = Vector3.zero;
+            return true;
+        }
+
+        return false; 
+    }
 }
