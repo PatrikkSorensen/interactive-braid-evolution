@@ -4,13 +4,13 @@ using System.Collections;
 public class Braid
 {
 
-    public string m_name;
-    public Vector3[] m_vectors; 
+    public string name;
+    public Vector3[] vectors; 
 
-    public Braid(string name, Vector3[] vectors)
+    public Braid(string newName, Vector3[] newVectors)
     {
-        this.m_name = name;
-        this.m_vectors = vectors; 
+        this.name = newName;
+        this.vectors = newVectors; 
     }
 }
 

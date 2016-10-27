@@ -66,10 +66,11 @@ public class ModelMessager : MonoBehaviour {
 
     public void SendMessageToGH()
     {
+        m_populationSize = 5;
         StatusWindow.SetStatus(StatusWindow.STATUS.MODELLING);
         Braid[] braids = CreateBraidArray(m_messageVectors);
 
-    
+         
         string s = JsonHelper.CreateJSONFromBraids(m_height, m_populationSize, braids); 
 
         Debug.Log("ModelMsg: " + s);
@@ -80,19 +81,50 @@ public class ModelMessager : MonoBehaviour {
     {
         Braid[] braids = new Braid[m_populationSize];
 
-        if (m_messageVectors.Length == 0)
+        // TEST VECTORS: 
+       // Vector3[] vects = {
+       //     new Vector3(0, 0, 0),
+       //     new Vector3(1, 0, 2),
+       //     new Vector3(1, 0, 4),
+       //     new Vector3(5, 0, 6)
+       // };
+
+       // Vector3[] vects2 = {
+       //    new Vector3( 0,0,0),
+       //    new Vector3( 0,0,2),
+       //    new Vector3( 0,0,4),
+       //    new Vector3( 0,0,6),
+       //    new Vector3( 0,0,8),
+       //    new Vector3( 2,0,10)
+       //};
+
+
+        for (int i = 0; i < braids.Length; i++)
         {
-            Debug.LogError("No message vectors found to populate braids."); 
-            return braids; 
-        } else
-        {
-            for (int i = 0; i < braids.Length; i++)
+            Braid b;
+            Vector3[] vects = {
+                new Vector3( Random.Range(i, i + 4), Random.Range(i, i + 4), 0),
+                new Vector3( Random.Range(i, i + 4), Random.Range(i, i + 4) ,2),
+                new Vector3( Random.Range(i, i + 4), Random.Range(i, i + 4) ,4),
+                new Vector3( Random.Range(i, i + 4), Random.Range(i, i + 4) ,6),
+                new Vector3( Random.Range(i, i + 4), Random.Range(i, i + 4) ,8),
+                new Vector3( Random.Range(i, i + 4), Random.Range(i, i + 4) ,10)
+            };
+
+            if (m_messageVectors[i] != null)
             {
-                Braid b = new Braid("braid_" + i.ToString(), braidVectors[i]);
-                braids[i] = b;
+                b = new Braid("braid_" + i.ToString(), braidVectors[i]);
+            } else
+            {
+                if(i == 1)
+                    b = new Braid("braid_" + i.ToString(), vects);
+                else
+                    b = new Braid("braid_" + i.ToString(), vects);
             }
 
+            braids[i] = b;
         }
+
         return braids; 
     }
 }
