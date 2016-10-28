@@ -132,7 +132,7 @@ public class Optimizer : MonoBehaviour {
 
         /* SPECIFIC TO THE BRAID CONTROLLER EXPERIMENT */ 
         obj.transform.parent = UnitContainer.transform;
-        obj.name = "unit_" + Generation.ToString() + "_" + UnitContainer.transform.childCount;
+        obj.name = "unit_" + UnitContainer.transform.childCount;
         controller.BraidId = UnitContainer.transform.childCount;
         /* END OF SPECIFIC OPERATIONS TO THE BRAID EXPERIMENT */
 

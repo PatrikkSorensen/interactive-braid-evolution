@@ -83,13 +83,27 @@ public class ObjImporter : MonoBehaviour {
         Debug.Log("Starting to import a single model with index: " + index);
         shouldImportSingle = false;
         string objFileName = Application.dataPath + "/Geometry/Models/braid_" + index.ToString() + ".obj";
-        GameObject curr_model = ObjReader.use.ConvertFile(objFileName, true)[0]; // Has to be an array because...? 
+        GameObject curr_model = ObjReader.use.ConvertFile(objFileName, true)[0];
+
+
 
         if (curr_model != null)
         {
+            // names and id
+            curr_model.name = "braid_" + index.ToString();
+            curr_model.tag = "Braid";
+
             // position
             Transform testModel = curr_model.transform;
             Vector3 v = FindSpawnPosition(index);
+
+            //TODO: Refactor this
+            if (GameObject.Find("unit_" + index.ToString()))
+            {
+                Debug.Log("Couldt find gameobject to parent with"); 
+                testModel.parent = GameObject.Find("unit_" + index.ToString()).transform;
+            }
+
 
             // tweening
             testModel.position = v + Vector3.up * offsetY;
@@ -99,6 +113,9 @@ public class ObjImporter : MonoBehaviour {
             Vector3 rotationVector = testModel.rotation.eulerAngles;
             rotationVector.x = -90.0f;
             testModel.rotation = Quaternion.Euler(rotationVector);
+
+            // collision box for selection
+            curr_model.AddComponent<BoxCollider>(); 
 
             // components and other scripts
             curr_model.AddComponent<Rotate>(); 
