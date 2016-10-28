@@ -2,7 +2,7 @@
 
     <Config>
       <PopulationSize>5</PopulationSize>
-      <SpecieCount>1</SpecieCount>
+      <SpecieCount>5</SpecieCount>
       <Activation>
         <Scheme>Acyclic</Scheme>
       </Activation>

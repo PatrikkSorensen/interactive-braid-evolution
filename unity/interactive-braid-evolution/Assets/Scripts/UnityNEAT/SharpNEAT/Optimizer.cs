@@ -13,7 +13,7 @@ public class Optimizer : MonoBehaviour {
 
     // Neural Networks
     public int NUM_INPUTS = 3;
-    public int NUM_OUTPUTS = 3;
+    public int NUM_OUTPUTS = 10;
 
     // Neat parameters
     SimpleExperiment experiment;
@@ -95,7 +95,7 @@ public class Optimizer : MonoBehaviour {
         _ea.PausedEvent += new EventHandler(ea_PauseEvent);
         // TODO: Make something pause until braids have been made here...
         _ea.StartContinue();
-        messenger.PrintCurrentVectors();
+        //messenger.PrintCurrentVectors();
         Debug.Log("-----------------------------------  FINISHED EA -----------------------------------");
     }
 
