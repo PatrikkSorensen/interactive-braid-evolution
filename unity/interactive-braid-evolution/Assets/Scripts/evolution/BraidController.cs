@@ -33,19 +33,17 @@ public class BraidController : UnitController
 
     public override void Activate(IBlackBox box)
     {
+        //TODO: Clean this up and refactor it into functions for debugging
         neat = box;
         messenger = GameObject.FindObjectOfType<ModelMessager>();
-        //TODO: This should change after evaluation to its own output
-        Vector3[] testVectors = {
-            new Vector3(0.0f, 0.0f, 0),
-            new Vector3(0.0f, 0.0f, 2),
-            new Vector3(0.0f, 0.0f, 4),
-            new Vector3(0.0f, 0.0f, 6),
-            new Vector3(0.0f, 0.0f, 8),
-            new Vector3(0.0f, 0.0f, 10),
-            new Vector3(0.0f, 0.0f, 12),
-            new Vector3(0.0f, 0.0f, 14)
-        };
+        int i = 0;
+
+
+        testVectors = new Vector3[20]; 
+        for (i = 0; i < 20; i++)
+        {
+            testVectors[i] = new Vector3(0.0f, 0.0f, i * 2); 
+        }
 
         testVectors = NormalizeInputVectors(testVectors);
 
@@ -54,7 +52,7 @@ public class BraidController : UnitController
 
         MessageVectors = new Vector3[testVectors.Length];
 
-        int i = 0;
+        i = 0; 
         Debug.Log("******** " + gameObject.name + " is creating braid segments ********");
         foreach (Vector3 v in testVectors)
         {
