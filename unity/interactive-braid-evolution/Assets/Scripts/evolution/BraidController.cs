@@ -6,7 +6,7 @@ using System;
 public class BraidController : UnitController
 {
     // Input vectors
-    public Vector3[] testVectors;
+    public Vector3[] inputVectors;
 
     private GameObject fitnessObjective;
     private IBlackBox neat;
@@ -33,48 +33,31 @@ public class BraidController : UnitController
 
     public override void Activate(IBlackBox box)
     {
-        //TODO: Clean this up and refactor it into functions for debugging
+        
         neat = box;
-        messenger = GameObject.FindObjectOfType<ModelMessager>();
-        int i = 0;
-
-
-        testVectors = new Vector3[20]; 
-        for (i = 0; i < 20; i++)
-        {
-            testVectors[i] = new Vector3(0.0f, 0.0f, i * 2); 
-        }
-
-        testVectors = NormalizeInputVectors(testVectors);
-
-        // Set up inputs as array and feed it to the network
         ISignalArray inputArr = neat.InputSignalArray;
+        InitializeControllerVariables(); 
 
-        MessageVectors = new Vector3[testVectors.Length];
+        inputVectors = CreateInputVectors(5);
+        inputVectors = NormalizeInputVectors(inputVectors);
+        MessageVectors = new Vector3[inputVectors.Length];
 
-        i = 0; 
         Debug.Log("******** " + gameObject.name + " is creating braid segments ********");
-        foreach (Vector3 v in testVectors)
-        {
-
-            inputArr[0] = v.x;
-            inputArr[1] = v.y;
+        int i = 0; 
+        foreach (Vector3 v in inputVectors)
+        {   
             inputArr[2] = v.z;
-
-
             neat.Activate();
 
             ISignalArray outputArr = neat.OutputSignalArray;
             
             MessageVectors[i] = NormalizeOutput(outputArr, i);
 
-            i++; 
-            //DebugRawNetwork(inputArr, outputArr);
-            
+            DebugRawNetwork(inputArr, outputArr);
+            i++;
         }
         messenger.AddVectors(braidId - 1, MessageVectors);
-        DebugNormalizedNetwork();
-
+        //DebugNormalizedNetwork();
     }
 
 
@@ -100,17 +83,9 @@ public class BraidController : UnitController
     /********************* NORMALIZING AND ULITIY FUNCTIONS **********************/
     public Vector3 NormalizeOutput (ISignalArray outputs, int vectorCounter)
     {
-        float min = -10.0f;
-        float max = 10.0f;
-
         double x = outputs[0] * 10;
         double y = outputs[1] * 10;
-        //Debug.Log("OUTPUTS: x: " + x + ", y: " + y); 
-
-        Vector3 v = new Vector3((float) x, (float) y, vectorCounter);
-
-
-        return v;
+        return new Vector3((float)x, (float)y, vectorCounter); 
     }
 
     private Vector3[] NormalizeInputVectors(Vector3[] vectors)
@@ -133,6 +108,22 @@ public class BraidController : UnitController
         return normalizedArray;
     }
 
+    public void InitializeControllerVariables()
+    {
+        messenger = GameObject.FindObjectOfType<ModelMessager>();
+    }
+
+    /********************** UTILITY FUNCTIONS FOR NETWORK **********************/
+    public Vector3[] CreateInputVectors(int size)
+    {
+        inputVectors = new Vector3[size];
+        for (int i = 0; i < inputVectors.Length; i++)
+        {
+            inputVectors[i] = new Vector3(0.0f, 0.0f, i * 2);
+        }
+        return inputVectors;
+    }
+
     /********************** DEBUGGING AND TESTING FUNCTIONS **********************/
 
     public void PrintMessageVectors ()
@@ -150,6 +141,7 @@ public class BraidController : UnitController
         Debug.Log("******** RAW INPUT ARRAY FOR " + gameObject.name + ": ********");
         for (int i = 0; i < inputs.Length; i++)
         {
+            
             Debug.Log("[" + i + "]" + " : [" + inputs[i] + "]");
         }
         Debug.Log("*********************************************************");
@@ -169,12 +161,12 @@ public class BraidController : UnitController
 
     public void DebugRawNetwork(ISignalArray inputs, ISignalArray outputs)
     {
-            //PrintRawInputs(inputs);
-            PrintRawOutputs(outputs);
+            PrintRawInputs(inputs);
+            //PrintRawOutputs(outputs);
     }
 
     private void DebugNormalizedNetwork()
     {
-        PrintMessageVectors(); 
+        //PrintMessageVectors(); 
     }
 }

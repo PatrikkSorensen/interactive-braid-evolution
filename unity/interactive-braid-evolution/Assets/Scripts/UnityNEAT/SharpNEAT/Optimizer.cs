@@ -72,7 +72,7 @@ public class Optimizer : MonoBehaviour {
         champFileSavePath = Application.persistentDataPath + string.Format("/{0}.champ.xml", "car");
         if(LoadPopulation)
             popFileSavePath = Application.persistentDataPath + string.Format("/{0}.pop.xml", "car");
-        print(champFileSavePath);
+        //print(champFileSavePath);
 
         startTime = DateTime.Now;
 
