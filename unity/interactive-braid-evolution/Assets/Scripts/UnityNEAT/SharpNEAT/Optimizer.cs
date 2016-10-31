@@ -96,6 +96,7 @@ public class Optimizer : MonoBehaviour {
         // TODO: Make something pause until braids have been made here...
         _ea.StartContinue();
         //messenger.PrintCurrentVectors();
+        BraidSelector.CreateHardcodedFitness(); 
         Debug.Log("-----------------------------------  FINISHED EA -----------------------------------");
     }
 

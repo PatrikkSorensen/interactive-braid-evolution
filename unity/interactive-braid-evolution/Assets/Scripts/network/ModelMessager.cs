@@ -57,10 +57,6 @@ public class ModelMessager : MonoBehaviour {
 
     public void AddVectors(int index, Vector3[] vectors)
     {
-        //Debug.Log("recieved vectors: ");
-        //foreach (Vector3 v in vectors)
-        //    Debug.Log(v);
-
         m_messageVectors[index] = vectors;
     }
 
