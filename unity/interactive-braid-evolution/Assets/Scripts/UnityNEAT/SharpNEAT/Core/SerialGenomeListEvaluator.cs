@@ -133,6 +133,7 @@ namespace SharpNeat.Core
                 }
                 else
                 {
+                    
                     _phenomeEvaluator.Evaluate(phenome);
                     FitnessInfo fitnessInfo = _phenomeEvaluator.GetLastFitness(phenome);
                     genome.EvaluationInfo.SetFitness(fitnessInfo._fitness);
@@ -161,6 +162,7 @@ namespace SharpNeat.Core
                 }
                 else
                 {
+
                     _phenomeEvaluator.Evaluate(phenome);
                     FitnessInfo fitnessInfo = _phenomeEvaluator.GetLastFitness(phenome);
                     genome.EvaluationInfo.SetFitness(fitnessInfo._fitness);

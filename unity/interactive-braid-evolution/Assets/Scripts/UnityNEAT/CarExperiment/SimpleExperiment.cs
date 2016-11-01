@@ -14,6 +14,7 @@ using SharpNeat.SpeciationStrategies;
 using SharpNeat.EvolutionAlgorithms.ComplexityRegulation;
 using SharpNEAT.Core;
 using System;
+using SharpNEAT.core;
 
 public class SimpleExperiment : INeatExperiment
 {
@@ -27,7 +28,7 @@ public class SimpleExperiment : INeatExperiment
     string _complexityRegulationStr;
     int? _complexityThreshold;
     string _description;
-    Optimizer _optimizer;
+    Optimizer m_optimizer;
     int _inputCount;
     int _outputCount;
 
@@ -68,7 +69,7 @@ public class SimpleExperiment : INeatExperiment
 
     public void SetOptimizer(Optimizer se)
     {
-        this._optimizer = se;
+        this.m_optimizer = se;
     }
 
 
@@ -167,19 +168,20 @@ public class SimpleExperiment : INeatExperiment
         NeatEvolutionAlgorithm<NeatGenome> ea = new NeatEvolutionAlgorithm<NeatGenome>(_eaParams, speciationStrategy, complexityRegulationStrategy);
 
         // Create black box evaluator       
-        SimpleEvaluator evaluator = new SimpleEvaluator(_optimizer);
+        SimpleEvaluator evaluator = new SimpleEvaluator(m_optimizer);
 
         IGenomeDecoder<NeatGenome, IBlackBox> genomeDecoder = CreateGenomeDecoder();
 
 
-        IGenomeListEvaluator<NeatGenome> innerEvaluator = new UnityParallelListEvaluator<NeatGenome, IBlackBox>(genomeDecoder, evaluator, _optimizer);
+        //IGenomeListEvaluator<NeatGenome> innerEvaluator = new UnityParallelListEvaluator<NeatGenome, IBlackBox>(genomeDecoder, evaluator, m_optimizer);
+        IGenomeListEvaluator<NeatGenome> innerEvaluator = new BraidListEvaluator< NeatGenome, IBlackBox> (genomeDecoder, evaluator, m_optimizer);
 
         //IGenomeListEvaluator<NeatGenome> selectiveEvaluator = new SelectiveGenomeListEvaluator<NeatGenome>(innerEvaluator,
-            //SelectiveGenomeListEvaluator<NeatGenome>.CreatePredicate_OnceOnly());
+        //SelectiveGenomeListEvaluator<NeatGenome>.CreatePredicate_OnceOnly());
 
         //ea.Initialize(selectiveEvaluator, genomeFactory, genomeList);
         ea.Initialize(innerEvaluator, genomeFactory, genomeList);
-
+        Debug.Log("Created NeatEvolutionAlgorithm...");
         return ea;
     }
 }

@@ -85,24 +85,22 @@ public class Optimizer : MonoBehaviour {
 
     public void StartEA()
     {
-        SetTimeScale();
-        //essenger.SetupEvolutionParameters(_)
-        Debug.Log("-----------------------------------  STARTING EA -----------------------------------");
-        messenger.SetupEvolutionParameters(PopulationSize, SliderUpdater.GetValue("Height"));
-        StatusWindow.SetStatus(StatusWindow.STATUS.EVOLVING);
+        Debug.Log("----------------------  SETTING UP EA IN UNITY SCENE ----------------------");
+        // ea and neat 
         _ea = experiment.CreateEvolutionAlgorithm(popFileSavePath);
         _ea.UpdateEvent += new EventHandler(ea_UpdateEvent);
         _ea.PausedEvent += new EventHandler(ea_PauseEvent);
-        // TODO: Make something pause until braids have been made here...
         _ea.StartContinue();
-        //messenger.PrintCurrentVectors();
-        BraidSelector.CreateHardcodedFitness(); 
-        Debug.Log("-----------------------------------  FINISHED EA -----------------------------------");
+
+        // evaluation and braid controller related 
+        SetTimeScale();
+
+        Debug.Log("------------------- FINISHED SETTING UP EA -------------------------------");
     }
 
     void ea_UpdateEvent(object sender, EventArgs e)
     {
-        Debug.Log("Generation: " + _ea.CurrentGeneration + ", best fitness: " + _ea.Statistics._maxFitness);
+        //Debug.Log("Generation: " + _ea.CurrentGeneration + ", best fitness: " + _ea.Statistics._maxFitness);
 
         Fitness = _ea.Statistics._maxFitness;
         Generation = _ea.CurrentGeneration;

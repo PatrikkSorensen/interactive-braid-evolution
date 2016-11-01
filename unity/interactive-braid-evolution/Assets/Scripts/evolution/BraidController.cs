@@ -38,7 +38,7 @@ public class BraidController : UnitController
 
     public void InitializeControllerVariables()
     {
-        Debug.Log("Initializing and activating controller: " + gameObject.name);
+        //Debug.Log("Initializing and activating controller: " + gameObject.name);
         VECTOR_ARRAY_SIZE = 11;
         messenger = GameObject.FindObjectOfType<ModelMessager>();
 
@@ -81,7 +81,7 @@ public class BraidController : UnitController
         //DebugNetwork();
         //PrintBraidVectors();
         
-        Debug.Log(" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ");
+        //Debug.Log(" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ");
 
     }
 
@@ -95,7 +95,7 @@ public class BraidController : UnitController
 
             float x = (float) debugOutputArray[j] * 10.0f;
             float y = (float) debugOutputArray[j + 1] * 10.0f;
-            float z = (float) debugInputArray[i] * 10.0f;
+            float z = (float) ((debugInputArray[i] + 1) * 10.0f); // Has to be made positive
             BraidVectors[i] = new Vector3(x, y, z);
 
             j += 2; 
@@ -105,13 +105,13 @@ public class BraidController : UnitController
 
     public void SetFitness(float newFitness)
     {
-        Debug.Log("Setting fitness to: " + newFitness); 
+        //Debug.Log("Setting fitness to: " + newFitness); 
         fitness = newFitness;
     }
 
     public override float GetFitness()
     {
-        Debug.Log("Returning fitness: " + fitness + " for gameobject: " + gameObject.name); 
+        //Debug.Log("Returning fitness: " + fitness + " for gameobject: " + gameObject.name); 
         return fitness;
     }
 

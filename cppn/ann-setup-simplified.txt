@@ -1,4 +1,3 @@
-
 inputs: y cordinate,  e.g the height cordinate
 outputs: x and z cordinate
 

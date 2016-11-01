@@ -44,7 +44,7 @@ public class BraidSelector : MonoBehaviour {
     public static void CreateHardcodedFitness()
     {
         BraidController bc = Object.FindObjectOfType<BraidController>();
-        Debug.Log(bc.transform.name);
+        Debug.Log("Hardcoded fitness applied to: " + bc.transform.name);
         bc.SetFitness(1.0f);
     }
 }

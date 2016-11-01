@@ -22,18 +22,22 @@ public class NormalizeHelper : MonoBehaviour {
         return normalizedArray;
     }
 
+    /// <summary>
+    /// Normalizes values between 0.0 and 40.0f in a range of [-1, 1]
+    /// </summary>
+    /// <param name="inputs"></param>
+    /// <returns></returns>
     public static double[] NormalizeInputDoubles(double[] inputs)
     {
-        //TODO: Wierd stuff happen if i minimize this
-        float min = -20.0f;
-        float max = 20.0f;
+        float min = 0.0f;
+        float max = 40.0f;
 
         double[] normalizedArray = new double[inputs.Length];
 
         for (int i = 0; i < inputs.Length; i++)
         {
             double x = (inputs[i] - min) / (max - min) * 2 - 1;
-            Debug.Log("input: " + inputs[i] + "became: " + x); 
+            //Debug.Log("input: " + inputs[i] + " became normalized to: " + x); 
             normalizedArray[i] = x;
         }
 
