@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using SharpNeat.EvolutionAlgorithms; 
 using System.Collections;
 using DG.Tweening; 
 
@@ -39,6 +40,12 @@ public class BraidSelector : MonoBehaviour {
                 }
             }
         }
+
+        if (Input.GetKeyDown(KeyCode.T)) {
+            Optimizer o = GameObject.FindObjectOfType<Optimizer>();
+            o.SetEAProgressFlag(true); 
+        }
+            
     }
 
     public static void CreateHardcodedFitness()

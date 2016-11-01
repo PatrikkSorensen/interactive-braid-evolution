@@ -202,6 +202,11 @@ public class Optimizer : MonoBehaviour {
         GUI.Button(new Rect(10, Screen.height - 70, 100, 60), string.Format("Generation: {0}\nFitness: {1:0.00}", Generation, Fitness));
     }
 
+    public void SetEAProgressFlag(bool flag)
+    {
+        _ea.SetProgressFlag(flag); 
+    }
+
     // Utility functions: 
     void SaveXMLFiles()
     {
