@@ -16,7 +16,8 @@ public class Optimizer : MonoBehaviour {
     public int NUM_OUTPUTS = 10;
 
     // Neat parameters
-    SimpleExperiment experiment;
+    //SimpleExperiment experiment;
+    BraidExperiment experiment; 
     static NeatEvolutionAlgorithm<NeatGenome> _ea;
     Dictionary<IBlackBox, UnitController> ControllerMap = new Dictionary<IBlackBox, UnitController>();
 
@@ -53,7 +54,7 @@ public class Optimizer : MonoBehaviour {
         xmlConfig.LoadXml(textAsset.text);
 
         // set up experiment
-        experiment = new SimpleExperiment();
+        experiment = new BraidExperiment();
         experiment.Initialize("Car Experiment", xmlConfig.DocumentElement, NUM_INPUTS, NUM_OUTPUTS);
         experiment.SetOptimizer(this);
 

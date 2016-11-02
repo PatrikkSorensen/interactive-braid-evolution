@@ -16,7 +16,7 @@ using SharpNEAT.Core;
 using System;
 using SharpNEAT.core;
 
-public class SimpleExperiment : INeatExperiment
+public class BraidExperiment : INeatExperiment
 {
 
     NeatEvolutionAlgorithmParameters _eaParams;
@@ -165,14 +165,16 @@ public class SimpleExperiment : INeatExperiment
 
         IComplexityRegulationStrategy complexityRegulationStrategy = ExperimentUtils.CreateComplexityRegulationStrategy(_complexityRegulationStr, _complexityThreshold);
 
-        NeatEvolutionAlgorithm<NeatGenome> ea = new NeatEvolutionAlgorithm<NeatGenome>(_eaParams, speciationStrategy, complexityRegulationStrategy);
+
+        BraidNeatEvolutionAlgorithm<NeatGenome> ea = new BraidNeatEvolutionAlgorithm<NeatGenome>(_eaParams, speciationStrategy, complexityRegulationStrategy);
+        //NeatEvolutionAlgorithm<NeatGenome> ea = new NeatEvolutionAlgorithm<NeatGenome>(_eaParams, speciationStrategy, complexityRegulationStrategy);
         // Create black box evaluator       
         SimpleEvaluator evaluator = new SimpleEvaluator(m_optimizer);
         IGenomeDecoder<NeatGenome, IBlackBox> genomeDecoder = CreateGenomeDecoder();
 
 
         //IGenomeListEvaluator<NeatGenome> innerEvaluator = new UnityParallelListEvaluator<NeatGenome, IBlackBox>(genomeDecoder, evaluator, m_optimizer);
-        IGenomeListEvaluator<NeatGenome> innerEvaluator = new BraidListEvaluator< NeatGenome, IBlackBox> (genomeDecoder, evaluator, m_optimizer);
+        IGenomeListEvaluator<NeatGenome> innerEvaluator = new BraidListEvaluator<NeatGenome, IBlackBox>(genomeDecoder, evaluator, m_optimizer);
 
         //IGenomeListEvaluator<NeatGenome> selectiveEvaluator = new SelectiveGenomeListEvaluator<NeatGenome>(innerEvaluator,
         //SelectiveGenomeListEvaluator<NeatGenome>.CreatePredicate_OnceOnly());

@@ -42,19 +42,19 @@ namespace SharpNeat.EvolutionAlgorithms
     public class NeatEvolutionAlgorithm<TGenome> : AbstractGenerationalAlgorithm<TGenome>
         where TGenome : class, IGenome<TGenome>
     {
-        NeatEvolutionAlgorithmParameters _eaParams;
-        readonly NeatEvolutionAlgorithmParameters _eaParamsComplexifying;
-        readonly NeatEvolutionAlgorithmParameters _eaParamsSimplifying;
+        protected NeatEvolutionAlgorithmParameters _eaParams;
+        protected readonly NeatEvolutionAlgorithmParameters _eaParamsComplexifying;
+        protected readonly NeatEvolutionAlgorithmParameters _eaParamsSimplifying;
 
-        readonly ISpeciationStrategy<TGenome> _speciationStrategy;
-        IList<Specie<TGenome>> _specieList;
+        protected readonly ISpeciationStrategy<TGenome> _speciationStrategy;
+        protected IList<Specie<TGenome>> _specieList;
         /// <summary>Index of the specie that contains _currentBestGenome.</summary>
         int _bestSpecieIdx;
         readonly FastRandom _rng = new FastRandom();
-        readonly NeatAlgorithmStats _stats;
+        protected readonly NeatAlgorithmStats _stats;
 
-        ComplexityRegulationMode _complexityRegulationMode;
-        readonly IComplexityRegulationStrategy _complexityRegulationStrategy;
+        protected ComplexityRegulationMode _complexityRegulationMode;
+        protected readonly IComplexityRegulationStrategy _complexityRegulationStrategy;
 
         // P. SØRENSEN VARIABLES 
         public bool ReadyForNextGeneration; 
@@ -289,7 +289,7 @@ namespace SharpNeat.EvolutionAlgorithms
         ///  3) Following (1) and (2) we can calculate the total number offspring that need to be generated 
         ///     for the current generation.
         /// </summary>
-        private SpecieStats[] CalcSpecieStats(out int offspringCount)
+        protected SpecieStats[] CalcSpecieStats(out int offspringCount)
         {
             double totalMeanFitness = 0.0;
 
@@ -527,7 +527,7 @@ namespace SharpNeat.EvolutionAlgorithms
         /// Create the required number of offspring genomes, using specieStatsArr as the basis for selecting how
         /// many offspring are produced from each species.
         /// </summary>
-        private List<TGenome> CreateOffspring(SpecieStats[] specieStatsArr, int offspringCount)
+        protected List<TGenome> CreateOffspring(SpecieStats[] specieStatsArr, int offspringCount)
         {
             // Build a RouletteWheelLayout for selecting species for cross-species reproduction.
             // While we're in the loop we also pre-build a RouletteWheelLayout for each specie;
@@ -714,7 +714,7 @@ namespace SharpNeat.EvolutionAlgorithms
         /// <summary>
         /// Updates the NeatAlgorithmStats object.
         /// </summary>
-        private void UpdateStats()
+        protected void UpdateStats()
         {
             _stats._generation = _currentGeneration;
             _stats._totalEvaluationCount = _genomeListEvaluator.EvaluationCount;
@@ -775,7 +775,7 @@ namespace SharpNeat.EvolutionAlgorithms
         /// <summary>
         /// Sorts the genomes within each species fittest first, secondary sorts on age.
         /// </summary>
-        private void SortSpecieGenomes()
+        protected void SortSpecieGenomes()
         {
             int minSize = _specieList[0].GenomeList.Count;
             int maxSize = minSize;
@@ -800,7 +800,7 @@ namespace SharpNeat.EvolutionAlgorithms
         /// <summary>
         /// Clear the genome list within each specie.
         /// </summary>
-        private void ClearAllSpecies()
+        protected void ClearAllSpecies()
         {
             foreach(Specie<TGenome> specie in _specieList) {
                 specie.GenomeList.Clear();
@@ -810,7 +810,7 @@ namespace SharpNeat.EvolutionAlgorithms
         /// <summary>
         /// Rebuild _genomeList from genomes held within the species.
         /// </summary>
-        private void RebuildGenomeList()
+        protected void RebuildGenomeList()
         {
             _genomeList.Clear();
             foreach(Specie<TGenome> specie in _specieList) {
@@ -822,7 +822,7 @@ namespace SharpNeat.EvolutionAlgorithms
         /// Trims the genomeList in each specie back to the number of elite genomes specified in
         /// specieStatsArr. Returns true if there are empty species following trimming.
         /// </summary>
-        private bool TrimSpeciesBackToElite(SpecieStats[] specieStatsArr)
+        protected bool TrimSpeciesBackToElite(SpecieStats[] specieStatsArr)
         {
             bool emptySpeciesFlag = false;
             int count = _specieList.Count;
@@ -880,7 +880,7 @@ namespace SharpNeat.EvolutionAlgorithms
 
         #region InnerClass [SpecieStats]
 
-        class SpecieStats
+        protected class SpecieStats
         {
             // Real/continuous stats.
             public double _meanFitness;
