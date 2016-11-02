@@ -16,6 +16,7 @@ namespace SharpNEAT.core
         IPhenomeEvaluator<TPhenome> m_phenomeEvaluator;
 
         Optimizer m_optimizer;
+        public bool ReadyForNextGeneration = false; 
 
         public BraidListEvaluator(IGenomeDecoder<TGenome, TPhenome> genomeDecoder,
                                          IPhenomeEvaluator<TPhenome> phenomeEvaluator,
@@ -38,21 +39,12 @@ namespace SharpNEAT.core
 
         public IEnumerator Evaluate(IList<TGenome> genomeList)
         {
-            //yield return Coroutiner.StartCoroutine(TestCoroutiner(4)); 
             yield return Coroutiner.StartCoroutine(evaluateList(genomeList));
-            Debug.Log("After Coroutine has ben called ********");
-        }
-
-        private IEnumerator TestCoroutiner(int result)
-        {
-            Debug.Log("Waiting..."); 
-            yield return new WaitForSeconds(2);
-            Debug.Log("Done waiting"); 
         }
 
         private IEnumerator evaluateList(IList<TGenome> genomeList)
         {
-            Debug.Log("---------------------- Starting Evaluation of GenomeList ----------------------");
+            Debug.Log("---------------------- Starting new trial ----------------------");
 
             // ui 
             StatusWindow.SetStatus(StatusWindow.STATUS.EVOLVING);
@@ -62,9 +54,13 @@ namespace SharpNEAT.core
             Dictionary<TGenome, FitnessInfo[]> fitnessDict = new Dictionary<TGenome, FitnessInfo[]>();
             for (int i = 0; i < m_optimizer.Trials; i++)
             {
-                Debug.Log("---------------------- Starting new trial ----------------------");
-                Utility.Log("Iteration " + (i + 1));
+                Debug.Log("---------------------- Starting simulation ----------------------");
                 Debug.Log("Creating Genomes...");
+
+                //TODO: This is too hardcoded, we need another way for braid experiments to remove them selves.
+                yield return new WaitForSeconds(3.0f); 
+
+                BraidSelector.SetShouldEvaluate(true);
                 m_phenomeEvaluator.Reset();
                 dict = new Dictionary<TGenome, TPhenome>();
                 foreach (TGenome genome in genomeList)
@@ -87,8 +83,26 @@ namespace SharpNEAT.core
                     }
                 }
 
-                yield return new WaitForSeconds(m_optimizer.TrialDuration);
-                Debug.Log("---------------------- End of trial ----------------------");
+                /**********************  IEC SPECIFIC CODE BEGINS HERE ******************************/
+                ModelMessager messenger = GameObject.FindObjectOfType<ModelMessager>();
+                messenger.SendMessageToGH();
+
+                //TODO: Error check: TrialDuration
+                while (!BraidSelector.ReadyForSelection())
+                {
+                    Debug.Log("In simulation, waiting for input..."); 
+                    yield return new WaitForSeconds(2.0f);
+                }
+
+
+
+                BraidSelector.SetShouldEvaluate(false);
+                BraidSelector.SetReadyForSelection(false); 
+
+                ReadyForNextGeneration = false;
+
+                /**********************  IEC SPECIFIC CODE ENDS HERE   ******************************/
+                Debug.Log("---------------------- End of simulation ----------------------");
 
                 Debug.Log("Getting fitness values...");
                 BraidSelector.CreateHardcodedFitness();
@@ -134,7 +148,7 @@ namespace SharpNEAT.core
                 }
             }
 
-            Debug.Log("---------------------- End of GenomeList Evaluation ----------------------");
+            Debug.Log("---------------------- End of trial ----------------------");
         }
 
         public void Reset()

@@ -57,7 +57,7 @@ public class ModelMessager : MonoBehaviour {
 
     public void AddVectors(int index, Vector3[] vectors)
     {
-        //m_messageVectors[index] = vectors;
+        m_messageVectors[index] = vectors;
     }
 
     public void SendMessageToGH()

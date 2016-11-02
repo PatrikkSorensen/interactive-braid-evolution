@@ -162,14 +162,13 @@ public class BraidExperiment : INeatExperiment
     {
         IDistanceMetric distanceMetric = new ManhattanDistanceMetric(1.0, 0.0, 10.0);
         ISpeciationStrategy<NeatGenome> speciationStrategy = new KMeansClusteringStrategy<NeatGenome>(distanceMetric);
-
         IComplexityRegulationStrategy complexityRegulationStrategy = ExperimentUtils.CreateComplexityRegulationStrategy(_complexityRegulationStr, _complexityThreshold);
 
-
         BraidNeatEvolutionAlgorithm<NeatGenome> ea = new BraidNeatEvolutionAlgorithm<NeatGenome>(_eaParams, speciationStrategy, complexityRegulationStrategy);
-        //NeatEvolutionAlgorithm<NeatGenome> ea = new NeatEvolutionAlgorithm<NeatGenome>(_eaParams, speciationStrategy, complexityRegulationStrategy);
+
         // Create black box evaluator       
-        SimpleEvaluator evaluator = new SimpleEvaluator(m_optimizer);
+        //SimpleEvaluator evaluator = new SimpleEvaluator(m_optimizer);
+        BraidEvaluator evaluator = new BraidEvaluator(m_optimizer);
         IGenomeDecoder<NeatGenome, IBlackBox> genomeDecoder = CreateGenomeDecoder();
 
 
@@ -181,7 +180,6 @@ public class BraidExperiment : INeatExperiment
 
         //ea.Initialize(selectiveEvaluator, genomeFactory, genomeList);
         ea.Initialize(innerEvaluator, genomeFactory, genomeList);
-        Debug.Log("Created NeatEvolutionAlgorithm...");
         return ea;
     }
 }

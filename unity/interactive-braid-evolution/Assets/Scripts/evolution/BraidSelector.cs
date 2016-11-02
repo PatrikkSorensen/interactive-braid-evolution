@@ -5,12 +5,14 @@ using DG.Tweening;
 
 public class BraidSelector : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
+    public static bool ReadyToProgressEvolution;
+    public static bool ShouldSimulateGenomes;
+
+    void Awake()
+    {
+        ShouldSimulateGenomes = true; 
+        ReadyToProgressEvolution = false; 
+    }
 	void Update () {
 
 
@@ -42,8 +44,9 @@ public class BraidSelector : MonoBehaviour {
         }
 
         if (Input.GetKeyDown(KeyCode.T)) {
-            Optimizer o = GameObject.FindObjectOfType<Optimizer>();
-            o.SetEAProgressFlag(true); 
+            //Optimizer o = GameObject.FindObjectOfType<Optimizer>();
+            //o.SetEAProgressFlag(true); 
+            SetReadyForSelection(true); 
         }
             
     }
@@ -51,7 +54,27 @@ public class BraidSelector : MonoBehaviour {
     public static void CreateHardcodedFitness()
     {
         BraidController bc = Object.FindObjectOfType<BraidController>();
-        Debug.Log("Hardcoded fitness applied to: " + bc.transform.name);
+        Debug.Log("Hardcoded fitness applied to: " + bc.transform.name + "...");
         bc.SetFitness(1.0f);
+    }
+
+    public static bool ReadyForSelection()
+    {
+        return ReadyToProgressEvolution; 
+    }
+
+    public static void SetReadyForSelection(bool b)
+    {
+        ReadyToProgressEvolution = b;
+    }
+
+    public static bool ShouldEvaluate()
+    {
+        return ShouldSimulateGenomes;
+    }
+
+    public static void SetShouldEvaluate(bool b)
+    {
+        ShouldSimulateGenomes = b;
     }
 }

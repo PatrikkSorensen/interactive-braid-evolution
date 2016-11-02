@@ -79,8 +79,8 @@ public class BraidController : UnitController
         OutputsToBraidVectors();
         messenger.AddVectors(braidId - 1, BraidVectors);
         //DebugNetwork();
-        //PrintBraidVectors();
-        
+        PrintBraidVectors();
+
         //Debug.Log(" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ");
 
     }

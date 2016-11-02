@@ -58,7 +58,7 @@ namespace SharpNeat.EvolutionAlgorithms
         protected override IEnumerator PerformOneGeneration()
         {
             myLogger = new Logger(new MyLogger());
-            myLogger.Log(logTag, "Performing One Generation."); 
+            myLogger.Log(logTag, "Advancing the current generation."); 
             
             // Calculate statistics for each specie (mean fitness, target size, number of offspring to produce etc.)
             int offspringCount;
@@ -78,14 +78,6 @@ namespace SharpNeat.EvolutionAlgorithms
             // (otherwise we could just evaluate offspringList).
             _genomeList.AddRange(offspringList);
 
-            /**********************  IEC SPECIFIC CODE BEGINS HERE ******************************/ 
-            while (!ReadyForNextGeneration)
-            {
-                myLogger.Log(logTag, "waiting for input"); 
-                yield return new WaitForSeconds(2.0f);
-            }
-
-            /**********************  IEC SPECIFIC CODE ENDS HERE   ******************************/
             yield return Coroutiner.StartCoroutine( _genomeListEvaluator.Evaluate(_genomeList));
 
             // Integrate offspring into species.

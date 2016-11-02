@@ -38,10 +38,6 @@ public class Optimizer : MonoBehaviour {
     public GameObject Unit;
     private GameObject UnitContainer;
     private DateTime startTime;
-    //private float timeLeft;
-    //private float accum;
-    //private int frames;
-    //private float updateInterval = 12;
     private string popFileSavePath = null; 
     private string champFileSavePath = null;
 
@@ -66,14 +62,13 @@ public class Optimizer : MonoBehaviour {
             messenger.SetupEvolutionParameters(PopulationSize, SliderUpdater.GetValue("Height"));
         } else
         {
-            Debug.LogError("No network messenge found in scene!");
+            Debug.LogError("No network messenger found in scene!");
         }
 
         // set up utility variables
         champFileSavePath = Application.persistentDataPath + string.Format("/{0}.champ.xml", "car");
         if(LoadPopulation)
             popFileSavePath = Application.persistentDataPath + string.Format("/{0}.pop.xml", "car");
-        //print(champFileSavePath);
 
         startTime = DateTime.Now;
 
@@ -142,6 +137,7 @@ public class Optimizer : MonoBehaviour {
 
     public void StopEvaluation(IBlackBox box)
     {
+        Debug.Log("Stopping evaluation"); 
         UnitController ct = ControllerMap[box];
         Destroy(ct.gameObject);
     }
@@ -186,18 +182,6 @@ public class Optimizer : MonoBehaviour {
 
     void OnGUI()
     {
-        //if (GUI.Button(new Rect(10, 10, 100, 40), "Start EA"))
-        //{
-        //    StartEA();
-        //}
-        //if (GUI.Button(new Rect(10, 60, 100, 40), "Stop EA"))
-        //{
-        //    StopEA();
-        //}
-        //if (GUI.Button(new Rect(10, 110, 100, 40), "Run best"))
-        //{
-        //    RunBest();
-        //}
 
         //TODO: Integrate this in your Unity UI 
         GUI.Button(new Rect(10, Screen.height - 70, 100, 60), string.Format("Generation: {0}\nFitness: {1:0.00}", Generation, Fitness));
@@ -205,6 +189,8 @@ public class Optimizer : MonoBehaviour {
 
     public void SetEAProgressFlag(bool flag)
     {
+        Debug.Log("Input recieved..."); 
+        
         _ea.SetProgressFlag(flag); 
     }
 
