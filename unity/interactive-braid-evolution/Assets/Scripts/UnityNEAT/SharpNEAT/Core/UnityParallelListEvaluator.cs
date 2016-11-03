@@ -54,7 +54,7 @@ namespace SharpNEAT.Core
             Debug.Log("Starting new trial");
 
             // ui 
-            IECManager.SetUIToSelectionState();
+            //IECManager.SetUIToSelectionState();
 
             Dictionary<TGenome, TPhenome> dict = new Dictionary<TGenome, TPhenome>();
             Dictionary<TGenome, FitnessInfo[]> fitnessDict = new Dictionary<TGenome, FitnessInfo[]>();

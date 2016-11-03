@@ -36,12 +36,7 @@ public class BraidSelector : MonoBehaviour {
                     UISelectionWindow.AddBraid(hit.transform.gameObject); 
                 }
             }
-        }
-
-        if (Input.GetKeyDown(KeyCode.T)) {
-            SetReadyForSelection(true); 
-        }
-            
+        }            
     }
 
     public static void CreateHardcodedFitness()

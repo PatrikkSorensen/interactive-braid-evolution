@@ -10,6 +10,7 @@ using System.Threading;
 public class UDPReciever : MonoBehaviour
 {
 	public int port = 8050;
+    public bool hasImportedAllModels; 
 
     private Thread readThread;
     private UdpClient client;
@@ -53,6 +54,9 @@ public class UDPReciever : MonoBehaviour
         {
             Debug.Log("Nothing to do..."); 
         }
+
+        if (msg.models_created == 5)
+            hasImportedAllModels = true; 
     }
 
     // Unity Application Quit Function

@@ -3,6 +3,11 @@ using System.Collections;
 
 public class BraidSimulationManager : MonoBehaviour {
 
+    public void SetFlagsFromButton(bool b)
+    {
+        BraidSelector.SetReadyForSelection(b);
+    }
+
 	public static void AdvanceGeneration()
     {
 
