@@ -63,7 +63,7 @@ public class ModelMessager : MonoBehaviour {
     public void SendMessageToGH()
     {
         m_populationSize = 5;
-        StatusWindow.SetStatus(StatusWindow.STATUS.MODELLING);
+        IECManager.SetUIToModellingState();
         Braid[] braids = CreateBraidArray(m_messageVectors);
 
          

@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 using SharpNeat.Phenomes;
 using SharpNeat.Domains;
 using System.Collections.Generic;
@@ -41,12 +40,33 @@ public class Optimizer : MonoBehaviour {
     private string popFileSavePath = null; 
     private string champFileSavePath = null;
 
-
-
-    void Start () {
-        // load in XML
+    public void InitializeEA()
+    {
+        UIANNSetupDropdown.ANNSetup setup = UIANNSetupDropdown.GetANNSetup();
         XmlDocument xmlConfig = new XmlDocument();
-        TextAsset textAsset = (TextAsset)Resources.Load("experiment.config");
+        TextAsset textAsset;
+
+        switch (setup)
+        {
+            case UIANNSetupDropdown.ANNSetup.SIMPLE:
+                Debug.Log("Simple setup booted up!");
+                textAsset = (TextAsset)Resources.Load("experiment.config");
+                break;
+            case UIANNSetupDropdown.ANNSetup.VECTOR_BASED:
+                Debug.Log("Vector Based Setup selected!");
+                textAsset = (TextAsset)Resources.Load("experiment.config.braid.simple");
+                break;
+            case UIANNSetupDropdown.ANNSetup.MATERIAL_AND_VECTOR:
+                Debug.Log("Material and vector based setup selected");
+                textAsset = (TextAsset)Resources.Load("experiment.config");
+                break;
+            default:
+                Debug.LogError("Something went wrong when getting the network setup");
+                textAsset = (TextAsset)Resources.Load("experiment.config");
+                break;
+        }
+
+        // load in XML
         xmlConfig.LoadXml(textAsset.text);
 
         // set up experiment
@@ -59,15 +79,16 @@ public class Optimizer : MonoBehaviour {
         if (messenger)
         {
             PopulationSize = XmlUtils.GetValueAsInt(xmlConfig.DocumentElement, "PopulationSize");
-            messenger.SetupEvolutionParameters(PopulationSize, SliderUpdater.GetValue("Height"));
-        } else
+            messenger.SetupEvolutionParameters(PopulationSize, UISliderUpdater.GetValue("Height"));
+        }
+        else
         {
             Debug.LogError("No network messenger found in scene!");
         }
 
         // set up utility variables
         champFileSavePath = Application.persistentDataPath + string.Format("/{0}.champ.xml", "car");
-        if(LoadPopulation)
+        if (LoadPopulation)
             popFileSavePath = Application.persistentDataPath + string.Format("/{0}.pop.xml", "car");
 
         startTime = DateTime.Now;
@@ -76,8 +97,10 @@ public class Optimizer : MonoBehaviour {
         if (!UnitContainer)
             UnitContainer = new GameObject("UnitContainer");
 
-
+        // setup the relevant ui
+        IECManager.SetUIToEvolvingState(); 
     }
+
 
     public void StartEA()
     {
@@ -180,13 +203,6 @@ public class Optimizer : MonoBehaviour {
         return 0;
     }
 
-    void OnGUI()
-    {
-
-        //TODO: Integrate this in your Unity UI 
-        GUI.Button(new Rect(10, Screen.height - 70, 100, 60), string.Format("Generation: {0}\nFitness: {1:0.00}", Generation, Fitness));
-    }
-
     public void SetEAProgressFlag(bool flag)
     {
         Debug.Log("Input recieved..."); 
@@ -218,8 +234,6 @@ public class Optimizer : MonoBehaviour {
         }
         DateTime endTime = DateTime.Now;
         Utility.Log("Total time elapsed: " + (endTime - startTime));
-
-        System.IO.StreamReader stream = new System.IO.StreamReader(popFileSavePath);
     }
 
     // time functions

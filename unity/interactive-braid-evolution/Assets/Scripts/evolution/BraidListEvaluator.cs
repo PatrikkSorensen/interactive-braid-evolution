@@ -45,10 +45,7 @@ namespace SharpNEAT.core
         private IEnumerator evaluateList(IList<TGenome> genomeList)
         {
             Debug.Log("---------------------- Starting new trial ----------------------");
-
-            // ui 
-            StatusWindow.SetStatus(StatusWindow.STATUS.EVOLVING);
-            EvolveButton.DisableAllUI();
+            IECManager.SetUIToSelectionState(); 
 
             Dictionary<TGenome, TPhenome> dict = new Dictionary<TGenome, TPhenome>();
             Dictionary<TGenome, FitnessInfo[]> fitnessDict = new Dictionary<TGenome, FitnessInfo[]>();

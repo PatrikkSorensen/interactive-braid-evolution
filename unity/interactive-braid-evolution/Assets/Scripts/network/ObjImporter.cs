@@ -42,7 +42,7 @@ public class ObjImporter : MonoBehaviour {
 
     public void StartImportSingleModel(int i)
     {
-        StatusWindow.SetStatus(StatusWindow.STATUS.MODELLING);
+        UIStatusWindow.SetStatus(UIStatusWindow.STATUS.MODELLING);
         shouldImportSingle = true; 
         m_curr_index = i; 
     }

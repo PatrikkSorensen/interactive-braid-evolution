@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine.UI;
 using System;
 
-public class SliderUpdater : MonoBehaviour {
+public class UISliderUpdater : MonoBehaviour {
 
     public string key; 
 

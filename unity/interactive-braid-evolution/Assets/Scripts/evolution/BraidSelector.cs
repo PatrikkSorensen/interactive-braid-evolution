@@ -29,23 +29,16 @@ public class BraidSelector : MonoBehaviour {
 
         if (Input.GetMouseButtonDown(0))
         {
-
-
             if (Physics.Raycast(ray, out hit))
             {
                 if (hit.transform.gameObject.tag == "Braid")
                 {
                     UISelectionWindow.AddBraid(hit.transform.gameObject); 
-                   
-                    //Debug.Log("SELECTING");
-
                 }
             }
         }
 
         if (Input.GetKeyDown(KeyCode.T)) {
-            //Optimizer o = GameObject.FindObjectOfType<Optimizer>();
-            //o.SetEAProgressFlag(true); 
             SetReadyForSelection(true); 
         }
             
