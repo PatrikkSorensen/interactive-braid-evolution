@@ -10,7 +10,7 @@ public class UISelectionWindow : MonoBehaviour {
 
 	public static void AddBraid(GameObject gb)
     {
-        Text t = GameObject.FindObjectOfType<UISelectionWindow>().gameObject.GetComponent<Text>();
+        Text t = GameObject.Find("SelectionWindow").GetComponentInChildren<Text>();
         t.text = "Current selection: \n" + gb.name;
         names[0] = gb.name;
         current_selected = gb; 

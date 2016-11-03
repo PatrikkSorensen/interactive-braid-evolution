@@ -34,6 +34,11 @@ public class UDPReciever : MonoBehaviour
         num_models_imported = 0; 
     }
 
+    public void ResetVariables()
+    {
+        num_models_imported = 0; 
+    }
+
     private void DecodeJSON(string jsonString)
     {
         UDPRecievedMessage msg = new UDPRecievedMessage();
@@ -41,9 +46,9 @@ public class UDPReciever : MonoBehaviour
 
         if (msg.models_created > num_models_imported)
         {
-            Debug.Log("exported models: " + msg.models_created + " , imported models: " + num_models_imported);
             objImporter.StartImportSingleModel(num_models_imported); 
             num_models_imported++;
+            Debug.Log("exported models: " + msg.models_created + " , imported models: " + num_models_imported);
         } else
         {
             Debug.Log("Nothing to do..."); 
@@ -85,7 +90,5 @@ public class UDPReciever : MonoBehaviour
 				print (err.ToString ());
 			}
 		}
-
-
     }
 }

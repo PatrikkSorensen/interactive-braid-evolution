@@ -42,7 +42,6 @@ public class ObjImporter : MonoBehaviour {
 
     public void StartImportSingleModel(int i)
     {
-        UIStatusWindow.SetStatus(UIStatusWindow.STATUS.MODELLING);
         shouldImportSingle = true; 
         m_curr_index = i; 
     }
@@ -98,11 +97,11 @@ public class ObjImporter : MonoBehaviour {
             Vector3 v = FindSpawnPosition(index);
 
             //TODO: Refactor this
-            if (GameObject.Find("unit_" + index.ToString()))
-            {
-                Debug.Log("Couldt find gameobject to parent with"); 
-                testModel.parent = GameObject.Find("unit_" + index.ToString()).transform;
-            }
+            //if (GameObject.Find("unit_" + index.ToString()))
+            //{
+            //    Debug.Log("Couldt find gameobject to parent with"); 
+            //    testModel.parent = GameObject.Find("unit_" + index.ToString()).transform;
+            //}
 
 
             // tweening

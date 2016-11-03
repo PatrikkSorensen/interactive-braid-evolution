@@ -91,10 +91,8 @@ namespace SharpNEAT.core
                     yield return new WaitForSeconds(2.0f);
                 }
 
+                BraidSimulationManager.AdvanceGeneration(); 
 
-
-                BraidSelector.SetShouldEvaluate(false);
-                BraidSelector.SetReadyForSelection(false); 
 
                 ReadyForNextGeneration = false;
 

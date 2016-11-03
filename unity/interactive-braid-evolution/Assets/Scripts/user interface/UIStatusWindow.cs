@@ -22,8 +22,10 @@ public class UIStatusWindow : MonoBehaviour
     }
     public static void SetStatus(STATUS st)
     {
+        if(!t)
+            t = GameObject.Find("StatusText").GetComponent<Text>();
+
         Debug.Log("Setting status"); 
-        t = GameObject.Find("StatusText").GetComponent<Text>();
         switch (st)
         {
             case STATUS.EVOLVING:
