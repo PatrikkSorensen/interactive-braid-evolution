@@ -49,7 +49,7 @@ public class UDPReciever : MonoBehaviour
         {
             objImporter.StartImportSingleModel(num_models_imported); 
             num_models_imported++;
-            Debug.Log("exported models: " + msg.models_created + " , imported models: " + num_models_imported);
+            //Debug.Log("exported models: " + msg.models_created + " , imported models: " + num_models_imported);
         } else
         {
             Debug.Log("Nothing to do..."); 
@@ -85,7 +85,7 @@ public class UDPReciever : MonoBehaviour
 			
 				// decode UTF8-coded bytes to text format
 				string text = Encoding.UTF8.GetString (data);
-                Debug.Log (">> " + text);
+                //Debug.Log (">> " + text);
 
                 // hot model import object
                 DecodeJSON(text); 

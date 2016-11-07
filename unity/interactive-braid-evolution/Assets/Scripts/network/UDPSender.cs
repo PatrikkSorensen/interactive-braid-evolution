@@ -29,7 +29,6 @@ public class UDPSender : MonoBehaviour
 			
 			// send the data
 			client.Send (data, data.Length, remoteEndPoint);
-            Debug.Log("Message sent to GH: " + message);
 
         } catch (Exception err) {
 			print (err.ToString ());

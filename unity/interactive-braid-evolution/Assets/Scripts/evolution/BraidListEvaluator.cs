@@ -87,8 +87,8 @@ namespace SharpNEAT.core
                 //TODO: Error check: TrialDuration
                 while (!BraidSelector.ReadyForSelection())
                 {
-                    Debug.Log("In simulation, waiting for input..."); 
-                    yield return new WaitForSeconds(2.0f);
+                    //Debug.Log("In simulation, waiting for input..."); 
+                    yield return new WaitForSeconds(0.2f);
                 }
 
                 BraidSimulationManager.AdvanceGeneration(); 

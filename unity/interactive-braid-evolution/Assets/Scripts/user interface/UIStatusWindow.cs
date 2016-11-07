@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using System.Text.RegularExpressions;
 
 public class UIStatusWindow : MonoBehaviour
 {
@@ -15,21 +16,43 @@ public class UIStatusWindow : MonoBehaviour
     }
 
     private static Text t;
+    private Regex rgx; 
+
+    private float nextActionTime = 0.0f;
+    public float period = 1.0f;
+    public int numDots = 0; 
 
     void Start()
     {
         t = GameObject.Find("StatusText").GetComponent<Text>();
+        rgx = new Regex("[^a-zA-Z0-9 -]");
+    }
+
+    void Update()
+    {
+        if (Time.time > nextActionTime)
+        {
+            nextActionTime += period;
+
+            if (numDots == 3)
+            {
+                t.text = rgx.Replace(t.text, "");
+                numDots = 0; 
+            } else
+            {
+                t.text = t.text + ".";
+                numDots++;
+            }
+        }
     }
     public static void SetStatus(STATUS st)
     {
         if(!t)
             t = GameObject.Find("StatusText").GetComponent<Text>();
 
-        Debug.Log("Setting status"); 
         switch (st)
         {
             case STATUS.EVOLVING:
-                Debug.Log("Setting it to evolging"); 
                 t.text = "evolving";
                 break;
             case STATUS.MODELLING:

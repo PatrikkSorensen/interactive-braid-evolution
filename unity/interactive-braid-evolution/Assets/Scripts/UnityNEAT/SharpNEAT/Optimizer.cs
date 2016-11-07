@@ -155,12 +155,13 @@ public class Optimizer : MonoBehaviour {
         /* END OF SPECIFIC OPERATIONS TO THE BRAID EXPERIMENT */
 
         ControllerMap.Add(phenome, controller);
+        controller.CURRENT_GENERATION = (int) _ea.CurrentGeneration; 
         controller.Activate(phenome);
     }
 
     public void StopEvaluation(IBlackBox box)
     {
-        Debug.Log("Stopping evaluation"); 
+        //Debug.Log("Stopping evaluation"); 
         UnitController ct = ControllerMap[box];
         Destroy(ct.gameObject);
     }

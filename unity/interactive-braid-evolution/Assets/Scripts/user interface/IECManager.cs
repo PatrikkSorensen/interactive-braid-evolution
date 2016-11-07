@@ -27,10 +27,7 @@ public class IECManager : MonoBehaviour {
         statusWindowContainer = GameObject.FindObjectOfType<UIStatusWindow>().gameObject;
         dropDown              = GameObject.Find("ANNSetupDropdown");
         advanceButton         = GameObject.Find("AdvanceGeneration"); 
-
         SetStartUI();
-
-
     }
 
     private void Update()

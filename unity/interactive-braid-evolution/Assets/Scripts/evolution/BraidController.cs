@@ -5,10 +5,16 @@ using System;
 
 public class BraidController : UnitController
 {
+
+    // Evolution specific variables 
+    public int CURRENT_GENERATION; 
+
     // Input vectors
     public Vector3[] inputVectors;
     public double[] inputDoubles; 
-    public int VECTOR_ARRAY_SIZE; 
+    public int VECTOR_ARRAY_SIZE;
+    public int NUM_INPUTS;
+    public int NUM_OUTPUTS; 
 
     private IBlackBox neat;
     private float fitness = 0.0f;
@@ -39,14 +45,16 @@ public class BraidController : UnitController
     public void InitializeControllerVariables()
     {
         //Debug.Log("Initializing and activating controller: " + gameObject.name);
-        VECTOR_ARRAY_SIZE = 11;
+        // hardcoded for nw
+        VECTOR_ARRAY_SIZE = 12 + CURRENT_GENERATION;
+        NUM_INPUTS = 1;
+        NUM_OUTPUTS = 2; 
         messenger = GameObject.FindObjectOfType<ModelMessager>();
 
-        debugInputArray = new double[VECTOR_ARRAY_SIZE]; // NOTE, inputs are only one value atm
-        debugOutputArray = new double[VECTOR_ARRAY_SIZE * 2]; // NOTE: inputs are only two values (x and y atm)
+        debugInputArray = new double[VECTOR_ARRAY_SIZE * NUM_INPUTS]; // NOTE, inputs are only one value atm
+        debugOutputArray = new double[VECTOR_ARRAY_SIZE * NUM_OUTPUTS]; // NOTE: outputs are only two values (x and y atm)
 
-        //inputVectors = CreateInputVectors();
-        //inputVectors = NormalizeHelper.NormalizeInputVectors(inputVectors);
+
 
         inputDoubles = CreateInputDoubles();
         inputDoubles = NormalizeHelper.NormalizeInputDoubles(inputDoubles);
@@ -58,10 +66,12 @@ public class BraidController : UnitController
     {
         neat = box; int i = 0;
         ISignalArray inputArr = neat.InputSignalArray;
-        InitializeControllerVariables(); 
+        InitializeControllerVariables();
 
+        //Debug.Log("The amount of inputs is: " + inputDoubles.Length);
         foreach (double d in inputDoubles)
         {
+            
             double input = d;
 
             inputArr[2] = input;
@@ -95,7 +105,7 @@ public class BraidController : UnitController
 
             float x = (float) debugOutputArray[j] * 10.0f;
             float y = (float) debugOutputArray[j + 1] * 10.0f;
-            float z = (float) ((debugInputArray[i] + 1) * 10.0f); // Has to be made positive
+            float z = (float) ((debugInputArray[i] + 1) * 20.0f); // Has to be made positive
             BraidVectors[i] = new Vector3(x, y, z);
 
             j += 2; 

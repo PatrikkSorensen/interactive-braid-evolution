@@ -79,7 +79,7 @@ public class ObjImporter : MonoBehaviour {
 
     IEnumerator ImportModel(int index)
     {
-        Debug.Log("Starting to import a single model with index: " + index);
+        //Debug.Log("Starting to import a single model with index: " + index);
         shouldImportSingle = false;
         string objFileName = Application.dataPath + "/Geometry/Models/braid_" + index.ToString() + ".obj";
         GameObject curr_model = ObjReader.use.ConvertFile(objFileName, true)[0];

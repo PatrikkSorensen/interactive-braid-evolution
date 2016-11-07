@@ -18,7 +18,6 @@ public class UIANNSetupDropdown : MonoBehaviour {
     {
         Dropdown dropdown = GameObject.FindObjectOfType<Dropdown>();
         ANNSetup currentNetworkSetup = (ANNSetup)dropdown.value;
-        Debug.Log("Returning: " + currentNetworkSetup); 
         return currentNetworkSetup;
     }
 }
