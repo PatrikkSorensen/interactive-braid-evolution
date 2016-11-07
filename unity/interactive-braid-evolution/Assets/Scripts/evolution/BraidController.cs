@@ -22,7 +22,7 @@ public class BraidController : UnitController
     // Message variables 
     private int braidId; 
     ModelMessager messenger;
-    Vector3[] BraidVectors; 
+    public Vector3[] BraidVectors; // For debugging
 
     // Braid specific variables
     public int BraidId
@@ -46,15 +46,13 @@ public class BraidController : UnitController
     {
         //Debug.Log("Initializing and activating controller: " + gameObject.name);
         // hardcoded for nw
-        VECTOR_ARRAY_SIZE = 12 + CURRENT_GENERATION;
+        VECTOR_ARRAY_SIZE = 12;
         NUM_INPUTS = 1;
         NUM_OUTPUTS = 2; 
         messenger = GameObject.FindObjectOfType<ModelMessager>();
 
         debugInputArray = new double[VECTOR_ARRAY_SIZE * NUM_INPUTS]; // NOTE, inputs are only one value atm
         debugOutputArray = new double[VECTOR_ARRAY_SIZE * NUM_OUTPUTS]; // NOTE: outputs are only two values (x and y atm)
-
-
 
         inputDoubles = CreateInputDoubles();
         inputDoubles = NormalizeHelper.NormalizeInputDoubles(inputDoubles);
@@ -88,8 +86,8 @@ public class BraidController : UnitController
 
         OutputsToBraidVectors();
         messenger.AddVectors(braidId - 1, BraidVectors);
-        //DebugNetwork();
-        //PrintBraidVectors();
+        DebugNetwork();
+        PrintBraidVectors();
 
         //Debug.Log(" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ");
 
@@ -183,14 +181,17 @@ public class BraidController : UnitController
 
     public void DebugNetwork()
     {
+        Debug.Log("Debugging network for: " + gameObject.name); 
         foreach(double input in debugInputArray)
             Debug.Log("i: " + input);
        
-        foreach (double d in debugOutputArray)
-            Debug.Log("o: " + d);
+        //foreach (double d in debugOutputArray)
+        //    Debug.Log("o: " + d);
 
+        for(int i = 0; i < debugOutputArray.Length; i+=2)
+            Debug.Log("OUTPUT [" + debugOutputArray[i] + ", " + debugOutputArray[i + 1] + "]");
 
-
+        Debug.Log(" - - - - - - - - Finished debugging - - - - - - - - "); 
     }
 
     public void PrintBraidVectors()

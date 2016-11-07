@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 using System;
+using System.Text.RegularExpressions;
 
 public class IECManager : MonoBehaviour {
 
@@ -37,6 +38,15 @@ public class IECManager : MonoBehaviour {
             SetUIToSelectionState();
             reciever.hasImportedAllModels = false;
         }
+
+        if (Input.GetKeyDown(KeyCode.U))
+            IECManager.GetSelectionId(); 
+    }
+
+    public static int GetSelectionId()
+    {
+        string resultString = Regex.Match(UISelectionWindow.current_selected.name, @"\d+").Value;
+        return (Int32.Parse(resultString));
     }
 
     public static void SetStartUI()
@@ -54,8 +64,8 @@ public class IECManager : MonoBehaviour {
         evolveButton.SetActive(true);
 
         // Destroy?
-        initializeButton.SetActive(false);
-        dropDown.SetActive(false);
+        Destroy(initializeButton);
+        Destroy(dropDown);
     }
 
     internal static void SetUIToModellingState()

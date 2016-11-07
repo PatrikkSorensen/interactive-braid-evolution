@@ -428,9 +428,9 @@ namespace SharpNeat.Genomes.Neat
         public static NeatGenomeParameters CreateSimplifyingParameters(NeatGenomeParameters copyFrom)
         {
             NeatGenomeParameters newParams = new NeatGenomeParameters(copyFrom);
-            newParams._connectionWeightMutationProbability = 0.6;
-            newParams._addNodeMutationProbability = 0.0;
-            newParams._addConnectionMutationProbability = 0.0;
+            newParams._connectionWeightMutationProbability = 0.3;
+            newParams._addNodeMutationProbability = 0.2;
+            newParams._addConnectionMutationProbability = 0.2;
             // TODO: better method for automatically generating simplifying parameters?
             newParams._nodeAuxStateMutationProbability = copyFrom._nodeAuxStateMutationProbability;
             newParams._deleteConnectionMutationProbability = 0.4;
@@ -440,7 +440,7 @@ namespace SharpNeat.Genomes.Neat
             newParams._connectionMutationInfoList = new ConnectionMutationInfoList(copyFrom._connectionMutationInfoList);
 
             // SharpNEAT version 1.x used this scheme.
-            // newParams._connectionMutationInfoList.Add(new ConnectionMutationInfo(0.333, ConnectionPerturbanceType.JiggleUniform, ConnectionSelectionType.Proportional, 0.3, 0, 0.05, 0.0));
+            //newParams._connectionMutationInfoList.Add(new ConnectionMutationInfo(0.333, ConnectionPerturbanceType.JiggleUniform, ConnectionSelectionType.Proportional, 0.3, 0, 0.05, 0.0));
             // newParams._connectionMutationInfoList.Add(new ConnectionMutationInfo(0.333, ConnectionPerturbanceType.JiggleUniform, ConnectionSelectionType.Proportional, 0.1, 0, 0.05, 0.0));
             // newParams._connectionMutationInfoList.Add(new ConnectionMutationInfo(0.333, ConnectionPerturbanceType.JiggleUniform, ConnectionSelectionType.Proportional, 0.01, 0, 0.05, 0.0));
             newParams._connectionMutationInfoList.Initialize();

@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Rotate : MonoBehaviour {
 
-    public float amount = 30.0f;
+    public float amount = 15.0f;
 
     // Update is called once per frame
     void Update()

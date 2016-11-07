@@ -30,13 +30,13 @@ public class NormalizeHelper : MonoBehaviour {
     public static double[] NormalizeInputDoubles(double[] inputs)
     {
         float min = 0.0f;
-        float max = 40.0f;
+        float max = 22.0f;
 
         double[] normalizedArray = new double[inputs.Length];
 
         for (int i = 0; i < inputs.Length; i++)
         {
-            double x = (inputs[i] - min) / (max - min) * 2 - 1;
+            double x = (inputs[i] - min) / (max - min);
             //Debug.Log("input: " + inputs[i] + " became normalized to: " + x); 
             normalizedArray[i] = x;
         }
