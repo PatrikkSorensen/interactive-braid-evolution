@@ -27,11 +27,8 @@ public class NormalizeHelper : MonoBehaviour {
     /// </summary>
     /// <param name="inputs"></param>
     /// <returns></returns>
-    public static double[] NormalizeInputDoubles(double[] inputs)
+    public static double[] NormalizeInputDoubles(double[] inputs, float min, float max)
     {
-        float min = 0.0f;
-        float max = 22.0f;
-
         double[] normalizedArray = new double[inputs.Length];
 
         for (int i = 0; i < inputs.Length; i++)

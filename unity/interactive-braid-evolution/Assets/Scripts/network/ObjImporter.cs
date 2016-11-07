@@ -9,7 +9,7 @@ public class ObjImporter : MonoBehaviour {
     public bool shouldImportSingle; 
     public Transform[] spawnPositions;
     public float tweenDuration = 2.0f;
-    public float offsetY = 5.0f; 
+    public float offsetY = -10.0f; 
 
     private string filePathToGeometry;
     private int m_num_models;
@@ -95,14 +95,6 @@ public class ObjImporter : MonoBehaviour {
             // position
             Transform testModel = curr_model.transform;
             Vector3 v = FindSpawnPosition(index);
-
-            //TODO: Refactor this
-            //if (GameObject.Find("unit_" + index.ToString()))
-            //{
-            //    Debug.Log("Couldt find gameobject to parent with"); 
-            //    testModel.parent = GameObject.Find("unit_" + index.ToString()).transform;
-            //}
-
 
             // tweening
             testModel.position = v + Vector3.up * offsetY;

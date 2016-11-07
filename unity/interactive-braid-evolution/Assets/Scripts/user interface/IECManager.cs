@@ -19,6 +19,8 @@ public class IECManager : MonoBehaviour {
 
     private void Start()
     {
+
+        Debug.Log("Save path: " + Application.persistentDataPath); 
         reciever = GameObject.FindObjectOfType<UDPReciever>(); 
 
         initializeButton      = GameObject.Find("InitializeANNButton");
@@ -45,6 +47,10 @@ public class IECManager : MonoBehaviour {
 
     public static int GetSelectionId()
     {
+
+        if (!GameObject.FindObjectOfType<UISelectionWindow>())
+            return 0; 
+
         string resultString = Regex.Match(UISelectionWindow.current_selected.name, @"\d+").Value;
         return (Int32.Parse(resultString));
     }

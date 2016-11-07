@@ -40,6 +40,19 @@ public class Optimizer : MonoBehaviour {
     private string popFileSavePath = null; 
     private string champFileSavePath = null;
 
+    void Start ()
+    {
+        Debug.Log(Application.dataPath);
+        champFileSavePath = Application.dataPath + "/Resources/xml/braid.champ.xml";
+        popFileSavePath = Application.dataPath + "/Resources/xml/braid.champ.xml";
+    }
+
+    void Update ()
+    {
+        if (Input.GetKeyDown(KeyCode.X))
+            StopEA(); 
+    }
+
     public void InitializeEA()
     {
         UIANNSetupDropdown.ANNSetup setup = UIANNSetupDropdown.GetANNSetup();
@@ -120,7 +133,7 @@ public class Optimizer : MonoBehaviour {
     void ea_UpdateEvent(object sender, EventArgs e)
     {
         //Debug.Log("Generation: " + _ea.CurrentGeneration + ", best fitness: " + _ea.Statistics._maxFitness);
-
+        Debug.Log("Updating..."); 
         Fitness = _ea.Statistics._maxFitness;
         Generation = _ea.CurrentGeneration;
         
@@ -128,7 +141,8 @@ public class Optimizer : MonoBehaviour {
 
     void ea_PauseEvent(object sender, EventArgs e)
     {
-        Debug.Log("EA paused!"); 
+        Debug.Log("EA paused!");
+       
         ResetTimeScale();
         SaveXMLFiles(); 
     }
@@ -136,8 +150,11 @@ public class Optimizer : MonoBehaviour {
     public void StopEA()
     {
         Debug.Log("EA stopped!");
+        BraidSelector.SetShouldEvaluate(false);
+        BraidSelector.SetReadyForSelection(true); 
         if (_ea != null && _ea.RunState == SharpNeat.Core.RunState.Running)
         {
+            Debug.Log("EA actually stopped..."); 
             _ea.Stop();
         }
     }

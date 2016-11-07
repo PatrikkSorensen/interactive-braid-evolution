@@ -55,7 +55,7 @@ public class BraidController : UnitController
         debugOutputArray = new double[VECTOR_ARRAY_SIZE * NUM_OUTPUTS]; // NOTE: outputs are only two values (x and y atm)
 
         inputDoubles = CreateInputDoubles();
-        inputDoubles = NormalizeHelper.NormalizeInputDoubles(inputDoubles);
+        inputDoubles = NormalizeHelper.NormalizeInputDoubles(inputDoubles, 0.0f, 22.0f);
 
         BraidVectors = new Vector3[VECTOR_ARRAY_SIZE]; 
     }
@@ -86,8 +86,8 @@ public class BraidController : UnitController
 
         OutputsToBraidVectors();
         messenger.AddVectors(braidId - 1, BraidVectors);
-        DebugNetwork();
-        PrintBraidVectors();
+        //DebugNetwork();
+        //PrintBraidVectors();
 
         //Debug.Log(" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ");
 

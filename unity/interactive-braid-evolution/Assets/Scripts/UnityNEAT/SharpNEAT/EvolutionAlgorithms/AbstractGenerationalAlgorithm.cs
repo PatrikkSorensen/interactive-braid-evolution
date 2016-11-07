@@ -320,6 +320,7 @@ namespace SharpNeat.EvolutionAlgorithms
 
         private void OnPausedEvent()
         {
+
             if(null != PausedEvent)
             {
                 // Catch exceptions thrown by even listeners. This prevents listener exceptions from terminating the algorithm thread.
