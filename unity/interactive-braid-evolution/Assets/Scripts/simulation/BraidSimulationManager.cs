@@ -11,6 +11,7 @@ public class BraidSimulationManager : MonoBehaviour {
 	public static void AdvanceGeneration()
     {
 
+
         // the actual models
         GameObject[] braids = GameObject.FindGameObjectsWithTag("Braid");
         
@@ -24,8 +25,8 @@ public class BraidSimulationManager : MonoBehaviour {
         // variable resetting
         ResetObjImportVariables();
 
-        Debug.Log("Simulation reset and cleaned up, ready for the next one"); 
-
+        Debug.Log("Simulation reset and cleaned up, ready for the next one");
+        IECManager.SetUIToModellingState();
     }
 
     public static void ResetObjImportVariables()

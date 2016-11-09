@@ -26,7 +26,7 @@ public class IECManager : MonoBehaviour {
 
         initializeButton      = GameObject.Find("InitializeANNButton");
         evolveButton          = GameObject.Find("EvolveButton");
-        selectionWindow       = GameObject.FindObjectOfType<UISelectionWindow>().gameObject;
+        selectionWindow       = GameObject.Find("SelectionWindow"); 
         slider                = GameObject.FindObjectOfType<UISliderUpdater>().gameObject;
         statusWindowContainer = GameObject.FindObjectOfType<UIStatusWindow>().gameObject;
         dropDown              = GameObject.Find("ANNSetupDropdown");
@@ -44,19 +44,7 @@ public class IECManager : MonoBehaviour {
         }
     }
 
-    public static int GetSelectionId()
-    {
-
-        if (!GameObject.FindObjectOfType<UISelectionWindow>() || !UISelectionWindow.current_selected)
-        {
-            Debug.LogError("You tried to get a braid id of a destroyed object"); 
-            return 0;
-        }
-
-        string resultString = Regex.Match(UISelectionWindow.current_selected.name, @"\d+").Value;
-        return (Int32.Parse(resultString));
-    }
-
+    /*********** UI STATES **********/
     public static void SetStartUI()
     {
         advanceButton.SetActive(false);
@@ -79,6 +67,10 @@ public class IECManager : MonoBehaviour {
     internal static void SetUIToModellingState()
     {
         evolveButton.SetActive(false);
+        exitButton.SetActive(false);
+        selectionWindow.SetActive(false);
+        advanceButton.SetActive(false);
+
         UIStatusWindow.SetStatus(UIStatusWindow.STATUS.MODELLING);
     }
 
@@ -91,5 +83,29 @@ public class IECManager : MonoBehaviour {
 
         UIStatusWindow.SetStatus(UIStatusWindow.STATUS.SIMULATING);
 
+    }
+
+    public static void SetUIToExitState()
+    {
+        evolveButton.SetActive(false);
+        selectionWindow.SetActive(false);
+        advanceButton.SetActive(false);
+        exitButton.SetActive(false);
+
+        UIStatusWindow.SetStatus(UIStatusWindow.STATUS.SIMULATING);
+    }
+    /*********** END OF UI STATES **********/
+
+    public static int GetSelectionId()
+    {
+
+        if (!GameObject.FindObjectOfType<UISelectionWindow>() || !UISelectionWindow.current_selected)
+        {
+            Debug.LogError("You tried to get a braid id of a destroyed object"); 
+            return 0;
+        }
+
+        string resultString = Regex.Match(UISelectionWindow.current_selected.name, @"\d+").Value;
+        return (Int32.Parse(resultString));
     }
 }
