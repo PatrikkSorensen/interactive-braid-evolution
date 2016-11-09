@@ -2,6 +2,7 @@
 using System.Collections;
 using SharpNeat.Phenomes;
 using System;
+using ExperimentTypes; 
 
 public class BraidController : UnitController
 {
@@ -37,27 +38,58 @@ public class BraidController : UnitController
             braidId = value;
         }
     }
+    public ANNSetup networkSetup; 
 
     // Debugging variables 
-    double[] debugInputArray;
-    double[] debugOutputArray;
+    double[] inputArray;
+    double[] outputArray;
 
     public void InitializeControllerVariables()
     {
-        //Debug.Log("Initializing and activating controller: " + gameObject.name);
-        // hardcoded for nw
+
+        switch (networkSetup)
+        {
+            case ANNSetup.SIMPLE:
+                SetupSimpleANNStructure();
+                break;
+            case ANNSetup.VECTOR_BASED:
+                SetupVectorANNStructure();
+                break;
+            default:
+                break;
+        }
+        messenger = GameObject.FindObjectOfType<ModelMessager>();
+        BraidVectors = new Vector3[VECTOR_ARRAY_SIZE];
+
+
+
+    }
+
+    private void SetupVectorANNStructure()
+    {
+        Debug.Log("I should do code specfic to the vector based Ann sturcure here..."); 
+        // hardcoded for now
         VECTOR_ARRAY_SIZE = 12;
         NUM_INPUTS = 1;
-        NUM_OUTPUTS = 2; 
-        messenger = GameObject.FindObjectOfType<ModelMessager>();
-
-        debugInputArray = new double[VECTOR_ARRAY_SIZE * NUM_INPUTS]; // NOTE, inputs are only one value atm
-        debugOutputArray = new double[VECTOR_ARRAY_SIZE * NUM_OUTPUTS]; // NOTE: outputs are only two values (x and y atm)
+        NUM_OUTPUTS = 2;
+        inputArray = new double[VECTOR_ARRAY_SIZE * NUM_INPUTS]; // NOTE, inputs are only one value atm
+        outputArray = new double[VECTOR_ARRAY_SIZE * NUM_OUTPUTS]; // NOTE: outputs are only two values (x and y atm)
 
         inputDoubles = CreateInputDoubles();
-        inputDoubles = NormalizeHelper.NormalizeInputDoubles(inputDoubles, 0.0f, 22.0f);
+        inputDoubles = NormalizeHelper.NormalizeInputDoubles(inputDoubles, 0.0f, 22.0f); // max and min
+    }
 
-        BraidVectors = new Vector3[VECTOR_ARRAY_SIZE]; 
+    private void SetupSimpleANNStructure()
+    {
+        // hardcoded for now
+        VECTOR_ARRAY_SIZE = 12;
+        NUM_INPUTS = 1;
+        NUM_OUTPUTS = 2;
+        inputArray = new double[VECTOR_ARRAY_SIZE * NUM_INPUTS]; // NOTE, inputs are only one value atm
+        outputArray = new double[VECTOR_ARRAY_SIZE * NUM_OUTPUTS]; // NOTE: outputs are only two values (x and y atm)
+
+        inputDoubles = CreateInputDoubles();
+        inputDoubles = NormalizeHelper.NormalizeInputDoubles(inputDoubles, 0.0f, 22.0f); // max and min
     }
 
     public override void Activate(IBlackBox box)
@@ -77,9 +109,9 @@ public class BraidController : UnitController
             ISignalArray outputArr = neat.OutputSignalArray;
 
             // debugging
-            debugInputArray[i] = input;
-            debugOutputArray[i] = Math.Round(outputArr[0], 2);
-            debugOutputArray[i + 1] = Math.Round(outputArr[1], 2);
+            inputArray[i] = input;
+            outputArray[i] = Math.Round(outputArr[0], 2);
+            outputArray[i + 1] = Math.Round(outputArr[1], 2);
 
             i++; 
         }
@@ -101,9 +133,9 @@ public class BraidController : UnitController
         {
             BraidVectors[i] = Vector3.up;
 
-            float x = (float) debugOutputArray[j] * 10.0f;
-            float y = (float) debugOutputArray[j + 1] * 10.0f;
-            float z = (float) ((debugInputArray[i] + 1) * 20.0f); // Has to be made positive
+            float x = (float) outputArray[j] * 10.0f;
+            float y = (float) outputArray[j + 1] * 10.0f;
+            float z = (float) ((inputArray[i] + 1) * 20.0f); // Has to be made positive
             BraidVectors[i] = new Vector3(x, y, z);
 
             j += 2; 
@@ -182,14 +214,14 @@ public class BraidController : UnitController
     public void DebugNetwork()
     {
         Debug.Log("Debugging network for: " + gameObject.name); 
-        foreach(double input in debugInputArray)
+        foreach(double input in inputArray)
             Debug.Log("i: " + input);
        
-        //foreach (double d in debugOutputArray)
+        //foreach (double d in outputArray)
         //    Debug.Log("o: " + d);
 
-        for(int i = 0; i < debugOutputArray.Length; i+=2)
-            Debug.Log("OUTPUT [" + debugOutputArray[i] + ", " + debugOutputArray[i + 1] + "]");
+        for(int i = 0; i < outputArray.Length; i+=2)
+            Debug.Log("OUTPUT [" + outputArray[i] + ", " + outputArray[i + 1] + "]");
 
         Debug.Log(" - - - - - - - - Finished debugging - - - - - - - - "); 
     }

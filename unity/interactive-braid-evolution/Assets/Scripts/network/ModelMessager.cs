@@ -16,13 +16,11 @@ public class ModelMessager : MonoBehaviour {
         sender = GameObject.FindObjectOfType<UDPSender>(); 
     }
 
-    public void SetupEvolutionParameters(int populationSize, int height)
+    public void SetupEvolutionParameters(int populationSize)
     {
         m_populationSize = populationSize;
-        m_height = height;
+        m_height = UISliderUpdater.GetValue("Height");
         m_messageVectors = new Vector3[populationSize][];
-        //Debug.Log("Evolution parameters set in network messsenger");
-        
     }
 
     public void AddVectors(int index, Vector3[] vectors)
@@ -48,32 +46,32 @@ public class ModelMessager : MonoBehaviour {
 
         for (int i = 0; i < braids.Length; i++)
         {
-            Braid b;
-            //Vector3[] vects = {
-            //    new Vector3( Random.Range(i, i + 4), Random.Range(i, i + 4), 0),
-            //    new Vector3( Random.Range(i, i + 4), Random.Range(i, i + 4) ,2),
-            //    new Vector3( Random.Range(i, i + 4), Random.Range(i, i + 4) ,4),
-            //    new Vector3( Random.Range(i, i + 4), Random.Range(i, i + 4) ,6),
-            //    new Vector3( Random.Range(i, i + 4), Random.Range(i, i + 4) ,8),
-            //    new Vector3( Random.Range(i, i + 4), Random.Range(i, i + 4) ,10)
-            //};
-
-            if (m_messageVectors[i] != null)
-            {
-                b = new Braid("braid_" + i.ToString(), braidVectors[i]);
-                braids[i] = b;
-            }
-            //} else
-            //{
-            //    if(i == 1)
-            //        b = new Braid("braid_" + i.ToString(), vects);
-            //    else
-            //        b = new Braid("braid_" + i.ToString(), vects);
-            //}
-
-
+            Braid b = new Braid("braid_" + i.ToString(), braidVectors[i]);
+            braids[i] = b;
         }
 
         return braids; 
+    }
+
+    public static Braid[] CreateRandomBraidArray(Vector3[][] braidVectors, int populationSize)
+    {
+        Braid[] braids = new Braid[populationSize];
+
+        for (int i = 0; i < braids.Length; i++)
+        {
+
+            Vector3[] vects = {
+                new Vector3( Random.Range(i, i + 4), Random.Range(i, i + 4), 0),
+                new Vector3( Random.Range(i, i + 4), Random.Range(i, i + 4) ,2),
+                new Vector3( Random.Range(i, i + 4), Random.Range(i, i + 4) ,4),
+                new Vector3( Random.Range(i, i + 4), Random.Range(i, i + 4) ,6),
+                new Vector3( Random.Range(i, i + 4), Random.Range(i, i + 4) ,8),
+                new Vector3( Random.Range(i, i + 4), Random.Range(i, i + 4) ,10)
+            };
+
+            Braid b = new Braid("braid_" + i.ToString(), vects);
+        }
+
+        return braids;
     }
 }

@@ -49,8 +49,6 @@ public class IECManager : MonoBehaviour {
         evolveButton.SetActive(false); 
         selectionWindow.SetActive(false);
         exitButton.SetActive(false); 
-
-        UIStatusWindow.SetStatus(UIStatusWindow.STATUS.UNINITIALIZED); 
     }
 
     public static void SetUIToEvolvingState()

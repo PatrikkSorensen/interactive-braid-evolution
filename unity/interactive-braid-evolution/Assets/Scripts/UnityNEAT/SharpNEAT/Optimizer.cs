@@ -7,6 +7,7 @@ using SharpNeat.Genomes.Neat;
 using System;
 using System.Xml;
 using System.IO;
+using ExperimentTypes;
 
 public class Optimizer : MonoBehaviour {
 
@@ -36,7 +37,7 @@ public class Optimizer : MonoBehaviour {
     private string champFileSavePath = null;
 
     // ANNSetup variables 
-    private UIANNSetupDropdown.ANNSetup ANN_SETUP; 
+    private ANNSetup ANN_SETUP; 
 
     void Start ()
     {
@@ -64,7 +65,7 @@ public class Optimizer : MonoBehaviour {
         if (messenger)
         {
             PopulationSize = XmlUtils.GetValueAsInt(xmlConfig.DocumentElement, "PopulationSize");
-            //messenger.SetupEvolutionParameters(PopulationSize, UISliderUpdater.GetValue("Height"));
+            messenger.SetupEvolutionParameters(PopulationSize);
         }
 
         UnitContainer = GameObject.Find("UnitContainer");
@@ -74,7 +75,7 @@ public class Optimizer : MonoBehaviour {
         // setup the relevant ui
         IECManager.SetUIToEvolvingState();
 
-        if (ANN_SETUP == UIANNSetupDropdown.ANNSetup.VECTOR_BASED)
+        if (ANN_SETUP == ANNSetup.VECTOR_BASED)
         {
             Debug.Log("I should create a random list of values");
 
@@ -98,11 +99,9 @@ public class Optimizer : MonoBehaviour {
 
     void ea_UpdateEvent(object sender, EventArgs e)
     {
-        //Debug.Log("Generation: " + _ea.CurrentGeneration + ", best fitness: " + _ea.Statistics._maxFitness);
-        Debug.Log("Updating..."); 
+        Debug.Log("Generation: " + _ea.CurrentGeneration + ", best fitness: " + _ea.Statistics._maxFitness);
         Fitness = _ea.Statistics._maxFitness;
         Generation = _ea.CurrentGeneration;
-        
     }
 
     void ea_PauseEvent(object sender, EventArgs e)
@@ -132,6 +131,7 @@ public class Optimizer : MonoBehaviour {
         obj.transform.parent = UnitContainer.transform;
         obj.name = "unit_" + UnitContainer.transform.childCount;
         controller.BraidId = UnitContainer.transform.childCount;
+        controller.networkSetup = ANN_SETUP; 
         /* END OF SPECIFIC OPERATIONS TO THE BRAID EXPERIMENT */
 
         ControllerMap.Add(phenome, controller);
@@ -149,18 +149,18 @@ public class Optimizer : MonoBehaviour {
     private TextAsset SetupANNStructure()
     {
         TextAsset textAsset;
-        UIANNSetupDropdown.ANNSetup setup = UIANNSetupDropdown.GetANNSetup();
+        ANNSetup setup = UIANNSetupDropdown.GetANNSetup();
         switch (setup)
         {
-            case UIANNSetupDropdown.ANNSetup.SIMPLE:
+            case ANNSetup.SIMPLE:
                 Debug.Log("Simple setup booted up!");
                 textAsset = (TextAsset)Resources.Load("experiment.config.braid.simple");
-                ANN_SETUP = UIANNSetupDropdown.ANNSetup.SIMPLE;
+                ANN_SETUP = ANNSetup.SIMPLE;
                 break;
-            case UIANNSetupDropdown.ANNSetup.VECTOR_BASED:
+            case ANNSetup.VECTOR_BASED:
                 Debug.Log("Vector Based Setup selected!");
                 textAsset = (TextAsset)Resources.Load("experiment.config.braid.vector");
-                ANN_SETUP = UIANNSetupDropdown.ANNSetup.VECTOR_BASED;
+                ANN_SETUP = ANNSetup.VECTOR_BASED;
                 break;
             default:
                 Debug.LogError("Something went wrong when getting the network setup");
