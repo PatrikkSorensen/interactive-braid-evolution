@@ -93,8 +93,11 @@ public class BraidExperiment : INeatExperiment
         _neatGenomeParams = new NeatGenomeParameters();
         _neatGenomeParams.FeedforwardOnly = _activationScheme.AcyclicNetwork;
 
-        _inputCount = input;
-        _outputCount = output;
+        //_inputCount = input;
+        //_outputCount = output;
+
+        _inputCount = XmlUtils.GetValueAsInt(xmlConfig, "Inputs");
+        _outputCount = XmlUtils.GetValueAsInt(xmlConfig, "Outputs");
     }
 
     public List<NeatGenome> LoadPopulation(XmlReader xr)

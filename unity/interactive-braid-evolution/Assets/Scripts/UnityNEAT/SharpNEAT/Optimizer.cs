@@ -57,11 +57,11 @@ public class Optimizer : MonoBehaviour {
         {
             case UIANNSetupDropdown.ANNSetup.SIMPLE:
                 Debug.Log("Simple setup booted up!");
-                textAsset = (TextAsset)Resources.Load("experiment.config");
+                textAsset = (TextAsset)Resources.Load("experiment.config.braid.simple");
                 break;
             case UIANNSetupDropdown.ANNSetup.VECTOR_BASED:
                 Debug.Log("Vector Based Setup selected!");
-                textAsset = (TextAsset)Resources.Load("experiment.config.braid.simple");
+                textAsset = (TextAsset)Resources.Load("experiment.config.braid.vector");
                 break;
             case UIANNSetupDropdown.ANNSetup.MATERIAL_AND_VECTOR:
                 Debug.Log("Material and vector based setup selected");
@@ -78,7 +78,7 @@ public class Optimizer : MonoBehaviour {
 
         // set up experiment
         experiment = new BraidExperiment();
-        experiment.Initialize("Car Experiment", xmlConfig.DocumentElement, NUM_INPUTS, NUM_OUTPUTS);
+        experiment.Initialize("Braid Experiment", xmlConfig.DocumentElement, NUM_INPUTS, NUM_OUTPUTS);
         experiment.SetOptimizer(this);
 
         // set up network variables 

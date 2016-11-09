@@ -3,6 +3,8 @@
     <Config>
       <PopulationSize>5</PopulationSize>
       <SpecieCount>3</SpecieCount>
+      <Inputs>3</Inputs>
+      <Outputs>3</Outputs>
       <Activation>
         <Scheme>Acyclic</Scheme>
       </Activation>
