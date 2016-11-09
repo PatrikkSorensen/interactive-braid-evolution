@@ -5,6 +5,9 @@ using System.Text.RegularExpressions;
 
 public class UIStatusWindow : MonoBehaviour
 {
+    public float period = 1.0f;
+    public int numDots = 0;
+    public static STATUS currentStatus; 
 
     public enum STATUS
     {
@@ -17,13 +20,11 @@ public class UIStatusWindow : MonoBehaviour
 
     private static Text t;
     private Regex rgx; 
-
     private float nextActionTime = 0.0f;
-    public float period = 1.0f;
-    public int numDots = 0; 
 
     void Start()
     {
+        currentStatus = STATUS.UNINITIALIZED; 
         t = GameObject.Find("StatusText").GetComponent<Text>();
         rgx = new Regex("[^a-zA-Z0-9 -]");
     }
@@ -53,19 +54,20 @@ public class UIStatusWindow : MonoBehaviour
         switch (st)
         {
             case STATUS.EVOLVING:
+                currentStatus = STATUS.EVOLVING;
                 t.text = "evolving";
                 break;
             case STATUS.MODELLING:
+                currentStatus = STATUS.MODELLING;
                 t.text = "modelling";
                 break;
             case STATUS.IMPORTING:
+                currentStatus = STATUS.IMPORTING;
                 t.text = "importing models";
                 break;
             case STATUS.SIMULATING:
+                currentStatus = STATUS.SIMULATING;
                 t.text = "simulating";
-                break;
-            case STATUS.UNINITIALIZED:
-                t.text = "uninitialized";
                 break;
             default:
                 Debug.Log("Nothing happens..."); 

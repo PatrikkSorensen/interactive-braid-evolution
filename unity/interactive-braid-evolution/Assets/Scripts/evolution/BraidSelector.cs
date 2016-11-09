@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI; 
 using SharpNeat.EvolutionAlgorithms; 
 using System.Collections;
 using DG.Tweening; 
@@ -8,13 +9,18 @@ public class BraidSelector : MonoBehaviour {
     public static bool ReadyToProgressEvolution;
     public static bool ShouldSimulateGenomes;
 
+    private Text statusText; 
+
     void Awake()
     {
+        statusText = GameObject.Find("StatusText").GetComponent<Text>(); 
         ShouldSimulateGenomes = true; 
         ReadyToProgressEvolution = false; 
     }
 	void Update () {
 
+        if (UIStatusWindow.currentStatus != UIStatusWindow.STATUS.SIMULATING)
+            return; 
 
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;

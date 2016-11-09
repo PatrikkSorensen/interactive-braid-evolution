@@ -91,6 +91,13 @@ namespace SharpNEAT.core
                     yield return new WaitForSeconds(0.2f);
                 }
 
+                if(!UISelectionWindow.current_selected)
+                {
+                    Debug.Log("Breaking out of simulation"); 
+                    break; 
+                }
+
+
                 BraidSimulationManager.AdvanceGeneration(); 
 
 

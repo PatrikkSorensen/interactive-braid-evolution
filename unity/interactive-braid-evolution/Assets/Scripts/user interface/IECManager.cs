@@ -15,7 +15,8 @@ public class IECManager : MonoBehaviour {
     public static GameObject statusWindowContainer;
     public static GameObject initializeButton;
     public static GameObject dropDown;
-    public static GameObject advanceButton; 
+    public static GameObject advanceButton;
+    public static GameObject exitButton; 
 
     private void Start()
     {
@@ -29,7 +30,8 @@ public class IECManager : MonoBehaviour {
         slider                = GameObject.FindObjectOfType<UISliderUpdater>().gameObject;
         statusWindowContainer = GameObject.FindObjectOfType<UIStatusWindow>().gameObject;
         dropDown              = GameObject.Find("ANNSetupDropdown");
-        advanceButton         = GameObject.Find("AdvanceGeneration"); 
+        advanceButton         = GameObject.Find("AdvanceGeneration");
+        exitButton            = GameObject.Find("ExitButton");
         SetStartUI();
     }
 
@@ -40,16 +42,16 @@ public class IECManager : MonoBehaviour {
             SetUIToSelectionState();
             reciever.hasImportedAllModels = false;
         }
-
-        if (Input.GetKeyDown(KeyCode.U))
-            IECManager.GetSelectionId(); 
     }
 
     public static int GetSelectionId()
     {
 
-        if (!GameObject.FindObjectOfType<UISelectionWindow>())
-            return 0; 
+        if (!GameObject.FindObjectOfType<UISelectionWindow>() || !UISelectionWindow.current_selected)
+        {
+            Debug.LogError("You tried to get a braid id of a destroyed object"); 
+            return 0;
+        }
 
         string resultString = Regex.Match(UISelectionWindow.current_selected.name, @"\d+").Value;
         return (Int32.Parse(resultString));
@@ -60,6 +62,7 @@ public class IECManager : MonoBehaviour {
         advanceButton.SetActive(false);
         evolveButton.SetActive(false); 
         selectionWindow.SetActive(false);
+        exitButton.SetActive(false); 
 
         UIStatusWindow.SetStatus(UIStatusWindow.STATUS.UNINITIALIZED); 
     }
@@ -69,7 +72,6 @@ public class IECManager : MonoBehaviour {
         UIStatusWindow.SetStatus(UIStatusWindow.STATUS.EVOLVING);
         evolveButton.SetActive(true);
 
-        // Destroy?
         Destroy(initializeButton);
         Destroy(dropDown);
     }
@@ -85,6 +87,9 @@ public class IECManager : MonoBehaviour {
         evolveButton.SetActive(false);
         selectionWindow.SetActive(true);
         advanceButton.SetActive(true);
+        exitButton.SetActive(true); 
+
         UIStatusWindow.SetStatus(UIStatusWindow.STATUS.SIMULATING);
+
     }
 }

@@ -44,13 +44,7 @@ public class Optimizer : MonoBehaviour {
     {
         Debug.Log(Application.dataPath);
         champFileSavePath = Application.dataPath + "/Resources/xml/braid.champ.xml";
-        popFileSavePath = Application.dataPath + "/Resources/xml/braid.champ.xml";
-    }
-
-    void Update ()
-    {
-        if (Input.GetKeyDown(KeyCode.X))
-            StopEA(); 
+        popFileSavePath = Application.dataPath + "/Resources/xml/pop.xml";
     }
 
     public void InitializeEA()
@@ -99,10 +93,11 @@ public class Optimizer : MonoBehaviour {
             Debug.LogError("No network messenger found in scene!");
         }
 
+        //TODO: Make this work with own local paths
         // set up utility variables
-        champFileSavePath = Application.persistentDataPath + string.Format("/{0}.champ.xml", "car");
-        if (LoadPopulation)
-            popFileSavePath = Application.persistentDataPath + string.Format("/{0}.pop.xml", "car");
+        //champFileSavePath = Application.persistentDataPath + string.Format("/{0}.champ.xml", "car");
+        //if (LoadPopulation)
+        //    popFileSavePath = Application.persistentDataPath + string.Format("/{0}.pop.xml", "car");
 
         startTime = DateTime.Now;
 
@@ -140,21 +135,17 @@ public class Optimizer : MonoBehaviour {
     }
 
     void ea_PauseEvent(object sender, EventArgs e)
-    {
-        Debug.Log("EA paused!");
-       
+    {     
         ResetTimeScale();
         SaveXMLFiles(); 
     }
 
     public void StopEA()
     {
-        Debug.Log("EA stopped!");
         BraidSelector.SetShouldEvaluate(false);
         BraidSelector.SetReadyForSelection(true); 
         if (_ea != null && _ea.RunState == SharpNeat.Core.RunState.Running)
         {
-            Debug.Log("EA actually stopped..."); 
             _ea.Stop();
         }
     }
@@ -243,15 +234,19 @@ public class Optimizer : MonoBehaviour {
         using (XmlWriter xw = XmlWriter.Create(popFileSavePath, _xwSettings))
         {
             experiment.SavePopulation(xw, _ea.GenomeList);
+            Debug.Log("population file saved to disk");
         }
 
         // Also save the best genome
         using (XmlWriter xw = XmlWriter.Create(champFileSavePath, _xwSettings))
         {
+            Debug.Log(_ea.CurrentChampGenome); 
             experiment.SavePopulation(xw, new NeatGenome[] { _ea.CurrentChampGenome });
+            Debug.Log("champions file saved to disk");
         }
         DateTime endTime = DateTime.Now;
         Utility.Log("Total time elapsed: " + (endTime - startTime));
+
     }
 
     // time functions
