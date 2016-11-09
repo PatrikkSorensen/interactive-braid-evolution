@@ -11,11 +11,13 @@ public class BraidController : UnitController
     public int CURRENT_GENERATION; 
 
     // Input vectors
-    public Vector3[] inputVectors;
-    public double[] inputDoubles; 
+    //public Vector3[] inputVectors;
+    //public double[] inputDoubles; 
     public int VECTOR_ARRAY_SIZE;
     public int NUM_INPUTS;
-    public int NUM_OUTPUTS; 
+    public int NUM_OUTPUTS;
+    double[] INPUT_ARRAY;
+    double[] OUTPUT_ARRAY;
 
     private IBlackBox neat;
     private float fitness = 0.0f;
@@ -41,8 +43,7 @@ public class BraidController : UnitController
     public ANNSetup networkSetup; 
 
     // Debugging variables 
-    double[] inputArray;
-    double[] outputArray;
+
 
     public void InitializeControllerVariables()
     {
@@ -70,13 +71,12 @@ public class BraidController : UnitController
         Debug.Log("I should do code specfic to the vector based Ann sturcure here..."); 
         // hardcoded for now
         VECTOR_ARRAY_SIZE = 12;
-        NUM_INPUTS = 1;
-        NUM_OUTPUTS = 2;
-        inputArray = new double[VECTOR_ARRAY_SIZE * NUM_INPUTS]; // NOTE, inputs are only one value atm
-        outputArray = new double[VECTOR_ARRAY_SIZE * NUM_OUTPUTS]; // NOTE: outputs are only two values (x and y atm)
+        NUM_INPUTS = 3;
+        NUM_OUTPUTS = 3;
+        OUTPUT_ARRAY = new double[VECTOR_ARRAY_SIZE * NUM_OUTPUTS]; // NOTE: outputs are only two values (x and y atm)
 
-        inputDoubles = CreateInputDoubles();
-        inputDoubles = NormalizeHelper.NormalizeInputDoubles(inputDoubles, 0.0f, 22.0f); // max and min
+        INPUT_ARRAY = CreateInputDoubles();
+        INPUT_ARRAY = NormalizeHelper.NormalizeInputDoubles(INPUT_ARRAY, 0.0f, 22.0f); // max and min
     }
 
     private void SetupSimpleANNStructure()
@@ -85,11 +85,10 @@ public class BraidController : UnitController
         VECTOR_ARRAY_SIZE = 12;
         NUM_INPUTS = 1;
         NUM_OUTPUTS = 2;
-        inputArray = new double[VECTOR_ARRAY_SIZE * NUM_INPUTS]; // NOTE, inputs are only one value atm
-        outputArray = new double[VECTOR_ARRAY_SIZE * NUM_OUTPUTS]; // NOTE: outputs are only two values (x and y atm)
+        OUTPUT_ARRAY = new double[VECTOR_ARRAY_SIZE * NUM_OUTPUTS]; // NOTE: outputs are only two values (x and y atm)
 
-        inputDoubles = CreateInputDoubles();
-        inputDoubles = NormalizeHelper.NormalizeInputDoubles(inputDoubles, 0.0f, 22.0f); // max and min
+        INPUT_ARRAY = CreateInputDoubles();
+        INPUT_ARRAY = NormalizeHelper.NormalizeInputDoubles(INPUT_ARRAY, 0.0f, 22.0f); // max and min
     }
 
     public override void Activate(IBlackBox box)
@@ -99,9 +98,8 @@ public class BraidController : UnitController
         InitializeControllerVariables();
 
         //Debug.Log("The amount of inputs is: " + inputDoubles.Length);
-        foreach (double d in inputDoubles)
+        foreach (double d in INPUT_ARRAY)
         {
-            
             double input = d;
 
             inputArr[2] = input;
@@ -109,9 +107,8 @@ public class BraidController : UnitController
             ISignalArray outputArr = neat.OutputSignalArray;
 
             // debugging
-            inputArray[i] = input;
-            outputArray[i] = Math.Round(outputArr[0], 2);
-            outputArray[i + 1] = Math.Round(outputArr[1], 2);
+            OUTPUT_ARRAY[i] = Math.Round(outputArr[0], 2);
+            OUTPUT_ARRAY[i + 1] = Math.Round(outputArr[1], 2);
 
             i++; 
         }
@@ -133,9 +130,9 @@ public class BraidController : UnitController
         {
             BraidVectors[i] = Vector3.up;
 
-            float x = (float) outputArray[j] * 10.0f;
-            float y = (float) outputArray[j + 1] * 10.0f;
-            float z = (float) ((inputArray[i] + 1) * 20.0f); // Has to be made positive
+            float x = (float) OUTPUT_ARRAY[j] * 10.0f;
+            float y = (float) OUTPUT_ARRAY[j + 1] * 10.0f;
+            float z = (float) ((INPUT_ARRAY[i] + 1) * 20.0f); // Has to be made positive
             BraidVectors[i] = new Vector3(x, y, z);
 
             j += 2; 
@@ -191,14 +188,14 @@ public class BraidController : UnitController
     }
 
     /********************** UTILITY FUNCTIONS FOR NETWORK **********************/
-    public Vector3[] CreateInputVectors()
-    {
-        inputVectors = new Vector3[VECTOR_ARRAY_SIZE];
-        for (int i = 0; i < inputVectors.Length; i++)
-            inputVectors[i] = new Vector3(0.0f, 0.0f, i * 2);
+    //public Vector3[] CreateInputVectors()
+    //{
+    //    inputVectors = new Vector3[VECTOR_ARRAY_SIZE];
+    //    for (int i = 0; i < inputVectors.Length; i++)
+    //        inputVectors[i] = new Vector3(0.0f, 0.0f, i * 2);
 
-        return inputVectors;
-    }
+    //    return inputVectors;
+    //}
 
     public double[] CreateInputDoubles()
     {
@@ -214,14 +211,14 @@ public class BraidController : UnitController
     public void DebugNetwork()
     {
         Debug.Log("Debugging network for: " + gameObject.name); 
-        foreach(double input in inputArray)
+        foreach(double input in INPUT_ARRAY)
             Debug.Log("i: " + input);
        
         //foreach (double d in outputArray)
         //    Debug.Log("o: " + d);
 
-        for(int i = 0; i < outputArray.Length; i+=2)
-            Debug.Log("OUTPUT [" + outputArray[i] + ", " + outputArray[i + 1] + "]");
+        for(int i = 0; i < OUTPUT_ARRAY.Length; i+=2)
+            Debug.Log("OUTPUT [" + OUTPUT_ARRAY[i] + ", " + OUTPUT_ARRAY[i + 1] + "]");
 
         Debug.Log(" - - - - - - - - Finished debugging - - - - - - - - "); 
     }
