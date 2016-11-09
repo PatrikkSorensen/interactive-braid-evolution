@@ -20,8 +20,6 @@ public class IECManager : MonoBehaviour {
 
     private void Start()
     {
-
-        Debug.Log("Save path: " + Application.persistentDataPath); 
         reciever = GameObject.FindObjectOfType<UDPReciever>(); 
 
         initializeButton      = GameObject.Find("InitializeANNButton");

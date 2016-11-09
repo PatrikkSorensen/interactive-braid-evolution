@@ -10,12 +10,7 @@ using System.IO;
 
 public class Optimizer : MonoBehaviour {
 
-    // Neural Networks
-    public int NUM_INPUTS = 3;
-    public int NUM_OUTPUTS = 10;
-
     // Neat parameters
-    //SimpleExperiment experiment;
     BraidExperiment experiment; 
     static NeatEvolutionAlgorithm<NeatGenome> _ea;
     Dictionary<IBlackBox, UnitController> ControllerMap = new Dictionary<IBlackBox, UnitController>();
@@ -40,45 +35,28 @@ public class Optimizer : MonoBehaviour {
     private string popFileSavePath = null; 
     private string champFileSavePath = null;
 
+    // ANNSetup variables 
+    private UIANNSetupDropdown.ANNSetup ANN_SETUP; 
+
     void Start ()
     {
-        Debug.Log(Application.dataPath);
         champFileSavePath = Application.dataPath + "/Resources/xml/braid.champ.xml";
         popFileSavePath = Application.dataPath + "/Resources/xml/pop.xml";
     }
 
     public void InitializeEA()
     {
-        UIANNSetupDropdown.ANNSetup setup = UIANNSetupDropdown.GetANNSetup();
+        
+        // set up network structure from dropdown
         XmlDocument xmlConfig = new XmlDocument();
-        TextAsset textAsset;
-
-        switch (setup)
-        {
-            case UIANNSetupDropdown.ANNSetup.SIMPLE:
-                Debug.Log("Simple setup booted up!");
-                textAsset = (TextAsset)Resources.Load("experiment.config.braid.simple");
-                break;
-            case UIANNSetupDropdown.ANNSetup.VECTOR_BASED:
-                Debug.Log("Vector Based Setup selected!");
-                textAsset = (TextAsset)Resources.Load("experiment.config.braid.vector");
-                break;
-            case UIANNSetupDropdown.ANNSetup.MATERIAL_AND_VECTOR:
-                Debug.Log("Material and vector based setup selected");
-                textAsset = (TextAsset)Resources.Load("experiment.config");
-                break;
-            default:
-                Debug.LogError("Something went wrong when getting the network setup");
-                textAsset = (TextAsset)Resources.Load("experiment.config");
-                break;
-        }
+        TextAsset textAsset = SetupANNStructure();
 
         // load in XML
         xmlConfig.LoadXml(textAsset.text);
 
         // set up experiment
         experiment = new BraidExperiment();
-        experiment.Initialize("Braid Experiment", xmlConfig.DocumentElement, NUM_INPUTS, NUM_OUTPUTS);
+        experiment.Initialize("Braid Experiment", xmlConfig.DocumentElement, 0, 0);
         experiment.SetOptimizer(this);
 
         // set up network variables 
@@ -86,40 +64,33 @@ public class Optimizer : MonoBehaviour {
         if (messenger)
         {
             PopulationSize = XmlUtils.GetValueAsInt(xmlConfig.DocumentElement, "PopulationSize");
-            messenger.SetupEvolutionParameters(PopulationSize, UISliderUpdater.GetValue("Height"));
+            //messenger.SetupEvolutionParameters(PopulationSize, UISliderUpdater.GetValue("Height"));
         }
-        else
-        {
-            Debug.LogError("No network messenger found in scene!");
-        }
-
-        //TODO: Make this work with own local paths
-        // set up utility variables
-        //champFileSavePath = Application.persistentDataPath + string.Format("/{0}.champ.xml", "car");
-        //if (LoadPopulation)
-        //    popFileSavePath = Application.persistentDataPath + string.Format("/{0}.pop.xml", "car");
-
-        startTime = DateTime.Now;
 
         UnitContainer = GameObject.Find("UnitContainer");
         if (!UnitContainer)
             UnitContainer = new GameObject("UnitContainer");
 
         // setup the relevant ui
-        IECManager.SetUIToEvolvingState(); 
+        IECManager.SetUIToEvolvingState();
+
+        if (ANN_SETUP == UIANNSetupDropdown.ANNSetup.VECTOR_BASED)
+        {
+            Debug.Log("I should create a random list of values");
+
+        }
     }
+
 
 
     public void StartEA()
     {
         Debug.Log("----------------------  SETTING UP EA IN UNITY SCENE ----------------------");
-        // ea and neat 
         _ea = experiment.CreateEvolutionAlgorithm(popFileSavePath);
         _ea.UpdateEvent += new EventHandler(ea_UpdateEvent);
         _ea.PausedEvent += new EventHandler(ea_PauseEvent);
         _ea.StartContinue();
 
-        // evaluation and braid controller related 
         SetTimeScale();
 
         Debug.Log("------------------- FINISHED SETTING UP EA -------------------------------");
@@ -173,6 +144,31 @@ public class Optimizer : MonoBehaviour {
         //Debug.Log("Stopping evaluation"); 
         UnitController ct = ControllerMap[box];
         Destroy(ct.gameObject);
+    }
+
+    private TextAsset SetupANNStructure()
+    {
+        TextAsset textAsset;
+        UIANNSetupDropdown.ANNSetup setup = UIANNSetupDropdown.GetANNSetup();
+        switch (setup)
+        {
+            case UIANNSetupDropdown.ANNSetup.SIMPLE:
+                Debug.Log("Simple setup booted up!");
+                textAsset = (TextAsset)Resources.Load("experiment.config.braid.simple");
+                ANN_SETUP = UIANNSetupDropdown.ANNSetup.SIMPLE;
+                break;
+            case UIANNSetupDropdown.ANNSetup.VECTOR_BASED:
+                Debug.Log("Vector Based Setup selected!");
+                textAsset = (TextAsset)Resources.Load("experiment.config.braid.vector");
+                ANN_SETUP = UIANNSetupDropdown.ANNSetup.VECTOR_BASED;
+                break;
+            default:
+                Debug.LogError("Something went wrong when getting the network setup");
+                textAsset = (TextAsset)Resources.Load("experiment.config");
+                break;
+        }
+
+        return textAsset;
     }
 
     public void RunBest()

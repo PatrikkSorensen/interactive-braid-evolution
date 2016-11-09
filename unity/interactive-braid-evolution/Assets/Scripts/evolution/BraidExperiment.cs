@@ -93,11 +93,10 @@ public class BraidExperiment : INeatExperiment
         _neatGenomeParams = new NeatGenomeParameters();
         _neatGenomeParams.FeedforwardOnly = _activationScheme.AcyclicNetwork;
 
-        //_inputCount = input;
-        //_outputCount = output;
-
         _inputCount = XmlUtils.GetValueAsInt(xmlConfig, "Inputs");
         _outputCount = XmlUtils.GetValueAsInt(xmlConfig, "Outputs");
+
+        Debug.Log("Inputs: " + _inputCount + ", Outputs: " + _outputCount); 
     }
 
     public List<NeatGenome> LoadPopulation(XmlReader xr)
@@ -170,18 +169,10 @@ public class BraidExperiment : INeatExperiment
         BraidNeatEvolutionAlgorithm<NeatGenome> ea = new BraidNeatEvolutionAlgorithm<NeatGenome>(_eaParams, speciationStrategy, complexityRegulationStrategy);
 
         // Create black box evaluator       
-        //SimpleEvaluator evaluator = new SimpleEvaluator(m_optimizer);
         BraidEvaluator evaluator = new BraidEvaluator(m_optimizer);
         IGenomeDecoder<NeatGenome, IBlackBox> genomeDecoder = CreateGenomeDecoder();
-
-
-        //IGenomeListEvaluator<NeatGenome> innerEvaluator = new UnityParallelListEvaluator<NeatGenome, IBlackBox>(genomeDecoder, evaluator, m_optimizer);
         IGenomeListEvaluator<NeatGenome> innerEvaluator = new BraidListEvaluator<NeatGenome, IBlackBox>(genomeDecoder, evaluator, m_optimizer);
 
-        //IGenomeListEvaluator<NeatGenome> selectiveEvaluator = new SelectiveGenomeListEvaluator<NeatGenome>(innerEvaluator,
-        //SelectiveGenomeListEvaluator<NeatGenome>.CreatePredicate_OnceOnly());
-
-        //ea.Initialize(selectiveEvaluator, genomeFactory, genomeList);
         ea.Initialize(innerEvaluator, genomeFactory, genomeList);
         return ea;
     }
