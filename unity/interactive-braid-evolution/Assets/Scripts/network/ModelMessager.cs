@@ -19,7 +19,7 @@ public class ModelMessager : MonoBehaviour {
     public void SetupEvolutionParameters(int populationSize)
     {
         m_populationSize = populationSize;
-        m_height = UISliderUpdater.GetValue("Height");
+        m_height = UISliderUpdater.GetValue();
         m_messageVectors = new Vector3[populationSize][];
     }
 
@@ -45,8 +45,9 @@ public class ModelMessager : MonoBehaviour {
         IECManager.SetUIToModellingState();
         Braid[] braids = CreateBraidArray(m_messageVectors);
 
-         
+        
         string s = JsonHelper.CreateJSONFromBraids(m_height, m_populationSize, braids);
+        Debug.Log(s);
         sender.SendString(s);
     }
 
@@ -66,23 +67,27 @@ public class ModelMessager : MonoBehaviour {
     public static Braid[] CreateRandomBraidArray(int populationSize)
     {
         Braid[] braids = new Braid[populationSize];
-
+        float multiplier = (float)UISliderUpdater.GetValue(); 
         for (int i = 0; i < braids.Length; i++)
         {
-
-            Vector3[] vects = {
-                new Vector3( Random.Range(i, i + 4), Random.Range(i, i + 4), 0),
-                new Vector3( Random.Range(i, i + 4), Random.Range(i, i + 4) ,2),
-                new Vector3( Random.Range(i, i + 4), Random.Range(i, i + 4) ,4),
-                new Vector3( Random.Range(i, i + 4), Random.Range(i, i + 4) ,6),
-                new Vector3( Random.Range(i, i + 4), Random.Range(i, i + 4) ,8),
-                new Vector3( Random.Range(i, i + 4), Random.Range(i, i + 4) ,10)
-            };
+            Vector3[] vects = CreateRandomVectors(0, 5, 6, 2);  
 
             Braid b = new Braid("braid_" + i.ToString(), vects);
             braids[i] = b; 
         }
 
         return braids;
+    }
+
+    public static Vector3[] CreateRandomVectors(int min, int max, int size, int yOffset)
+    {
+        Vector3[] v = new Vector3[size];
+        for (int i = 0; i < size; i++) {
+            {
+                v[i] = new Vector3(Random.Range(min, max), Random.Range(min, max), i * yOffset);
+            };
+        }
+
+            return v; 
     }
 }

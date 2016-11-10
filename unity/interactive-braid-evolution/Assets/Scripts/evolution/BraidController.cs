@@ -43,10 +43,77 @@ public class BraidController : UnitController
 
     // Debugging variables 
 
-
-    public void InitializeControllerVariables()
+    public override void Activate(IBlackBox box)
     {
+        InitializeBraidControllerVariables(box);
+        ActivateBraidController(); 
 
+        //ISignalArray inputArr = neat.InputSignalArray;
+        //for(int i = 0; i < INPUT_ARRAY.Length; i++)
+        //{
+        //    double input = INPUT_ARRAY[i];
+
+        //    inputArr[0] = input;
+        //    neat.Activate();
+        //    ISignalArray outputArr = neat.OutputSignalArray;
+
+        //    OUTPUT_ARRAY[i] = Math.Round(outputArr[0], 2);
+        //    OUTPUT_ARRAY[i + 1] = Math.Round(outputArr[1], 2);
+        //}
+
+
+        //DebugNetwork();
+        //PrintBraidVectors();
+
+        //Debug.Log(" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ");
+
+    }
+
+    /********************* CONTROLLER SPECIFIC ACTIVATION FUNCTIONS **********************/
+    private void ActivateBraidController()
+    {
+        switch (Optimizer.ANN_SETUP)
+        {
+            case ANNSetup.SIMPLE:
+                ActivateSimpleBraidController();
+                break;
+            case ANNSetup.VECTOR_BASED:
+                SetupVectorANNStructure();
+                break;
+            case ANNSetup.RANDOM_VECTORS:
+                ActivateRandomBraidController();
+                break;
+            default:
+                break;
+        }
+    }
+    private void ActivateRandomBraidController()
+    {
+            messenger.SendRandomBraidArrays();
+    }
+
+    private void ActivateSimpleBraidController()
+    {
+        ISignalArray inputArr = neat.InputSignalArray;
+        for (int i = 0; i < INPUT_ARRAY.Length; i++)
+        {
+            double input = INPUT_ARRAY[i];
+
+            inputArr[0] = input;
+            neat.Activate();
+            ISignalArray outputArr = neat.OutputSignalArray;
+
+            OUTPUT_ARRAY[i] = Math.Round(outputArr[0], 2);
+            OUTPUT_ARRAY[i + 1] = Math.Round(outputArr[1], 2);
+        }
+
+        OutputsToBraidVectors();
+        messenger.AddVectors(braidId - 1, BraidVectors);
+    }
+
+    /********************* CONTROLLER SETUP FUNCTIONS **********************/
+    public void InitializeBraidControllerVariables(IBlackBox box)
+    {
         switch (Optimizer.ANN_SETUP)
         {
             case ANNSetup.SIMPLE:
@@ -57,17 +124,18 @@ public class BraidController : UnitController
                 break;
             case ANNSetup.RANDOM_VECTORS:
                 SetupRandomANNStructure();
-                break; 
+                break;
             default:
                 break;
         }
+        neat = box; 
         messenger = GameObject.FindObjectOfType<ModelMessager>();
         BraidVectors = new Vector3[VECTOR_ARRAY_SIZE];
     }
 
     private void SetupVectorANNStructure()
     {
-        Debug.Log("I should do code specfic to the vector based Ann sturcure here..."); 
+        Debug.Log("I should do code specfic to the vector based Ann sturcure here...");
         // hardcoded for now
         VECTOR_ARRAY_SIZE = 12;
         NUM_INPUTS = 3;
@@ -95,81 +163,25 @@ public class BraidController : UnitController
         VECTOR_ARRAY_SIZE = 12;
     }
 
-    public override void Activate(IBlackBox box)
-    {
-        InitializeControllerVariables();
-
-
-        neat = box; int i = 0;
-        ISignalArray inputArr = neat.InputSignalArray;
-
-        if (Optimizer.ANN_SETUP == ANNSetup.RANDOM_VECTORS)
-        {
-            messenger.SendRandomBraidArrays();
-            return;
-        }
-
-        //Debug.Log("The amount of inputs is: " + inputDoubles.Length);
-        foreach (double d in INPUT_ARRAY)
-        {
-            double input = d;
-
-            inputArr[2] = input;
-            neat.Activate();
-            ISignalArray outputArr = neat.OutputSignalArray;
-
-            // debugging
-            OUTPUT_ARRAY[i] = Math.Round(outputArr[0], 2);
-            OUTPUT_ARRAY[i + 1] = Math.Round(outputArr[1], 2);
-
-            i++; 
-        }
-
-        OutputsToBraidVectors();
-        messenger.AddVectors(braidId - 1, BraidVectors);
-        //DebugNetwork();
-        //PrintBraidVectors();
-
-        //Debug.Log(" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ");
-
-    }
-
+    /********************* NORMALIZING AND ULITIY FUNCTIONS **********************/
     private void OutputsToBraidVectors()
     {
         //TODO: Make this use the NormalizeHelper class 
-        int j = 0; 
-        for(int i = 0; i < VECTOR_ARRAY_SIZE; i++)
+        int j = 0;
+        for (int i = 0; i < VECTOR_ARRAY_SIZE; i++)
         {
             BraidVectors[i] = Vector3.up;
 
-            float x = (float) OUTPUT_ARRAY[j] * 10.0f;
-            float y = (float) OUTPUT_ARRAY[j + 1] * 10.0f;
-            float z = (float) ((INPUT_ARRAY[i] + 1) * 20.0f); // Has to be made positive
+            float x = (float)OUTPUT_ARRAY[j] * 10.0f;
+            float y = (float)OUTPUT_ARRAY[j + 1] * 10.0f;
+            float z = (float)(INPUT_ARRAY[i] * UISliderUpdater.GetValue()); // Has to be made positive
             BraidVectors[i] = new Vector3(x, y, z);
 
-            j += 2; 
+            j += 2;
         }
 
     }
 
-    public void SetFitness(float newFitness)
-    {
-        fitness = newFitness;
-    }
-
-    public override float GetFitness()
-    {
-        return fitness;
-    }
-
-    public override void Stop()
-    {
-        Debug.Log("Stop braidController called"); 
-    }
-
-    
-
-    /********************* NORMALIZING AND ULITIY FUNCTIONS **********************/
     public Vector3 NormalizeOutput (ISignalArray outputs, int vectorCounter)
     {
         double x = outputs[0] * 10;
@@ -215,6 +227,12 @@ public class BraidController : UnitController
 
         return inputVectors;
     }
+
+    #region interface functions
+    public void SetFitness(float newFitness) { fitness = newFitness; }
+    public override float GetFitness() { return fitness; }
+    public override void Stop() { Debug.Log("Stop braidController called"); }
+    #endregion
 
     /********************** DEBUGGING AND TESTING FUNCTIONS **********************/
 

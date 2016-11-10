@@ -16,7 +16,8 @@ public class IECManager : MonoBehaviour {
     public static GameObject initializeButton;
     public static GameObject dropDown;
     public static GameObject advanceButton;
-    public static GameObject exitButton; 
+    public static GameObject exitButton;
+    public static GameObject loadDropdown;
 
     private void Start()
     {
@@ -30,6 +31,7 @@ public class IECManager : MonoBehaviour {
         dropDown              = GameObject.Find("ANNSetupDropdown");
         advanceButton         = GameObject.Find("AdvanceGeneration");
         exitButton            = GameObject.Find("ExitButton");
+        loadDropdown          = GameObject.Find("LoadDropDown");
         SetStartUI();
     }
 
@@ -58,6 +60,7 @@ public class IECManager : MonoBehaviour {
 
         Destroy(initializeButton);
         Destroy(dropDown);
+        Destroy(loadDropdown); 
     }
 
     internal static void SetUIToModellingState()
