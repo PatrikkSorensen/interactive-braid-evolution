@@ -36,12 +36,13 @@ public class BraidEvaluator : IPhenomeEvaluator<IBlackBox>
             optimizer.Evaluate(box);
 
             while (BraidSelector.ShouldEvaluate())
-                yield return new WaitForSeconds(2.0f);
+                yield return new WaitForSeconds(0.1f);
 
             optimizer.StopEvaluation(box);
             float fit = optimizer.GetFitness(box);
             FitnessInfo fitness = new FitnessInfo(fit, fit);
             dict.Add(box, fitness);
+            BraidSimulationManager.evaluationsMade++; 
         }
     }
 

@@ -74,12 +74,9 @@ public class Optimizer : MonoBehaviour {
 
         // setup the relevant ui
         IECManager.SetUIToEvolvingState();
+        BraidSimulationManager.populationSize = PopulationSize;
+        BraidSimulationManager.evaluationsMade = PopulationSize; 
 
-        if (ANN_SETUP == ANNSetup.VECTOR_BASED)
-        {
-            Debug.Log("I should create a random list of values");
-
-        }
     }
 
 
@@ -211,13 +208,6 @@ public class Optimizer : MonoBehaviour {
             return ControllerMap[box].GetFitness();
         }
         return 0;
-    }
-
-    public void SetEAProgressFlag(bool flag)
-    {
-        Debug.Log("Input recieved..."); 
-        
-        _ea.SetProgressFlag(flag); 
     }
 
     // Utility functions: 

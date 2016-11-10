@@ -3,15 +3,23 @@ using System.Collections;
 
 public class BraidSimulationManager : MonoBehaviour {
 
+    public static int evaluationsMade; 
+    public static int populationSize; 
+
     public void SetFlagsFromButton(bool b)
     {
         BraidSelector.SetReadyForSelection(b);
     }
+    
+    public static bool HasControllersEvaluated()
+    {
+        bool b = (evaluationsMade == populationSize);
+        Debug.Log("Returning some bool: " + b);
+        return b; 
+    }
 
 	public static void AdvanceGeneration()
     {
-
-
         // the actual models
         GameObject[] braids = GameObject.FindGameObjectsWithTag("Braid");
         

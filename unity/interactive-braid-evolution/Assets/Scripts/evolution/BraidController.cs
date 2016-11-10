@@ -111,11 +111,6 @@ public class BraidController : UnitController
         messenger.AddVectors(braidId - 1, BraidVectors);
     }
 
-    //private void ActivateRandomBraidController()
-    //{
-    //    messenger.SendRandomBraidArrays();
-    //}
-
     /********************* CONTROLLER SETUP FUNCTIONS **********************/
     public void InitializeBraidControllerVariables(IBlackBox box)
     {
@@ -138,6 +133,19 @@ public class BraidController : UnitController
         BraidVectors = new Vector3[VECTOR_ARRAY_SIZE];
     }
 
+
+    private void SetupSimpleANNStructure()
+    {
+        // hardcoded for now
+        VECTOR_ARRAY_SIZE = 5;
+        NUM_INPUTS = 1;
+        NUM_OUTPUTS = 2;
+        OUTPUT_ARRAY = new double[VECTOR_ARRAY_SIZE * NUM_OUTPUTS]; // NOTE: outputs are only two values (x and y atm)
+
+        INPUT_ARRAY = CreateInputDoubles();
+        INPUT_ARRAY = NormalizeHelper.NormalizeInputDoubles(INPUT_ARRAY, 0.0f, VECTOR_ARRAY_SIZE * 2); // max and min
+    }
+
     private void SetupVectorANNStructure()
     {
         Debug.Log("I should do code specfic to the vector based Ann sturcure here...");
@@ -145,18 +153,6 @@ public class BraidController : UnitController
         VECTOR_ARRAY_SIZE = 12;
         NUM_INPUTS = 3;
         NUM_OUTPUTS = 3;
-        OUTPUT_ARRAY = new double[VECTOR_ARRAY_SIZE * NUM_OUTPUTS]; // NOTE: outputs are only two values (x and y atm)
-
-        INPUT_ARRAY = CreateInputDoubles();
-        INPUT_ARRAY = NormalizeHelper.NormalizeInputDoubles(INPUT_ARRAY, 0.0f, 22.0f); // max and min
-    }
-
-    private void SetupSimpleANNStructure()
-    {
-        // hardcoded for now
-        VECTOR_ARRAY_SIZE = 12;
-        NUM_INPUTS = 1;
-        NUM_OUTPUTS = 2;
         OUTPUT_ARRAY = new double[VECTOR_ARRAY_SIZE * NUM_OUTPUTS]; // NOTE: outputs are only two values (x and y atm)
 
         INPUT_ARRAY = CreateInputDoubles();

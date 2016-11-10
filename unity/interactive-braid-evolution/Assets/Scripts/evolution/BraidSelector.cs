@@ -42,23 +42,23 @@ public class BraidSelector : MonoBehaviour {
         }            
     }
 
-    public static void CreateHardcodedFitness()
-    {
-        //BraidController bc = Object.FindObjectOfType<BraidController>();
-        int id = IECManager.GetSelectionId() + 1;
-        string name = "unit_" +  id.ToString();
+    //public static void CreateHardcodedFitness()
+    //{
+    //    //BraidController bc = Object.FindObjectOfType<BraidController>();
+    //    int id = IECManager.GetSelectionId() + 1;
+    //    string name = "unit_" +  id.ToString();
 
-        if (GameObject.Find(name))
-        {
-            BraidController bc = GameObject.Find(name).GetComponent<BraidController>();
-            bc.SetFitness(1.0f);
-            Debug.Log("fitness applied to: " + bc.transform.name + "...");
-        } else
-        {
-            Debug.Log("Couldt find bc on: " + name); 
-        }
+    //    if (GameObject.Find(name))
+    //    {
+    //        BraidController bc = GameObject.Find(name).GetComponent<BraidController>();
+    //        bc.SetFitness(1.0f);
+    //        Debug.Log("fitness applied to: " + bc.transform.name + "...");
+    //    } else
+    //    {
+    //        Debug.Log("Couldt find bc on: " + name); 
+    //    }
 
-    }
+    //}
 
     public static bool ReadyForSelection()
     {

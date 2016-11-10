@@ -55,7 +55,11 @@ namespace SharpNEAT.core
                 Debug.Log("Creating Genomes...");
 
                 //TODO: This is too hardcoded, we need another way for braid experiments to remove them selves.
-                yield return new WaitForSeconds(3.0f); 
+                while (!BraidSimulationManager.HasControllersEvaluated())
+                {
+                    Debug.Log("Controllers havent evaluated yet dude..."); 
+                    yield return new WaitForSeconds(1.0f);
+                }
 
                 BraidSelector.SetShouldEvaluate(true);
                 m_phenomeEvaluator.Reset();
@@ -107,7 +111,6 @@ namespace SharpNEAT.core
                 Debug.Log("---------------------- End of simulation ----------------------");
 
                 Debug.Log("Getting fitness values...");
-                BraidSelector.CreateHardcodedFitness();
                 foreach (TGenome genome in dict.Keys)
                 {
 
@@ -151,6 +154,7 @@ namespace SharpNEAT.core
             }
 
             Debug.Log("---------------------- End of trial ----------------------");
+            BraidSimulationManager.evaluationsMade = 0; 
         }
 
         public void Reset()
