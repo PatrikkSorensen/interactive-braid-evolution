@@ -10,7 +10,7 @@ public class UIANNSetupDropdown : MonoBehaviour {
 
     public static ANNSetup GetANNSetup()
     {
-        Dropdown dropdown = GameObject.FindObjectOfType<Dropdown>();
+        Dropdown dropdown = GameObject.Find("ANNSetupDropdown").GetComponent<Dropdown>();
         ANNSetup currentNetworkSetup = (ANNSetup)dropdown.value;
         return currentNetworkSetup;
     }

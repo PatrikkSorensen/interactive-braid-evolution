@@ -111,6 +111,11 @@ public class BraidController : UnitController
         messenger.AddVectors(braidId - 1, BraidVectors);
     }
 
+    //private void ActivateRandomBraidController()
+    //{
+    //    messenger.SendRandomBraidArrays();
+    //}
+
     /********************* CONTROLLER SETUP FUNCTIONS **********************/
     public void InitializeBraidControllerVariables(IBlackBox box)
     {
