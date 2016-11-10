@@ -37,7 +37,7 @@ public class Optimizer : MonoBehaviour {
     private string champFileSavePath = null;
 
     // ANNSetup variables 
-    private ANNSetup ANN_SETUP; 
+    public static ANNSetup ANN_SETUP; 
 
     void Start ()
     {
@@ -131,7 +131,6 @@ public class Optimizer : MonoBehaviour {
         obj.transform.parent = UnitContainer.transform;
         obj.name = "unit_" + UnitContainer.transform.childCount;
         controller.BraidId = UnitContainer.transform.childCount;
-        controller.networkSetup = ANN_SETUP; 
         /* END OF SPECIFIC OPERATIONS TO THE BRAID EXPERIMENT */
 
         ControllerMap.Add(phenome, controller);
@@ -162,9 +161,14 @@ public class Optimizer : MonoBehaviour {
                 textAsset = (TextAsset)Resources.Load("experiment.config.braid.vector");
                 ANN_SETUP = ANNSetup.VECTOR_BASED;
                 break;
+            case ANNSetup.RANDOM_VECTORS:
+                Debug.Log("Vector Based Setup selected!");
+                textAsset = (TextAsset)Resources.Load("experiment.config.braid.vector");
+                ANN_SETUP = ANNSetup.RANDOM_VECTORS;
+                break;
             default:
                 Debug.LogError("Something went wrong when getting the network setup");
-                textAsset = (TextAsset)Resources.Load("experiment.config");
+                textAsset = (TextAsset)Resources.Load("experiment.config.braid.random");
                 break;
         }
 

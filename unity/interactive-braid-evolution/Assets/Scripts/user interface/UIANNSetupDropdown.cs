@@ -22,6 +22,7 @@ namespace ExperimentTypes
     {
         SIMPLE,
         VECTOR_BASED,
-        MATERIAL_AND_VECTOR
+        MATERIAL_AND_VECTOR, 
+        RANDOM_VECTORS
     }
 }

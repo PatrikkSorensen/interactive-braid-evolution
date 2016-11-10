@@ -28,6 +28,17 @@ public class ModelMessager : MonoBehaviour {
         m_messageVectors[index] = vectors;
     }
 
+    public void SendRandomBraidArrays()
+    {
+        m_populationSize = 5;
+        IECManager.SetUIToModellingState();
+        Braid[] braids = CreateRandomBraidArray(m_populationSize); 
+
+        string s = JsonHelper.CreateJSONFromBraids(m_height, m_populationSize, braids);
+
+        sender.SendString(s);
+    }
+
     public void SendMessageToGH()
     {
         m_populationSize = 5;
@@ -35,8 +46,7 @@ public class ModelMessager : MonoBehaviour {
         Braid[] braids = CreateBraidArray(m_messageVectors);
 
          
-        string s = JsonHelper.CreateJSONFromBraids(m_height, m_populationSize, braids); 
-
+        string s = JsonHelper.CreateJSONFromBraids(m_height, m_populationSize, braids);
         sender.SendString(s);
     }
 
@@ -53,7 +63,7 @@ public class ModelMessager : MonoBehaviour {
         return braids; 
     }
 
-    public static Braid[] CreateRandomBraidArray(Vector3[][] braidVectors, int populationSize)
+    public static Braid[] CreateRandomBraidArray(int populationSize)
     {
         Braid[] braids = new Braid[populationSize];
 
@@ -70,6 +80,7 @@ public class ModelMessager : MonoBehaviour {
             };
 
             Braid b = new Braid("braid_" + i.ToString(), vects);
+            braids[i] = b; 
         }
 
         return braids;

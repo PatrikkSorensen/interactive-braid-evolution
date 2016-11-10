@@ -40,7 +40,6 @@ public class BraidController : UnitController
             braidId = value;
         }
     }
-    public ANNSetup networkSetup; 
 
     // Debugging variables 
 
@@ -48,7 +47,7 @@ public class BraidController : UnitController
     public void InitializeControllerVariables()
     {
 
-        switch (networkSetup)
+        switch (Optimizer.ANN_SETUP)
         {
             case ANNSetup.SIMPLE:
                 SetupSimpleANNStructure();
@@ -56,14 +55,14 @@ public class BraidController : UnitController
             case ANNSetup.VECTOR_BASED:
                 SetupVectorANNStructure();
                 break;
+            case ANNSetup.RANDOM_VECTORS:
+                SetupRandomANNStructure();
+                break; 
             default:
                 break;
         }
         messenger = GameObject.FindObjectOfType<ModelMessager>();
         BraidVectors = new Vector3[VECTOR_ARRAY_SIZE];
-
-
-
     }
 
     private void SetupVectorANNStructure()
@@ -91,11 +90,24 @@ public class BraidController : UnitController
         INPUT_ARRAY = NormalizeHelper.NormalizeInputDoubles(INPUT_ARRAY, 0.0f, 22.0f); // max and min
     }
 
+    private void SetupRandomANNStructure()
+    {
+        VECTOR_ARRAY_SIZE = 12;
+    }
+
     public override void Activate(IBlackBox box)
     {
+        InitializeControllerVariables();
+
+
         neat = box; int i = 0;
         ISignalArray inputArr = neat.InputSignalArray;
-        InitializeControllerVariables();
+
+        if (Optimizer.ANN_SETUP == ANNSetup.RANDOM_VECTORS)
+        {
+            messenger.SendRandomBraidArrays();
+            return;
+        }
 
         //Debug.Log("The amount of inputs is: " + inputDoubles.Length);
         foreach (double d in INPUT_ARRAY)
@@ -142,13 +154,11 @@ public class BraidController : UnitController
 
     public void SetFitness(float newFitness)
     {
-        //Debug.Log("Setting fitness to: " + newFitness); 
         fitness = newFitness;
     }
 
     public override float GetFitness()
     {
-        //Debug.Log("Returning fitness: " + fitness + " for gameobject: " + gameObject.name); 
         return fitness;
     }
 
