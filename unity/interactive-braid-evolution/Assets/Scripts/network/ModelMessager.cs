@@ -28,6 +28,11 @@ public class ModelMessager : MonoBehaviour {
         m_messageVectors[index] = vectors;
     }
 
+    public Vector3[] GetVectors(int index)
+    {
+        return m_messageVectors[index - 1]; 
+    }
+
     public void SendRandomBraidArrays(int populationSize)
     {
         IECManager.SetUIToModellingState();

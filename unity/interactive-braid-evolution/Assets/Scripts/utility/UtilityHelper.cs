@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-
+using ExperimentTypes; 
 
 public class UtilityHelper : MonoBehaviour {
 
@@ -80,11 +80,28 @@ public class UtilityHelper : MonoBehaviour {
     }
     #endregion
 
-    /********************* NORMALIZING AND ULITIY FUNCTIONS **********************/
+    // INPUTS TO BRAID VECTORS // 
     public static Vector3[] OutputsToBraidVectors(double[] inputs, double[] outputs, int size)
     {
         Vector3[] braidVectors = new Vector3[size]; 
-        //TODO: Make this use the NormalizeHelper class 
+        switch (Optimizer.ANN_SETUP)
+        {
+            case ANNSetup.SIMPLE:
+                braidVectors = DoubleToBraidVectors(inputs, outputs, size);
+                break;
+            case ANNSetup.VECTOR_BASED:
+                braidVectors = VectorsToBraidVectors(inputs, outputs, size);
+                break;
+            default:
+                break;
+        }
+
+        return braidVectors; 
+    }
+
+    private static Vector3[ ]DoubleToBraidVectors(double[] inputs, double[] outputs, int size)
+    {
+        Vector3[] braidVectors = new Vector3[size];
         int j = 0;
         for (int i = 0; i < size; i++)
         {
@@ -98,6 +115,40 @@ public class UtilityHelper : MonoBehaviour {
             j += 2;
         }
 
-        return braidVectors; 
+        return braidVectors;
+    }
+
+    private static Vector3[] VectorsToBraidVectors(double[] inputs, double[] outputs, int size)
+    {
+        Vector3[] braidVectors = new Vector3[size];
+        int j = 0;
+        for (int i = 0; i < size; i++)
+        {
+            braidVectors[i] = Vector3.up;
+
+            float x = (float)outputs[j] * 10.0f;
+            float y = (float)outputs[j + 1] * 10.0f;
+            float z = (float)outputs[j + 2] * 20.0f; // Creates interesting braids if z is inputs instead of outputs
+            braidVectors[i] = new Vector3(x, y, z);
+
+            j += 3;
+        }
+        return braidVectors;
+    }
+
+    public static double[] Vector3ToDoubleArray(Vector3[] vectors)
+    {
+        double[] doubleArray = new double[vectors.Length * 3]; 
+
+        for(int i = 0, j = 0; i < vectors.Length; i++)
+        {
+            doubleArray[j] = vectors[i].x;
+            doubleArray[j + 1] = vectors[i].y;
+            doubleArray[j + 2] = vectors[i].z;
+
+            j += 3; 
+        }
+
+        return doubleArray; 
     }
 }
