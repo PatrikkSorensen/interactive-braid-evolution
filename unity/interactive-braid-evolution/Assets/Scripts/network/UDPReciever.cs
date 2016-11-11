@@ -55,7 +55,7 @@ public class UDPReciever : MonoBehaviour
             Debug.Log("Nothing to do..."); 
         }
 
-        if (msg.models_created == 5)
+        if (msg.models_created == Optimizer.PopulationSize)
             hasImportedAllModels = true; 
     }
 

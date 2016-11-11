@@ -15,9 +15,10 @@ public class Optimizer : MonoBehaviour {
     BraidExperiment experiment; 
     static NeatEvolutionAlgorithm<NeatGenome> _ea;
     Dictionary<IBlackBox, UnitController> ControllerMap = new Dictionary<IBlackBox, UnitController>();
+    public static ANNSetup ANN_SETUP;
 
     // Evolution parameters
-    private int PopulationSize;
+    public static int PopulationSize;
     private uint Generation;
     private double Fitness;
     public int Trials;
@@ -37,7 +38,7 @@ public class Optimizer : MonoBehaviour {
     private string champFileSavePath = null;
 
     // ANNSetup variables 
-    public static ANNSetup ANN_SETUP; 
+
 
     void Start ()
     {
@@ -84,7 +85,7 @@ public class Optimizer : MonoBehaviour {
     public void StartEA()
     {
         Debug.Log("----------------------  SETTING UP EA IN UNITY SCENE ----------------------");
-        _ea = experiment.CreateEvolutionAlgorithm(popFileSavePath);
+        _ea = experiment.CreateEvolutionAlgorithm();
         _ea.UpdateEvent += new EventHandler(ea_UpdateEvent);
         _ea.PausedEvent += new EventHandler(ea_PauseEvent);
         _ea.StartContinue();
@@ -231,7 +232,6 @@ public class Optimizer : MonoBehaviour {
         // Also save the best genome
         using (XmlWriter xw = XmlWriter.Create(champFileSavePath, _xwSettings))
         {
-            Debug.Log(_ea.CurrentChampGenome); 
             experiment.SavePopulation(xw, new NeatGenome[] { _ea.CurrentChampGenome });
             Debug.Log("champions file saved to disk");
         }

@@ -52,7 +52,7 @@ namespace SharpNEAT.core
             for (int i = 0; i < m_optimizer.Trials; i++)
             {
                 Debug.Log("---------------------- Starting simulation ----------------------");
-                Debug.Log("Creating Genomes...");
+                Debug.Log("Creating  " + genomeList.Count + " Genomes...");
 
                 //TODO: This is too hardcoded, we need another way for braid experiments to remove them selves.
                 while (!BraidSimulationManager.HasControllersEvaluated())

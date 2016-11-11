@@ -28,24 +28,21 @@ public class ModelMessager : MonoBehaviour {
         m_messageVectors[index] = vectors;
     }
 
-    public void SendRandomBraidArrays()
+    public void SendRandomBraidArrays(int populationSize)
     {
-        m_populationSize = 5;
         IECManager.SetUIToModellingState();
         Braid[] braids = CreateRandomBraidArray(m_populationSize); 
 
-        string s = JsonHelper.CreateJSONFromBraids(m_height, m_populationSize, braids);
+        string s = JsonHelper.CreateJSONFromBraids(m_height, populationSize, braids);
 
         sender.SendString(s);
     }
 
     public void SendMessageToGH()
     {
-        m_populationSize = 5;
         IECManager.SetUIToModellingState();
         Braid[] braids = CreateBraidArray(m_messageVectors);
 
-        
         string s = JsonHelper.CreateJSONFromBraids(m_height, m_populationSize, braids);
         Debug.Log(s);
         sender.SendString(s);

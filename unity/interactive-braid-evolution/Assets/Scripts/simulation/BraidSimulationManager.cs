@@ -13,9 +13,7 @@ public class BraidSimulationManager : MonoBehaviour {
     
     public static bool HasControllersEvaluated()
     {
-        bool b = (evaluationsMade == populationSize);
-        Debug.Log("Returning some bool: " + b);
-        return b; 
+        return (evaluationsMade == populationSize); 
     }
 
 	public static void AdvanceGeneration()

@@ -50,7 +50,7 @@ namespace SharpNeat.EvolutionAlgorithms
                                       complexityRegulationStrategy)
         {
             myLogger = new Logger(new MyLogger());
-            myLogger.Log(logTag, "Initialized");
+            myLogger.Log(logTag, "Initialized: ");
         }
 
         #endregion

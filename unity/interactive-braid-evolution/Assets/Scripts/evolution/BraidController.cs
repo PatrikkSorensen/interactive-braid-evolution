@@ -89,7 +89,8 @@ public class BraidController : UnitController
     }
     private void ActivateRandomBraidController()
     {
-            messenger.SendRandomBraidArrays();
+        //TODO: Too hardcoded, function should be called in optimizer?
+            messenger.SendRandomBraidArrays(9);
     }
 
     private void ActivateSimpleBraidController()
