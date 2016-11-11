@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 
     <Config>
-      <PopulationSize>5</PopulationSize>
+      <PopulationSize>9</PopulationSize>
       <SpecieCount>3</SpecieCount>
       <Inputs>3</Inputs>
       <Outputs>3</Outputs>

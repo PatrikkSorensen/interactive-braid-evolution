@@ -67,7 +67,7 @@ public class ModelMessager : MonoBehaviour {
         float multiplier = (float)UISliderUpdater.GetValue(); 
         for (int i = 0; i < braids.Length; i++)
         {
-            Vector3[] vects = CreateRandomVectors(0, 5, 6, 2);  
+            Vector3[] vects = UtilityHelper.CreateRandomVectors(0, 5, 6, 2);  
 
             Braid b = new Braid("braid_" + i.ToString(), vects);
             braids[i] = b; 
@@ -76,15 +76,5 @@ public class ModelMessager : MonoBehaviour {
         return braids;
     }
 
-    public static Vector3[] CreateRandomVectors(int min, int max, int size, int yOffset)
-    {
-        Vector3[] v = new Vector3[size];
-        for (int i = 0; i < size; i++) {
-            {
-                v[i] = new Vector3(Random.Range(min, max), Random.Range(min, max), i * yOffset);
-            };
-        }
-
-            return v; 
-    }
+    
 }

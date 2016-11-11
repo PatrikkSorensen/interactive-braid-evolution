@@ -18,6 +18,7 @@ public class IECManager : MonoBehaviour {
     public static GameObject advanceButton;
     public static GameObject exitButton;
     public static GameObject loadDropdown;
+    public static GameObject generationCounter;
 
     private void Start()
     {
@@ -32,6 +33,7 @@ public class IECManager : MonoBehaviour {
         advanceButton         = GameObject.Find("AdvanceGeneration");
         exitButton            = GameObject.Find("ExitButton");
         loadDropdown          = GameObject.Find("LoadDropDown");
+        generationCounter        = GameObject.Find("GenerationCounter"); 
         SetStartUI();
     }
 
@@ -50,13 +52,15 @@ public class IECManager : MonoBehaviour {
         advanceButton.SetActive(false);
         evolveButton.SetActive(false); 
         selectionWindow.SetActive(false);
-        exitButton.SetActive(false); 
+        exitButton.SetActive(false);
+        generationCounter.SetActive(false); 
     }
 
     public static void SetUIToEvolvingState()
     {
         UIStatusWindow.SetStatus(UIStatusWindow.STATUS.EVOLVING);
         evolveButton.SetActive(true);
+        generationCounter.SetActive(true); 
 
         Destroy(initializeButton);
         Destroy(dropDown);
@@ -93,7 +97,15 @@ public class IECManager : MonoBehaviour {
 
         UIStatusWindow.SetStatus(UIStatusWindow.STATUS.SIMULATING);
     }
+
     /*********** END OF UI STATES **********/
+
+    public static void SetGeneration(uint generation)
+    {
+        generationCounter.GetComponentInChildren<Text>().text = "Generation: " + generation.ToString(); 
+    }
+
+
 
     public static int GetSelectionId()
     {

@@ -19,7 +19,7 @@ public class Optimizer : MonoBehaviour {
 
     // Evolution parameters
     public static int PopulationSize;
-    private uint Generation;
+    public static uint Generation;
     private double Fitness;
     public int Trials;
     public float TrialDuration;
@@ -33,11 +33,8 @@ public class Optimizer : MonoBehaviour {
     public bool LoadPopulation = true;
     public GameObject Unit;
     private GameObject UnitContainer;
-    private DateTime startTime;
     private string popFileSavePath = null; 
     private string champFileSavePath = null;
-
-    // ANNSetup variables 
 
 
     void Start ()
@@ -97,9 +94,11 @@ public class Optimizer : MonoBehaviour {
 
     void ea_UpdateEvent(object sender, EventArgs e)
     {
+
         Debug.Log("Generation: " + _ea.CurrentGeneration + ", best fitness: " + _ea.Statistics._maxFitness);
         Fitness = _ea.Statistics._maxFitness;
         Generation = _ea.CurrentGeneration;
+        IECManager.SetGeneration(Generation);
     }
 
     void ea_PauseEvent(object sender, EventArgs e)
@@ -235,9 +234,6 @@ public class Optimizer : MonoBehaviour {
             experiment.SavePopulation(xw, new NeatGenome[] { _ea.CurrentChampGenome });
             Debug.Log("champions file saved to disk");
         }
-        DateTime endTime = DateTime.Now;
-        Utility.Log("Total time elapsed: " + (endTime - startTime));
-
     }
 
     // time functions
