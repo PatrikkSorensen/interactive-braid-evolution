@@ -82,8 +82,15 @@ public class ObjImporter : MonoBehaviour {
         //Debug.Log("Starting to import a single model with index: " + index);
         shouldImportSingle = false;
         string objFileName = Application.dataPath + "/Geometry/Models/braid_" + index.ToString() + ".obj";
-        GameObject curr_model = ObjReader.use.ConvertFile(objFileName, true)[0];
 
+        GameObject curr_model; 
+        if (ObjReader.use.ConvertFile(objFileName, true) != null)
+        {
+            curr_model = ObjReader.use.ConvertFile(objFileName, true)[0];
+        } else
+        {
+            curr_model = GameObject.CreatePrimitive(PrimitiveType.Cube); 
+        }
 
 
         if (curr_model != null)

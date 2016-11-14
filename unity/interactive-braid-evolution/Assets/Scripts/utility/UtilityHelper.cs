@@ -11,7 +11,6 @@ public class UtilityHelper : MonoBehaviour {
 
         for(int i = 0, j = 0; i < inputVectors.Length; i++, j += 3)
         {
-            //NOTE: Be careful if this is the right dimensions
             inputArray[j] = inputVectors[i].x;
             inputArray[j + 1] = inputVectors[i].y;
             inputArray[j + 2] = inputVectors[i].z;
@@ -38,10 +37,16 @@ public class UtilityHelper : MonoBehaviour {
     {
         Vector3[] v = new Vector3[size];
         for (int i = 0; i < size; i++)
-        {
             v[i] = new Vector3(Random.Range(min, max), Random.Range(min, max), i * yOffset);
-        }
 
+        return v;
+    }
+
+    public static Vector3[] CreateEmptyVector3Array(int size)
+    {
+        Vector3[] v = new Vector3[size];
+        for (int i = 0; i < size; i++)
+            v[i] = Vector3.zero; 
         return v;
     }
 
@@ -90,7 +95,7 @@ public class UtilityHelper : MonoBehaviour {
                 braidVectors = DoubleToBraidVectors(inputs, outputs, size);
                 break;
             case ANNSetup.VECTOR_BASED:
-                braidVectors = VectorsToBraidVectors(inputs, outputs, size);
+                braidVectors = VectorsToBraidVectors(outputs, size);
                 break;
             default:
                 break;
@@ -99,7 +104,7 @@ public class UtilityHelper : MonoBehaviour {
         return braidVectors; 
     }
 
-    private static Vector3[ ]DoubleToBraidVectors(double[] inputs, double[] outputs, int size)
+    public static Vector3[ ]DoubleToBraidVectors(double[] inputs, double[] outputs, int size)
     {
         Vector3[] braidVectors = new Vector3[size];
         int j = 0;
@@ -118,17 +123,14 @@ public class UtilityHelper : MonoBehaviour {
         return braidVectors;
     }
 
-    private static Vector3[] VectorsToBraidVectors(double[] inputs, double[] outputs, int size)
+    public static Vector3[] VectorsToBraidVectors(double[] outputs, int size)
     {
         Vector3[] braidVectors = new Vector3[size];
-        int j = 0;
-        for (int i = 0; i < size; i++)
+        for (int i = 0, j = 0; i < size; i++)
         {
-            braidVectors[i] = Vector3.up;
-
             float x = (float)outputs[j] * 10.0f;
             float y = (float)outputs[j + 1] * 10.0f;
-            float z = (float)outputs[j + 2] * 20.0f; // Creates interesting braids if z is inputs instead of outputs
+            float z = (float)outputs[j + 2] * 10.0f; // Creates interesting braids if z is inputs instead of outputs
             braidVectors[i] = new Vector3(x, y, z);
 
             j += 3;
