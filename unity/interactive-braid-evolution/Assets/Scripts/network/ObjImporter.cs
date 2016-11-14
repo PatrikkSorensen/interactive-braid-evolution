@@ -82,19 +82,14 @@ public class ObjImporter : MonoBehaviour {
         //Debug.Log("Starting to import a single model with index: " + index);
         shouldImportSingle = false;
         string objFileName = Application.dataPath + "/Geometry/Models/braid_" + index.ToString() + ".obj";
+        GameObject[] models = ObjReader.use.ConvertFile(objFileName, true);
+        GameObject curr_model;
 
-        GameObject curr_model; 
-        if (ObjReader.use.ConvertFile(objFileName, true) != null)
+        if (models == null)
+            Debug.LogWarning("No model imported from obj importer...");
+        else
         {
-            curr_model = ObjReader.use.ConvertFile(objFileName, true)[0];
-        } else
-        {
-            curr_model = GameObject.CreatePrimitive(PrimitiveType.Cube); 
-        }
-
-
-        if (curr_model != null)
-        {
+            curr_model = models[0];
             // names and id
             curr_model.name = "braid_" + index.ToString();
             curr_model.tag = "Braid";
@@ -113,16 +108,12 @@ public class ObjImporter : MonoBehaviour {
             testModel.rotation = Quaternion.Euler(rotationVector);
 
             // collision box for selection
-            curr_model.AddComponent<BoxCollider>(); 
+            curr_model.AddComponent<BoxCollider>();
 
             // components and other scripts
-            curr_model.AddComponent<Rotate>(); 
-            
+            curr_model.AddComponent<Rotate>();
         }
-        else
-        {
-            Debug.LogError("The model " + objFileName + " could not be found.");
-        }
+
         yield return new WaitForSeconds(1.0f);
     }
 

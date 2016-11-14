@@ -1,0 +1,17 @@
+<Config>
+  <PopulationSize>500</PopulationSize>
+  <SpecieCount>40</SpecieCount>
+  <ActivationCppn>
+    <Scheme>CyclicFixedIters</Scheme>
+    <Iters>4</Iters>
+  </ActivationCppn>
+  <Activation>
+    <Scheme>CyclicFixedIters</Scheme>
+    <Iters>1</Iters>
+  </Activation>
+  <ComplexityRegulationStrategy>Relative</ComplexityRegulationStrategy>
+  <ComplexityThreshold>10</ComplexityThreshold>
+  <LengthCppnInput>false</LengthCppnInput>
+  <Resolution>11</Resolution>
+  <Description>Boxes Visual Discrimination Task </Description>
+</Config>

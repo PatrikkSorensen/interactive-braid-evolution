@@ -76,7 +76,6 @@ public class BraidController : UnitController
 
     private void ActivateVectorBraidController()
     {
-        // Remove ++i and ++j to for loop
         ISignalArray inputArr = neat.InputSignalArray;
         for (int i = 0, j = 0; i < INPUT_ARRAY.Length; i += 3, j += 3)
         {
@@ -158,19 +157,21 @@ public class BraidController : UnitController
         else
             SetANNVectorArray();
 
-        INPUT_ARRAY = UtilityHelper.NormalizeInputVector3Array(INPUT_ARRAY, 0.0f, VECTOR_ARRAY_SIZE * 2); // TODO: Make min and max generic
+        
     }
 
     private void SetANNVectorArray()
     {
         INPUT_ARRAY = UtilityHelper.Vector3ToDoubleArray(messenger.GetVectors(BraidId));
+        INPUT_ARRAY = UtilityHelper.NormalizeInputVector3Array(INPUT_ARRAY, 0.0f, VECTOR_ARRAY_SIZE * 2); // TODO: Make min and max generic
     }
 
     private void InitializeVectorANNStructure()
     {
         //Vector3[] TEMP_ARRAY = UtilityHelper.CreateEmptyVector3Array(VECTOR_ARRAY_SIZE);
         Vector3[] TEMP_ARRAY = UtilityHelper.CreateRandomVectors(0, 10, VECTOR_ARRAY_SIZE, 2);
-        INPUT_ARRAY = UtilityHelper.Vector3ToDoubleArray(TEMP_ARRAY); 
+        INPUT_ARRAY = UtilityHelper.Vector3ToDoubleArray(TEMP_ARRAY);
+        INPUT_ARRAY = UtilityHelper.NormalizeInputVector3Array(INPUT_ARRAY, 0.0f, VECTOR_ARRAY_SIZE * 2);
 
         ISignalArray inputArr = neat.InputSignalArray;
         for (int i = 0, j = 0; i < INPUT_ARRAY.Length; i += 3, j+= 3)
@@ -197,7 +198,8 @@ public class BraidController : UnitController
         }
 
         TEMP_ARRAY = UtilityHelper.VectorsToBraidVectors(INPUT_ARRAY, VECTOR_ARRAY_SIZE);
-        INPUT_ARRAY = UtilityHelper.Vector3ToDoubleArray(TEMP_ARRAY); 
+        INPUT_ARRAY = UtilityHelper.Vector3ToDoubleArray(TEMP_ARRAY);
+        INPUT_ARRAY = UtilityHelper.NormalizeInputVector3Array(INPUT_ARRAY, 0.0f, VECTOR_ARRAY_SIZE * 2);
     }
 
     private void SetupRandomANNStructure()
