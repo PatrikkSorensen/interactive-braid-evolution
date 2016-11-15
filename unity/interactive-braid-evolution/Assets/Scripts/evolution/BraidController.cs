@@ -209,7 +209,7 @@ public class BraidController : UnitController
 
     #region interface functions
     public void SetFitness(float newFitness) { fitness = newFitness; }
-    public override float GetFitness() { return fitness; }
+    public override float GetFitness() { return 10.0f; }
     public override void Stop() { Debug.Log("Stop braidController called"); }
     #endregion
 

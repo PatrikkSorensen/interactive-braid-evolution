@@ -78,10 +78,13 @@ namespace SharpNeat.EvolutionAlgorithms
             // (otherwise we could just evaluate offspringList).
             _genomeList.AddRange(offspringList);
 
+
+            myLogger.Log(logTag, "Evaluating genomes.");
             yield return Coroutiner.StartCoroutine( _genomeListEvaluator.Evaluate(_genomeList));
 
+            myLogger.Log(logTag, "Evaluating species.");
             // Integrate offspring into species.
-            if(emptySpeciesFlag)
+            if (emptySpeciesFlag)
             {   
                 // We have one or more terminated species. Therefore we need to fully re-speciate all genomes to divide them
                 // evenly between the required number of species.
@@ -120,6 +123,8 @@ namespace SharpNeat.EvolutionAlgorithms
                     _eaParams = _eaParamsSimplifying;
                     break;
             }
+
+            myLogger.Log(logTag, "Performed one generation.");
         }
     }
 }

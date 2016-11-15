@@ -44,28 +44,24 @@ namespace SharpNEAT.core
 
         private IEnumerator evaluateList(IList<TGenome> genomeList)
         {
-            Debug.Log("---------------------- Starting new trial ----------------------");
+            Debug.Log("---------------------- Evaluating List of genomes ----------------------");
 
             Dictionary<TGenome, TPhenome> dict = new Dictionary<TGenome, TPhenome>();
             Dictionary<TGenome, FitnessInfo[]> fitnessDict = new Dictionary<TGenome, FitnessInfo[]>();
             for (int i = 0; i < m_optimizer.Trials; i++)
             {
-                Debug.Log("---------------------- Starting simulation ----------------------");
-                Debug.Log("Creating  " + genomeList.Count + " Genomes...");
+                
 
-                //TODO: This is too hardcoded, we need another way for braid experiments to remove them selves.
                 while (!BraidSimulationManager.HasControllersEvaluated())
                 {
                     Debug.Log("Controllers havent evaluated yet dude..."); 
-                    yield return new WaitForSeconds(1.0f);
+                    yield return new WaitForSeconds(0.2f);
                 }
 
-                BraidSelector.SetShouldEvaluate(true);
                 m_phenomeEvaluator.Reset();
                 dict = new Dictionary<TGenome, TPhenome>();
                 foreach (TGenome genome in genomeList)
                 {
-
                     TPhenome phenome = m_genomeDecoder.Decode(genome);
                     if (null == phenome)
                     {   // Non-viable genome.
@@ -75,39 +71,30 @@ namespace SharpNEAT.core
                     else
                     {
                         if (i == 0)
-                        {
                             fitnessDict.Add(genome, new FitnessInfo[m_optimizer.Trials]);
-                        }
+
                         dict.Add(genome, phenome);
                         Coroutiner.StartCoroutine(m_phenomeEvaluator.Evaluate(phenome));
                     }
                 }
 
-                /**********************  IEC SPECIFIC CODE BEGINS HERE ******************************/
+                
                 ModelMessager messenger = GameObject.FindObjectOfType<ModelMessager>();
                 messenger.SendMessageToGH();
 
                 //TODO: Error check: TrialDuration
+                BraidSelector.SetShouldEvaluate(true);
                 while (!BraidSelector.ReadyForSelection())
-                {
-                    //Debug.Log("In simulation, waiting for input..."); 
                     yield return new WaitForSeconds(0.2f);
-                }
 
                 if(!UISelectionWindow.current_selected)
-                {
-                    Debug.Log("Breaking out of simulation"); 
                     break; 
-                }
 
 
                 BraidSimulationManager.AdvanceGeneration(); 
 
 
                 ReadyForNextGeneration = false;
-
-                /**********************  IEC SPECIFIC CODE ENDS HERE   ******************************/
-                Debug.Log("---------------------- End of simulation ----------------------");
 
                 Debug.Log("Getting fitness values...");
                 foreach (TGenome genome in dict.Keys)
@@ -124,7 +111,7 @@ namespace SharpNEAT.core
                 }
                 Debug.Log("Done getting fitness values...");
             }
-
+            
 
             foreach (TGenome genome in dict.Keys)
             {
@@ -152,7 +139,7 @@ namespace SharpNEAT.core
                 }
             }
 
-            Debug.Log("---------------------- End of trial ----------------------");
+            Debug.Log("---------------------- End of list evaluation ----------------------");
             BraidSimulationManager.evaluationsMade = 0; 
         }
 
