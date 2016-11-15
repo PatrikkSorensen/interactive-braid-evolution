@@ -30,7 +30,7 @@ public class BraidSimulationManager : MonoBehaviour {
 
         // variable resetting
         ResetObjImportVariables();
-        IECManager.SetUIToModellingState();
+        IECManager.SetUIToModellingState(populationSize);
 
         Debug.Log("Simulation reset and cleaned up, ready for the next one");
     }

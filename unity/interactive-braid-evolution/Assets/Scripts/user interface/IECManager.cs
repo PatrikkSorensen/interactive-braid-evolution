@@ -67,13 +67,14 @@ public class IECManager : MonoBehaviour {
         Destroy(loadDropdown); 
     }
 
-    internal static void SetUIToModellingState()
+    internal static void SetUIToModellingState(int populationSize)
     {
         evolveButton.SetActive(false);
         exitButton.SetActive(false);
         selectionWindow.SetActive(false);
         advanceButton.SetActive(false);
 
+        UIStatusWindow.totalModels = populationSize;
         UIStatusWindow.SetStatus(UIStatusWindow.STATUS.MODELLING);
     }
 

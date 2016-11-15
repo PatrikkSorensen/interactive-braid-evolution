@@ -7,7 +7,8 @@ public class UIStatusWindow : MonoBehaviour
 {
     public float period = 1.0f;
     public int numDots = 0;
-    public static STATUS currentStatus; 
+    public static STATUS currentStatus;
+    public static int modelsImported, totalModels;
 
     public enum STATUS
     {
@@ -22,11 +23,14 @@ public class UIStatusWindow : MonoBehaviour
     private Regex rgx; 
     private float nextActionTime = 0.0f;
 
+
+
     void Start()
     {
         currentStatus = STATUS.UNINITIALIZED; 
         t = GameObject.Find("StatusText").GetComponent<Text>();
         rgx = new Regex("[^a-zA-Z0-9 -]");
+        modelsImported = totalModels = 0; 
     }
 
     void Update()
@@ -34,18 +38,24 @@ public class UIStatusWindow : MonoBehaviour
         if (Time.time > nextActionTime)
         {
             nextActionTime += period;
-
-            if (numDots == 3)
+            if (currentStatus == STATUS.MODELLING)
+                t.text = "modelling " + modelsImported + " out of " + totalModels;
+            else
             {
-                t.text = rgx.Replace(t.text, "");
-                numDots = 0; 
-            } else
-            {
-                t.text = t.text + ".";
-                numDots++;
+                if (numDots == 3)
+                {
+                    t.text = rgx.Replace(t.text, "");
+                    numDots = 0;
+                }
+                else
+                {
+                    t.text = t.text + ".";
+                    numDots++;
+                }
             }
         }
     }
+
     public static void SetStatus(STATUS st)
     {
         if(!t)
@@ -59,7 +69,7 @@ public class UIStatusWindow : MonoBehaviour
                 break;
             case STATUS.MODELLING:
                 currentStatus = STATUS.MODELLING;
-                t.text = "modelling";
+                t.text = "modelling " + modelsImported + " out of " + totalModels;
                 break;
             case STATUS.IMPORTING:
                 currentStatus = STATUS.IMPORTING;

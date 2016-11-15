@@ -47,9 +47,9 @@ public class UDPReciever : MonoBehaviour
 
         if (msg.models_created > num_models_imported)
         {
-            objImporter.StartImportSingleModel(num_models_imported); 
+            objImporter.StartImportSingleModel(num_models_imported);
+            Debug.Log("exported models: " + msg.models_created + " , imported models: " + num_models_imported);
             num_models_imported++;
-            //Debug.Log("exported models: " + msg.models_created + " , imported models: " + num_models_imported);
         } else
         {
             Debug.Log("Nothing to do..."); 

@@ -55,7 +55,6 @@ public class MaterialScript : MonoBehaviour {
         r.materials = mats;
         selected = true;
 
-        Debug.Log("Clicked!"); 
         UISelectionWindow.AddBraid(gameObject);
     }
 }
