@@ -112,9 +112,10 @@ public class ObjImporter : MonoBehaviour {
 
             // components and other scripts
             curr_model.AddComponent<Rotate>();
+            curr_model.AddComponent<MaterialScript>(); 
         }
 
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(0.02f);
     }
 
     Vector3 FindSpawnPosition()

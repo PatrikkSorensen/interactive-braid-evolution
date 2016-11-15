@@ -3,7 +3,6 @@ using System.Collections;
 
 public class Braid
 {
-
     public string name;
     public Vector3[] vectors; 
 
