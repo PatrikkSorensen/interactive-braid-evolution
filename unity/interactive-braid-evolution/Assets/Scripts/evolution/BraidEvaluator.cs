@@ -41,7 +41,6 @@ public class BraidEvaluator : IPhenomeEvaluator<IBlackBox>
             while (BraidSelector.ShouldEvaluate())
                 yield return new WaitForSeconds(0.1f);
 
-            Debug.Log("Stópping evaluation and determing fitness"); 
             optimizer.StopEvaluation(box);
             float fit = optimizer.GetFitness(box);
             FitnessInfo fitness = new FitnessInfo(fit, fit);

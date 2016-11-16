@@ -27,79 +27,46 @@ public class CPPNExperiment : INeatExperiment
     string _complexityRegulationStr;
     int? _complexityThreshold;
     string _description;
-    //ParallelOptions _parallelOptions;
     bool _lengthCppnInput;
-    //int _visualFieldResolution;
-    //int _visualFieldPixelCount;
     Optimizer m_optimizer;
 
-
-    #region INeatExperiment
-
-    /// <summary>
-    /// Gets the name of the experiment.
-    /// </summary>
     public string Name
     {
         get { return _name; }
     }
 
-    /// <summary>
-    /// Gets human readable explanatory text for the experiment.
-    /// </summary>
     public string Description
     {
         get { return _description; }
     }
 
-    /// <summary>
-    /// Gets the number of inputs required by the network/black-box that the underlying problem domain is based on.
-    /// 6 inputs. 2 * (x,y,z) CPPN substrate node position coordinates, plus one optional connection length input.
-    /// </summary>
+    // TODO: Needs to change accordingly to the domain 
     public int InputCount
     {
         get { return _lengthCppnInput ? 7 : 6; }
     }
 
-    /// <summary>
-    /// Gets the number of outputs required by the network/black-box that the underlying problem domain is based on.
-    /// 2 outputs.CPPN weight output and bias weight output.
-    /// </summary>
+    // TODO: Needs to change accordingly to the domain 
     public int OutputCount
     {
         get { return 2; }
     }
 
-    /// <summary>
-    /// Gets the default population size to use for the experiment.
-    /// </summary>
     public int DefaultPopulationSize
     {
         get { return _populationSize; }
     }
 
-    /// <summary>
-    /// Gets the NeatEvolutionAlgorithmParameters to be used for the experiment. Parameters on this object can be 
-    /// modified. Calls to CreateEvolutionAlgorithm() make a copy of and use this object in whatever state it is in 
-    /// at the time of the call.
-    /// </summary>
     public NeatEvolutionAlgorithmParameters NeatEvolutionAlgorithmParameters
     {
         get { return _eaParams; }
     }
 
-    /// <summary>
-    /// Gets the NeatGenomeParameters to be used for the experiment. Parameters on this object can be modified. Calls
-    /// to CreateEvolutionAlgorithm() make a copy of and use this object in whatever state it is in at the time of the call.
-    /// </summary>
     public NeatGenomeParameters NeatGenomeParameters
     {
         get { return _neatGenomeParams; }
     }
 
-    /// <summary>
-    /// Initialize the experiment with some optional XML configuration data.
-    /// </summary>
     public void Initialize(string name, XmlElement xmlConfig)
     {
         _name = name;
@@ -109,12 +76,6 @@ public class CPPNExperiment : INeatExperiment
         _activationScheme = ExperimentUtils.CreateActivationScheme(xmlConfig, "Activation");
         _complexityRegulationStr = XmlUtils.TryGetValueAsString(xmlConfig, "ComplexityRegulationStrategy");
         _complexityThreshold = XmlUtils.TryGetValueAsInt(xmlConfig, "ComplexityThreshold");
-
-        //_description = XmlUtils.TryGetValueAsString(xmlConfig, "Description");
-        //_parallelOptions = ExperimentUtils.ReadParallelOptions(xmlConfig);
-
-        //_visualFieldResolution = XmlUtils.GetValueAsInt(xmlConfig, "Resolution");
-        //_visualFieldPixelCount = _visualFieldResolution * _visualFieldResolution;
         _lengthCppnInput = XmlUtils.GetValueAsBool(xmlConfig, "LengthCppnInput");
 
         _eaParams = new NeatEvolutionAlgorithmParameters();
@@ -122,58 +83,35 @@ public class CPPNExperiment : INeatExperiment
         _neatGenomeParams = new NeatGenomeParameters();
     }
 
-    /// <summary>
-    /// Load a population of genomes from an XmlReader and returns the genomes in a new list.
-    /// The genome factory for the genomes can be obtained from any one of the genomes.
-    /// </summary>
     public List<NeatGenome> LoadPopulation(XmlReader xr)
     {
         NeatGenomeFactory genomeFactory = (NeatGenomeFactory)CreateGenomeFactory();
         return NeatGenomeXmlIO.ReadCompleteGenomeList(xr, false, genomeFactory);
     }
 
-    /// <summary>
-    /// Save a population of genomes to an XmlWriter.
-    /// </summary>
     public void SavePopulation(XmlWriter xw, IList<NeatGenome> genomeList)
     {
         // Writing node IDs is not necessary for NEAT.
         NeatGenomeXmlIO.WriteComplete(xw, genomeList, true);
     }
 
-    /// <summary>
-    /// Create a genome decoder for the experiment.
-    /// </summary>
+
     public IGenomeDecoder<NeatGenome, IBlackBox> CreateGenomeDecoder()
     {
         //NOTE: HARCODED STUFF DUDE
         return CreateGenomeDecoder(12, _lengthCppnInput);
     }
 
-    /// <summary>
-    /// Create a genome factory for the experiment.
-    /// </summary>
     public IGenomeFactory<NeatGenome> CreateGenomeFactory()
     {
         return new CppnGenomeFactory(InputCount, OutputCount, GetCppnActivationFunctionLibrary(), _neatGenomeParams);
     }
 
-    /// <summary>
-    /// Create and return a NeatEvolutionAlgorithm object ready for running the NEAT algorithm/search. Various sub-parts
-    /// of the algorithm are also constructed and connected up.
-    /// Uses the experiments default population size defined in the experiment's config XML.
-    /// </summary>
     public NeatEvolutionAlgorithm<NeatGenome> CreateEvolutionAlgorithm()
     {
         return CreateEvolutionAlgorithm(_populationSize);
     }
 
-    /// <summary>
-    /// Create and return a NeatEvolutionAlgorithm object ready for running the NEAT algorithm/search. Various sub-parts
-    /// of the algorithm are also constructed and connected up.
-    /// This overload accepts a population size parameter that specifies how many genomes to create in an initial randomly
-    /// generated population.
-    /// </summary>
     public NeatEvolutionAlgorithm<NeatGenome> CreateEvolutionAlgorithm(int populationSize)
     {
         // Create a genome factory with our neat genome parameters object and the appropriate number of input and output neuron genes.
@@ -186,11 +124,6 @@ public class CPPNExperiment : INeatExperiment
         return CreateEvolutionAlgorithm(genomeFactory, genomeList);
     }
 
-    /// <summary>
-    /// Create and return a NeatEvolutionAlgorithm object ready for running the NEAT algorithm/search. Various sub-parts
-    /// of the algorithm are also constructed and connected up.
-    /// This overload accepts a pre-built genome population and their associated/parent genome factory.
-    /// </summary>
     public NeatEvolutionAlgorithm<NeatGenome> CreateEvolutionAlgorithm(IGenomeFactory<NeatGenome> genomeFactory, List<NeatGenome> genomeList)
     {
         // Create distance metric. Mismatched genes have a fixed distance of 10; for matched genes the distance is their weight difference.
@@ -224,25 +157,16 @@ public class CPPNExperiment : INeatExperiment
         return ea;
     }
 
-    #region Properties
-
-    /// <summary>
-    /// Gets the visual resolution for the task, as loaded from the experiment config XML.
-    /// </summary>
     public int VisualFieldResolution
     {
         get { return 10; }
     }
 
-    /// <summary>
-    /// Gets the CPPN length input flag, as loaded from the experiment config XML.
-    /// </summary>
     public bool LengthCppnInput
     {
         get { return _lengthCppnInput; }
     }
 
-    #endregion
 
     #region Public Methods
 
@@ -294,15 +218,8 @@ public class CPPNExperiment : INeatExperiment
     }
 
     #endregion
-
-    #region Private Methods
-
     IActivationFunctionLibrary GetCppnActivationFunctionLibrary()
     {
         return DefaultActivationFunctionLibrary.CreateLibraryCppn();
     }
-
-    #endregion
-
-    #endregion
 }

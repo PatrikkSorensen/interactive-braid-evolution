@@ -49,10 +49,13 @@ public class BraidController : UnitController
                 break;
             case ANNSetup.RANDOM_VECTORS:
                 ActivateRandomBraidController();
-                break;
+                return;
             default:
                 break;
         }
+
+        BraidVectors = UtilityHelper.OutputsToBraidVectors(INPUT_ARRAY, OUTPUT_ARRAY, VECTOR_ARRAY_SIZE);
+        messenger.AddVectors(braidId, BraidVectors);
     }
 
     private void ActivateSimpleBraidController()
@@ -60,18 +63,13 @@ public class BraidController : UnitController
         ISignalArray inputArr = neat.InputSignalArray;
         for (int i = 0; i < INPUT_ARRAY.Length; i++)
         {
-            double input = INPUT_ARRAY[i];
-
-            inputArr[0] = input;
+            inputArr[0] = INPUT_ARRAY[i]; 
             neat.Activate();
             ISignalArray outputArr = neat.OutputSignalArray;
 
-            OUTPUT_ARRAY[i] = Math.Round(outputArr[0], 2);
-            OUTPUT_ARRAY[i + 1] = Math.Round(outputArr[1], 2);
+            OUTPUT_ARRAY[i] = outputArr[0];
+            OUTPUT_ARRAY[i + 1] = outputArr[1];
         }
-
-        BraidVectors = UtilityHelper.OutputsToBraidVectors(INPUT_ARRAY, OUTPUT_ARRAY, VECTOR_ARRAY_SIZE);
-        messenger.AddVectors(braidId, BraidVectors);
     }
 
     private void ActivateVectorBraidController()
@@ -79,33 +77,22 @@ public class BraidController : UnitController
         ISignalArray inputArr = neat.InputSignalArray;
         for (int i = 0, j = 0; i < INPUT_ARRAY.Length; i += 3, j += 3)
         {
-            double inputX = INPUT_ARRAY[i];
-            double inputY = INPUT_ARRAY[i + 1];
-            double inputZ = INPUT_ARRAY[i + 2];
-             
-            inputArr[0] = inputX;
-            inputArr[1] = inputY;
-            inputArr[2] = inputZ;
+            inputArr[0] = INPUT_ARRAY[i];      // x
+            inputArr[1] = INPUT_ARRAY[i + 1];  // y
+            inputArr[2] = INPUT_ARRAY[i + 2];  // z
 
             neat.Activate();
             ISignalArray outputArr = neat.OutputSignalArray;
 
-            double outputX = outputArr[0];
-            double outputY = outputArr[1];
-            double outputZ = outputArr[2];
-
-            OUTPUT_ARRAY[j] = outputX;
-            OUTPUT_ARRAY[j + 1] = outputY;
-            OUTPUT_ARRAY[j + 2] = outputZ;
+            OUTPUT_ARRAY[j]     = outputArr[0]; // x
+            OUTPUT_ARRAY[j + 1] = outputArr[1]; // y
+            OUTPUT_ARRAY[j + 2] = outputArr[2]; // z
         }
-
-        BraidVectors = UtilityHelper.OutputsToBraidVectors(INPUT_ARRAY, OUTPUT_ARRAY, VECTOR_ARRAY_SIZE);
-        messenger.AddVectors(braidId, BraidVectors);
     }
 
     private void ActivateRandomBraidController()
     {
-        messenger.SendRandomBraidArrays(9);
+        messenger.SendRandomBraidArrays(VECTOR_ARRAY_SIZE);
     }
 
     /********************* CONTROLLER SETUP FUNCTIONS **********************/
@@ -132,34 +119,25 @@ public class BraidController : UnitController
 
     private void SetupSimpleANNStructure()
     {
-        VECTOR_ARRAY_SIZE = 5;
-        NUM_INPUTS = 1;
-        NUM_OUTPUTS = 2;
-        OUTPUT_ARRAY = new double[VECTOR_ARRAY_SIZE * NUM_OUTPUTS]; 
-
+        SetupANNStructure(5, 1, 2);
         INPUT_ARRAY = UtilityHelper.CreateInputDoubleArray(VECTOR_ARRAY_SIZE);
         INPUT_ARRAY = UtilityHelper.NormalizeInputDoubleArray(INPUT_ARRAY, 0.0f, VECTOR_ARRAY_SIZE * 2); // max and min
     }
 
     private void SetupVectorANNStructure()
     {
-        VECTOR_ARRAY_SIZE = 5;
-        NUM_INPUTS = 3;
-        NUM_OUTPUTS = 3;
-        OUTPUT_ARRAY = new double[VECTOR_ARRAY_SIZE * NUM_OUTPUTS];
+        SetupANNStructure(5, 3, 3); 
 
         if (Optimizer.Generation < 1)
             InitializeVectorANNStructure();
         else
             SetANNVectorArray();
-
-        
     }
 
     private void SetANNVectorArray()
     {
         INPUT_ARRAY = UtilityHelper.Vector3ToDoubleArray(messenger.GetVectors(BraidId));
-        INPUT_ARRAY = UtilityHelper.NormalizeInputVector3Array(INPUT_ARRAY, 0.0f, VECTOR_ARRAY_SIZE * 2); // TODO: Make min and max generic
+        INPUT_ARRAY = UtilityHelper.NormalizeInputVector3Array(INPUT_ARRAY, 0.0f, VECTOR_ARRAY_SIZE * 2); 
     }
 
     private void InitializeVectorANNStructure()
@@ -198,18 +176,22 @@ public class BraidController : UnitController
         INPUT_ARRAY = UtilityHelper.NormalizeInputVector3Array(INPUT_ARRAY, 0.0f, VECTOR_ARRAY_SIZE * 2);
     }
 
+    private void SetupANNStructure(int vectorSize, int inputSize, int outputSize)
+    {
+        VECTOR_ARRAY_SIZE = vectorSize;
+        NUM_INPUTS = inputSize;
+        NUM_OUTPUTS = outputSize;
+        OUTPUT_ARRAY = new double[VECTOR_ARRAY_SIZE * NUM_OUTPUTS];
+    }
+
     private void SetupRandomANNStructure()
     {
         VECTOR_ARRAY_SIZE = 12;
     }
 
-    #region interface functions
     public void SetFitness(float newFitness) { fitness = newFitness; }
     public override float GetFitness() { return fitness; }
     public override void Stop() { Debug.Log("Stop braidController called"); }
-    #endregion
-
-    #region debugging functions
     public void DebugNetwork()
     {
         Debug.Log("Debugging network for: " + gameObject.name); 
@@ -224,11 +206,9 @@ public class BraidController : UnitController
 
         Debug.Log(" - - - - - - - - Finished debugging - - - - - - - - "); 
     }
-
     public void PrintBraidVectors()
     {
         foreach(Vector3 v in BraidVectors)
             Debug.Log(v);
     }
-    #endregion
 }
