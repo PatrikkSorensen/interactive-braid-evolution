@@ -7,8 +7,11 @@ using System;
 
 public class BraidEvaluator : IPhenomeEvaluator<IBlackBox>
 {
+    public bool hasEvaluated = false;
+
     ulong _evalCount;
     bool _stopConditionSatisfied;
+
     Optimizer optimizer;
     FitnessInfo fitness;
 
@@ -34,15 +37,17 @@ public class BraidEvaluator : IPhenomeEvaluator<IBlackBox>
         if (optimizer != null)
         {
             optimizer.Evaluate(box);
-
+            hasEvaluated = false; 
             while (BraidSelector.ShouldEvaluate())
                 yield return new WaitForSeconds(0.1f);
 
+            Debug.Log("Stópping evaluation and determing fitness"); 
             optimizer.StopEvaluation(box);
             float fit = optimizer.GetFitness(box);
             FitnessInfo fitness = new FitnessInfo(fit, fit);
             dict.Add(box, fitness);
-            BraidSimulationManager.evaluationsMade++; 
+            BraidSimulationManager.evaluationsMade++;
+            hasEvaluated = true; 
         }
     }
 

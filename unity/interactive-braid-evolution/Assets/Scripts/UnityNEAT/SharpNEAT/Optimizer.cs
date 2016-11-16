@@ -73,7 +73,7 @@ public class Optimizer : MonoBehaviour {
         // setup the relevant ui
         IECManager.SetUIToEvolvingState();
         BraidSimulationManager.populationSize = PopulationSize;
-        BraidSimulationManager.evaluationsMade = PopulationSize; 
+        BraidSimulationManager.evaluationsMade = 0; 
 
     }
 
@@ -111,7 +111,8 @@ public class Optimizer : MonoBehaviour {
     {
         IECManager.SetUIToExitState(); 
         BraidSelector.SetShouldEvaluate(false);
-        BraidSelector.SetReadyForSelection(true); 
+        //BraidSelector.SetReadyToProgressEvolution(false); 
+
         if (_ea != null && _ea.RunState == SharpNeat.Core.RunState.Running)
         {
             _ea.Stop();
@@ -126,8 +127,9 @@ public class Optimizer : MonoBehaviour {
 
         /* SPECIFIC TO THE BRAID CONTROLLER EXPERIMENT */ 
         obj.transform.parent = UnitContainer.transform;
-        obj.name = "unit_" + UnitContainer.transform.childCount;
-        controller.BraidId = UnitContainer.transform.childCount;
+        int id = UnitContainer.transform.childCount - 1; 
+        obj.name = "unit_" + id;
+        controller.BraidId = id;
         /* END OF SPECIFIC OPERATIONS TO THE BRAID EXPERIMENT */
 
         ControllerMap.Add(phenome, controller);

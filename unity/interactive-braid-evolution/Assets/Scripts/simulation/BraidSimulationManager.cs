@@ -5,14 +5,16 @@ public class BraidSimulationManager : MonoBehaviour {
 
     public static int evaluationsMade; 
     public static int populationSize; 
+    
 
     public void SetFlagsFromButton(bool b)
     {
-        BraidSelector.SetReadyForSelection(b);
+        BraidSelector.SetShouldEvaluate(b);
     }
     
     public static bool HasControllersEvaluated()
     {
+        //Debug.Log(evaluationsMade + ", " + populationSize); 
         return (evaluationsMade == populationSize); 
     }
 
@@ -25,8 +27,8 @@ public class BraidSimulationManager : MonoBehaviour {
             Destroy(braid);
 
         // the ann controllers
-        BraidSelector.SetShouldEvaluate(false);
-        BraidSelector.SetReadyForSelection(false);
+        BraidSelector.SetShouldEvaluate(true);
+        //BraidSelector.SetReadyToProgressEvolution(false);
 
         // variable resetting
         ResetObjImportVariables();

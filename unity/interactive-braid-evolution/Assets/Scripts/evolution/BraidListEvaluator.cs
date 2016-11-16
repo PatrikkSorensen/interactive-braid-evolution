@@ -16,7 +16,6 @@ namespace SharpNEAT.core
         IPhenomeEvaluator<TPhenome> m_phenomeEvaluator;
 
         Optimizer m_optimizer;
-        public bool ReadyForNextGeneration = false; 
 
         public BraidListEvaluator(IGenomeDecoder<TGenome, TPhenome> genomeDecoder,
                                          IPhenomeEvaluator<TPhenome> phenomeEvaluator,
@@ -50,51 +49,25 @@ namespace SharpNEAT.core
             Dictionary<TGenome, FitnessInfo[]> fitnessDict = new Dictionary<TGenome, FitnessInfo[]>();
             for (int i = 0; i < m_optimizer.Trials; i++)
             {
-                
-
-                while (!BraidSimulationManager.HasControllersEvaluated())
-                {
-                    Debug.Log("Controllers havent evaluated yet dude..."); 
-                    yield return new WaitForSeconds(0.2f);
-                }
-
                 m_phenomeEvaluator.Reset();
                 dict = new Dictionary<TGenome, TPhenome>();
                 foreach (TGenome genome in genomeList)
                 {
                     TPhenome phenome = m_genomeDecoder.Decode(genome);
-                    if (null == phenome)
-                    {   // Non-viable genome.
-                        genome.EvaluationInfo.SetFitness(0.0);
-                        genome.EvaluationInfo.AuxFitnessArr = null;
-                    }
-                    else
-                    {
-                        if (i == 0)
-                            fitnessDict.Add(genome, new FitnessInfo[m_optimizer.Trials]);
+                    if (i == 0)
+                        fitnessDict.Add(genome, new FitnessInfo[m_optimizer.Trials]);
 
-                        dict.Add(genome, phenome);
-                        Coroutiner.StartCoroutine(m_phenomeEvaluator.Evaluate(phenome));
-                    }
+                    dict.Add(genome, phenome);
+                    Coroutiner.StartCoroutine(m_phenomeEvaluator.Evaluate(phenome));
                 }
 
-                
                 ModelMessager messenger = GameObject.FindObjectOfType<ModelMessager>();
                 messenger.SendMessageToGH();
 
-                //TODO: Error check: TrialDuration
-                BraidSelector.SetShouldEvaluate(true);
-                while (!BraidSelector.ReadyForSelection())
+                while (!BraidSimulationManager.HasControllersEvaluated())
                     yield return new WaitForSeconds(0.2f);
 
-                if(!UISelectionWindow.current_selected)
-                    break; 
-
-
                 BraidSimulationManager.AdvanceGeneration(); 
-
-
-                ReadyForNextGeneration = false;
 
                 Debug.Log("Getting fitness values...");
                 foreach (TGenome genome in dict.Keys)

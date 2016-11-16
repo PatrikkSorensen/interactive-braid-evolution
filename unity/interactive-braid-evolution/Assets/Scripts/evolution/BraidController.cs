@@ -71,7 +71,7 @@ public class BraidController : UnitController
         }
 
         BraidVectors = UtilityHelper.OutputsToBraidVectors(INPUT_ARRAY, OUTPUT_ARRAY, VECTOR_ARRAY_SIZE);
-        messenger.AddVectors(braidId - 1, BraidVectors);
+        messenger.AddVectors(braidId, BraidVectors);
     }
 
     private void ActivateVectorBraidController()
@@ -97,14 +97,10 @@ public class BraidController : UnitController
             OUTPUT_ARRAY[j] = outputX;
             OUTPUT_ARRAY[j + 1] = outputY;
             OUTPUT_ARRAY[j + 2] = outputZ;
-
-            //Math.Round(outputArr[0], 2);
-            //Math.Round(outputArr[1], 2);
-            //Math.Round(outputArr[2], 2);
         }
 
         BraidVectors = UtilityHelper.OutputsToBraidVectors(INPUT_ARRAY, OUTPUT_ARRAY, VECTOR_ARRAY_SIZE);
-        messenger.AddVectors(braidId - 1, BraidVectors);
+        messenger.AddVectors(braidId, BraidVectors);
     }
 
     private void ActivateRandomBraidController()
@@ -209,7 +205,7 @@ public class BraidController : UnitController
 
     #region interface functions
     public void SetFitness(float newFitness) { fitness = newFitness; }
-    public override float GetFitness() { return 10.0f; }
+    public override float GetFitness() { return fitness; }
     public override void Stop() { Debug.Log("Stop braidController called"); }
     #endregion
 

@@ -56,5 +56,8 @@ public class MaterialScript : MonoBehaviour {
         selected = true;
 
         UISelectionWindow.AddBraid(gameObject);
+
+        GameObject gb = GameObject.Find("unit_" + IECManager.GetSelectionId());
+        gb.GetComponent<BraidController>().SetFitness(10.0f);  
     }
 }
