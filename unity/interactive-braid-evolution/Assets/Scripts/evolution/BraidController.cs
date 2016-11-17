@@ -54,7 +54,7 @@ public class BraidController : UnitController
                 break;
         }
 
-        BraidVectors = UtilityHelper.OutputsToBraidVectors(INPUT_ARRAY, OUTPUT_ARRAY, VECTOR_ARRAY_SIZE);
+        BraidVectors = UtilityHelper.OutputsToBraidVectors(INPUT_ARRAY, INPUT_ARRAY, VECTOR_ARRAY_SIZE);
         messenger.AddVectors(braidId, BraidVectors);
     }
 
@@ -77,16 +77,16 @@ public class BraidController : UnitController
         ISignalArray inputArr = neat.InputSignalArray;
         for (int i = 0, j = 0; i < INPUT_ARRAY.Length; i += 3, j += 3)
         {
-            inputArr[0] = INPUT_ARRAY[i];      // x
-            inputArr[1] = INPUT_ARRAY[i + 1];  // y
-            inputArr[2] = INPUT_ARRAY[i + 2];  // z
+            //inputArr[0] = INPUT_ARRAY[i];      // x
+            //inputArr[1] = INPUT_ARRAY[i + 1];  // y
+            //inputArr[2] = INPUT_ARRAY[i + 2];  // z
 
-            neat.Activate();
-            ISignalArray outputArr = neat.OutputSignalArray;
+            //neat.Activate();
+            //ISignalArray outputArr = neat.OutputSignalArray;
 
-            OUTPUT_ARRAY[j]     = outputArr[0]; // x
-            OUTPUT_ARRAY[j + 1] = outputArr[1]; // y
-            OUTPUT_ARRAY[j + 2] = outputArr[2]; // z
+            //OUTPUT_ARRAY[j]     = outputArr[0]; // x
+            //OUTPUT_ARRAY[j + 1] = outputArr[1]; // y
+            //OUTPUT_ARRAY[j + 2] = outputArr[2]; // z
         }
     }
 
@@ -148,27 +148,18 @@ public class BraidController : UnitController
         INPUT_ARRAY = UtilityHelper.NormalizeInputVector3Array(INPUT_ARRAY, 0.0f, VECTOR_ARRAY_SIZE * 2);
 
         ISignalArray inputArr = neat.InputSignalArray;
-        for (int i = 0, j = 0; i < INPUT_ARRAY.Length; i += 3, j+= 3)
+        for (int i = 0; i < INPUT_ARRAY.Length; i += 3)
         {
-            double inputX = INPUT_ARRAY[i];
-            double inputY = INPUT_ARRAY[i + 1];
-            double inputZ = INPUT_ARRAY[i + 2];
+            //inputArr[0] = INPUT_ARRAY[i];      // x
+            //inputArr[1] = INPUT_ARRAY[i + 1];  // y
+            //inputArr[2] = INPUT_ARRAY[i + 2];  // z
 
-            inputArr[0] = inputX;
-            inputArr[1] = inputY;
-            inputArr[2] = inputZ;
+            //neat.Activate();
+            //ISignalArray outputArr = neat.OutputSignalArray;
 
-            neat.Activate();
-            ISignalArray outputArr = neat.OutputSignalArray;
-
-            OUTPUT_ARRAY[j] = Math.Round(outputArr[0], 2);
-            INPUT_ARRAY[j] = OUTPUT_ARRAY[j];
-
-            OUTPUT_ARRAY[j + 1] = Math.Round(outputArr[1], 2);
-            INPUT_ARRAY[j + 1] = OUTPUT_ARRAY[j + 1];
-
-            OUTPUT_ARRAY[j + 2] = Math.Round(outputArr[2], 2);
-            INPUT_ARRAY[j + 2] = OUTPUT_ARRAY[j + 2];
+            //INPUT_ARRAY[i] += outputArr[0];
+            //INPUT_ARRAY[i + 1] += outputArr[1];
+            //INPUT_ARRAY[i + 2] += outputArr[2];
         }
 
         TEMP_ARRAY = UtilityHelper.VectorsToBraidVectors(INPUT_ARRAY, VECTOR_ARRAY_SIZE);

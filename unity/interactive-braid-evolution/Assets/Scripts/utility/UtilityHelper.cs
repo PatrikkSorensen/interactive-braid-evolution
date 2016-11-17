@@ -37,7 +37,7 @@ public class UtilityHelper : MonoBehaviour {
     {
         Vector3[] v = new Vector3[size];
         for (int i = 0; i < size; i++)
-            v[i] = new Vector3(Random.Range(min, max), Random.Range(min, max), i * yOffset);
+            v[i] = new Vector3(Random.Range(min, max), i * yOffset, Random.Range(min, max));
 
         return v;
     }
@@ -130,7 +130,7 @@ public class UtilityHelper : MonoBehaviour {
         {
             float x = (float)outputs[j] * 10.0f;
             float y = (float)outputs[j + 1] * 10.0f;
-            float z = (float)outputs[j + 2]; // Creates interesting braids if z is inputs instead of outputs
+            float z = (float)outputs[j + 2] * 10.0f; // Creates interesting braids if z is inputs instead of outputs
             braidVectors[i] = new Vector3(x, y, z);
 
             j += 3;
