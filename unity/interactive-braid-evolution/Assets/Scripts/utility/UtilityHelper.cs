@@ -4,21 +4,6 @@ using ExperimentTypes;
 
 public class UtilityHelper : MonoBehaviour {
 
-    public static double[] CreateInputVector3Array(int numVectors)
-    {
-        double[] inputArray = new double[numVectors * 3]; 
-        Vector3[] inputVectors = UtilityHelper.CreateRandomVectors(0, 10, numVectors, 2);
-
-        for(int i = 0, j = 0; i < inputVectors.Length; i++, j += 3)
-        {
-            inputArray[j] = inputVectors[i].x;
-            inputArray[j + 1] = inputVectors[i].y;
-            inputArray[j + 2] = inputVectors[i].z;
-        }
-
-        return inputArray;
-    }
-
     public static double[] NormalizeInputVector3Array(double[] inputs, float min, float max)
     {
         double[] normalizedArray = new double[inputs.Length];
@@ -94,14 +79,6 @@ public class UtilityHelper : MonoBehaviour {
         return normalizedArray;
     }
     #endregion
-
-    // INPUTS TO BRAID VECTORS // 
-    //public static Vector3[] OutputsToBraidVectors(double[] inputs, double[] outputs, int size)
-    //{
-    //    Vector3[] braidVectors = new Vector3[size]; 
-    //    braidVectors = DoubleToBraidVectors(inputs, outputs, size);
-    //    return braidVectors; 
-    //}
 
     public static Vector3[] OutputsToBraidVectors(double[] outputs, int size)
     {

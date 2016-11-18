@@ -70,8 +70,11 @@ public class BraidController : UnitController
             neat.Activate();
             ISignalArray outputArr = neat.OutputSignalArray;
 
-            OUTPUT_ARRAY[i] = outputArr[0];
-            OUTPUT_ARRAY[i + 1] = outputArr[1];
+            OUTPUT_ARRAY[i] = outputArr[0] * 2 - 1;
+            OUTPUT_ARRAY[i + 1] = outputArr[1] * 2 - 1;
+
+            //= (float)outputArr[0] * 2 - 1;
+            //(float)outputArr[1] * 2 - 1;
         }
 
         VECTOR_ARRAY = UtilityHelper.MergeArraysFromSimpleANN(INPUT_ARRAY, OUTPUT_ARRAY); 
@@ -90,9 +93,9 @@ public class BraidController : UnitController
             neat.Activate();
             ISignalArray outputArr = neat.OutputSignalArray;
 
-            DELTA_ARRAY[i]      += outputArr[0]; // x
-            DELTA_ARRAY[i + 1]  += outputArr[1]; // y
-            DELTA_ARRAY[i + 2]  += outputArr[2]; // z
+            DELTA_ARRAY[i]      += outputArr[0] * 2 - 1; // x
+            DELTA_ARRAY[i + 1]  += outputArr[1] * 2 - 1; // y
+            DELTA_ARRAY[i + 2]  += outputArr[2] * 2 - 1; // z
         }
 
         VECTOR_ARRAY = UtilityHelper.MergeArraysFromVectorANN(INPUT_ARRAY, DELTA_ARRAY);
