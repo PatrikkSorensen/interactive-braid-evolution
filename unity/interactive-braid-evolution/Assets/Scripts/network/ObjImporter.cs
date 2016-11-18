@@ -66,9 +66,9 @@ public class ObjImporter : MonoBehaviour {
                 testModel.position = FindSpawnPosition();
 
                 // rotation
-                Vector3 rotationVector = testModel.rotation.eulerAngles;
-                rotationVector.x = -90.0f;
-                testModel.rotation = Quaternion.Euler(rotationVector);
+                //Vector3 rotationVector = testModel.rotation.eulerAngles;
+                //rotationVector.x = -90.0f;
+                //testModel.rotation = Quaternion.Euler(rotationVector);
 
             } else
             {

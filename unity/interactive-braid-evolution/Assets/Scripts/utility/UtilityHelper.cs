@@ -86,25 +86,23 @@ public class UtilityHelper : MonoBehaviour {
     #endregion
 
     // INPUTS TO BRAID VECTORS // 
-    public static Vector3[] OutputsToBraidVectors(double[] inputs, double[] outputs, int size)
-    {
-        Vector3[] braidVectors = new Vector3[size]; 
-        switch (Optimizer.ANN_SETUP)
-        {
-            case ANNSetup.SIMPLE:
-                braidVectors = DoubleToBraidVectors(inputs, outputs, size);
-                break;
-            case ANNSetup.VECTOR_BASED:
-                braidVectors = VectorsToBraidVectors(outputs, size);
-                break;
-            default:
-                break;
-        }
+    //public static Vector3[] OutputsToBraidVectors(double[] inputs, double[] outputs, int size)
+    //{
+    //    Vector3[] braidVectors = new Vector3[size]; 
+    //    braidVectors = DoubleToBraidVectors(inputs, outputs, size);
+    //    return braidVectors; 
+    //}
 
-        return braidVectors; 
+    public static Vector3[] OutputsToBraidVectors(double[] outputs, int size)
+    {
+        Vector3[] braidVectors = new Vector3[size];
+        braidVectors = VectorsToBraidVectors(outputs, size);
+        return braidVectors;
     }
 
-    public static Vector3[ ]DoubleToBraidVectors(double[] inputs, double[] outputs, int size)
+
+
+    public static Vector3[] DoubleToBraidVectors(double[] inputs, double[] outputs, int size)
     {
         Vector3[] braidVectors = new Vector3[size];
         int j = 0;
@@ -152,5 +150,55 @@ public class UtilityHelper : MonoBehaviour {
         }
 
         return doubleArray; 
+    }
+
+
+    /// <summary>
+    /// Merges input and output array, so they can be converted to a vector list.
+    /// </summary>
+    /// <param name="arr1">Inputs sent to the ANN</param>
+    /// <param name="arr2">Outputs recieved to the ANN</param>
+    /// <returns></returns>
+    public static double[] MergeArraysFromSimpleANN(double[] arr1, double[] arr2)
+    {
+        int size = arr1.Length + arr2.Length; 
+        double[] res = new double[size];
+
+        for (int i = 0, j = 0; i < size; i += 3, j++)
+            res[i + 1] = arr1[j];
+
+        for (int i = 0, j = 0; i < size; i += 3, j += 2)
+        {
+            res[i] = arr2[j];
+            res[i + 2] = arr2[j + 1];
+        }
+
+        return res; 
+    }
+
+    public static double[] MergeArraysFromVectorANN(double[] inputs, double[] deltaValues)
+    {
+        
+        double[] res = new double[inputs.Length];
+
+        for(int i = 0; i < inputs.Length; i+=3)
+        {
+
+            // TODO: This can be made smarter...
+            //double x = (inputs[i] + deltaValues[i] > 1.0) ? inputs[i] + deltaValues[i] : 1.0; 
+            double x = inputs[i] + deltaValues[i];
+            double y = inputs[i] + deltaValues[i + 1];
+            double z = inputs[i] + deltaValues[i + 2];
+
+            if (x > 1.0) x = 1.0;
+            if (y > 1.0) y = 1.0;
+            if (z > 1.0) z = 1.0;
+
+            res[i] = x;
+            res[i + 1] = y;
+            res[i + 2] = z; 
+        }
+
+        return res; 
     }
 }

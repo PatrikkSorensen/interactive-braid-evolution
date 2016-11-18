@@ -15,6 +15,8 @@ public class BraidController : UnitController
 
     double[] INPUT_ARRAY;
     double[] OUTPUT_ARRAY;
+    double[] DELTA_ARRAY;
+    double[] VECTOR_ARRAY; 
 
     private IBlackBox neat;
     private float fitness = 0.0f;
@@ -54,7 +56,7 @@ public class BraidController : UnitController
                 break;
         }
 
-        BraidVectors = UtilityHelper.OutputsToBraidVectors(INPUT_ARRAY, INPUT_ARRAY, VECTOR_ARRAY_SIZE);
+        BraidVectors = UtilityHelper.OutputsToBraidVectors(VECTOR_ARRAY, VECTOR_ARRAY_SIZE);
         messenger.AddVectors(braidId, BraidVectors);
     }
 
@@ -64,30 +66,36 @@ public class BraidController : UnitController
         for (int i = 0; i < INPUT_ARRAY.Length; i++)
         {
             inputArr[0] = INPUT_ARRAY[i]; 
+
             neat.Activate();
             ISignalArray outputArr = neat.OutputSignalArray;
 
             OUTPUT_ARRAY[i] = outputArr[0];
             OUTPUT_ARRAY[i + 1] = outputArr[1];
         }
+
+        VECTOR_ARRAY = UtilityHelper.MergeArraysFromSimpleANN(INPUT_ARRAY, OUTPUT_ARRAY); 
     }
+
 
     private void ActivateVectorBraidController()
     {
         ISignalArray inputArr = neat.InputSignalArray;
-        for (int i = 0, j = 0; i < INPUT_ARRAY.Length; i += 3, j += 3)
+        for (int i = 0; i < INPUT_ARRAY.Length; i += 3)
         {
-            //inputArr[0] = INPUT_ARRAY[i];      // x
-            //inputArr[1] = INPUT_ARRAY[i + 1];  // y
-            //inputArr[2] = INPUT_ARRAY[i + 2];  // z
+            inputArr[0] = INPUT_ARRAY[i];      // x
+            inputArr[1] = INPUT_ARRAY[i + 1];  // y
+            inputArr[2] = INPUT_ARRAY[i + 2];  // z
 
-            //neat.Activate();
-            //ISignalArray outputArr = neat.OutputSignalArray;
+            neat.Activate();
+            ISignalArray outputArr = neat.OutputSignalArray;
 
-            //OUTPUT_ARRAY[j]     = outputArr[0]; // x
-            //OUTPUT_ARRAY[j + 1] = outputArr[1]; // y
-            //OUTPUT_ARRAY[j + 2] = outputArr[2]; // z
+            DELTA_ARRAY[i]      += outputArr[0]; // x
+            DELTA_ARRAY[i + 1]  += outputArr[1]; // y
+            DELTA_ARRAY[i + 2]  += outputArr[2]; // z
         }
+
+        VECTOR_ARRAY = UtilityHelper.MergeArraysFromVectorANN(INPUT_ARRAY, DELTA_ARRAY);
     }
 
     private void ActivateRandomBraidController()
@@ -136,43 +144,26 @@ public class BraidController : UnitController
 
     private void SetANNVectorArray()
     {
+        Debug.Log("Grabbing the vectors from my last run..."); 
         INPUT_ARRAY = UtilityHelper.Vector3ToDoubleArray(messenger.GetVectors(BraidId));
         INPUT_ARRAY = UtilityHelper.NormalizeInputVector3Array(INPUT_ARRAY, 0.0f, VECTOR_ARRAY_SIZE * 2); 
     }
 
     private void InitializeVectorANNStructure()
     {
-        //Vector3[] TEMP_ARRAY = UtilityHelper.CreateEmptyVector3Array(VECTOR_ARRAY_SIZE);
         Vector3[] TEMP_ARRAY = UtilityHelper.CreateRandomVectors(0, 10, VECTOR_ARRAY_SIZE, 2);
-        INPUT_ARRAY = UtilityHelper.Vector3ToDoubleArray(TEMP_ARRAY);
-        INPUT_ARRAY = UtilityHelper.NormalizeInputVector3Array(INPUT_ARRAY, 0.0f, VECTOR_ARRAY_SIZE * 2);
-
-        ISignalArray inputArr = neat.InputSignalArray;
-        for (int i = 0; i < INPUT_ARRAY.Length; i += 3)
-        {
-            //inputArr[0] = INPUT_ARRAY[i];      // x
-            //inputArr[1] = INPUT_ARRAY[i + 1];  // y
-            //inputArr[2] = INPUT_ARRAY[i + 2];  // z
-
-            //neat.Activate();
-            //ISignalArray outputArr = neat.OutputSignalArray;
-
-            //INPUT_ARRAY[i] += outputArr[0];
-            //INPUT_ARRAY[i + 1] += outputArr[1];
-            //INPUT_ARRAY[i + 2] += outputArr[2];
-        }
-
-        TEMP_ARRAY = UtilityHelper.VectorsToBraidVectors(INPUT_ARRAY, VECTOR_ARRAY_SIZE);
         INPUT_ARRAY = UtilityHelper.Vector3ToDoubleArray(TEMP_ARRAY);
         INPUT_ARRAY = UtilityHelper.NormalizeInputVector3Array(INPUT_ARRAY, 0.0f, VECTOR_ARRAY_SIZE * 2);
     }
 
     private void SetupANNStructure(int vectorSize, int inputSize, int outputSize)
     {
+        
         VECTOR_ARRAY_SIZE = vectorSize;
         NUM_INPUTS = inputSize;
         NUM_OUTPUTS = outputSize;
         OUTPUT_ARRAY = new double[VECTOR_ARRAY_SIZE * NUM_OUTPUTS];
+        DELTA_ARRAY = new double[VECTOR_ARRAY_SIZE * 3];
     }
 
     private void SetupRandomANNStructure()
