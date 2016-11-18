@@ -178,8 +178,13 @@ public class UtilityHelper : MonoBehaviour {
             double z = inputs[i + 2] + deltaValues[i + 2];
 
             if (x > 1.0) x = 1.0;
+            if (x < -1.0) x = 1.0;
+
             if (y > 1.0) y = 1.0;
+            if (y > 1.0) y = -1.0;
+
             if (z > 1.0) z = 1.0;
+            if (z > 1.0) z = -1.0;
 
             res[i] = x;
             res[i + 1] = y;
