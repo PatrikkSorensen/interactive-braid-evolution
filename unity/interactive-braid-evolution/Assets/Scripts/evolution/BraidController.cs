@@ -144,16 +144,17 @@ public class BraidController : UnitController
 
     private void SetANNVectorArray()
     {
-        Debug.Log("Grabbing the vectors from my last run..."); 
-        INPUT_ARRAY = UtilityHelper.Vector3ToDoubleArray(messenger.GetVectors(BraidId));
-        INPUT_ARRAY = UtilityHelper.NormalizeInputVector3Array(INPUT_ARRAY, 0.0f, VECTOR_ARRAY_SIZE * 2); 
+        Vector3[] temp = messenger.GetVectors(BraidId);
+        INPUT_ARRAY = UtilityHelper.Vector3ToDoubleArray(temp);
+        INPUT_ARRAY = UtilityHelper.NormalizeInputVector3Array(INPUT_ARRAY, -10, VECTOR_ARRAY_SIZE * 2);
     }
 
     private void InitializeVectorANNStructure()
     {
-        Vector3[] TEMP_ARRAY = UtilityHelper.CreateRandomVectors(0, 10, VECTOR_ARRAY_SIZE, 2);
+        //Vector3[] TEMP_ARRAY = UtilityHelper.CreateRandomVectors(-10, 10, VECTOR_ARRAY_SIZE, 2);
+        Vector3[] TEMP_ARRAY = UtilityHelper.CreateEmptyVector3Array(VECTOR_ARRAY_SIZE, -10, 10);
         INPUT_ARRAY = UtilityHelper.Vector3ToDoubleArray(TEMP_ARRAY);
-        INPUT_ARRAY = UtilityHelper.NormalizeInputVector3Array(INPUT_ARRAY, 0.0f, VECTOR_ARRAY_SIZE * 2);
+        INPUT_ARRAY = UtilityHelper.NormalizeInputVector3Array(INPUT_ARRAY, -10, VECTOR_ARRAY_SIZE * 2);
     }
 
     private void SetupANNStructure(int vectorSize, int inputSize, int outputSize)

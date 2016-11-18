@@ -81,6 +81,6 @@ public class ModelMessager : MonoBehaviour {
 
     public Vector3[] GetVectors(int index)
     {
-        return m_messageVectors[index - 1];
+        return m_messageVectors[index];
     }
 }

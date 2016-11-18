@@ -25,9 +25,13 @@ public class UtilityHelper : MonoBehaviour {
 
         for (int i = 0; i < inputs.Length; i++)
         {
-            double x = (inputs[i] - min) / (max - min);
-            //Debug.Log("input: " + inputs[i] + " became normalized to: " + x); 
-            normalizedArray[i] = x;
+            double x = inputs[i];
+            x += Mathf.Abs(min); 
+            x /= (max - min);
+            x *= 2;
+            x -= 1; 
+
+            normalizedArray[i] = x ;
         }
 
         return normalizedArray;
@@ -35,18 +39,24 @@ public class UtilityHelper : MonoBehaviour {
 
     public static Vector3[] CreateRandomVectors(int min, int max, int size, int yOffset)
     {
+        int multiplier = (max + Mathf.Abs(min)) / size; 
         Vector3[] v = new Vector3[size];
-        for (int i = 0; i < size; i++)
-            v[i] = new Vector3(Random.Range(min, max), i * yOffset, Random.Range(min, max));
+
+        for (int i = 0, yValue = min; i < size; i++, yValue += multiplier)
+            v[i] = new Vector3(Random.Range(min, max), yValue + multiplier, Random.Range(min, max));
 
         return v;
     }
 
-    public static Vector3[] CreateEmptyVector3Array(int size)
+    public static Vector3[] CreateEmptyVector3Array(int size, int min, int max)
     {
+        int multiplier = (max + Mathf.Abs(min)) / (size - 1);
         Vector3[] v = new Vector3[size];
-        for (int i = 0; i < size; i++)
-            v[i] = Vector3.zero; 
+        int yValue = min - multiplier;
+
+        for (int i = 0; i < size; i++, yValue += multiplier)
+            v[i] = new Vector3(0.0f, yValue + multiplier, 0.0f);
+
         return v;
     }
 
@@ -187,8 +197,8 @@ public class UtilityHelper : MonoBehaviour {
             // TODO: This can be made smarter...
             //double x = (inputs[i] + deltaValues[i] > 1.0) ? inputs[i] + deltaValues[i] : 1.0; 
             double x = inputs[i] + deltaValues[i];
-            double y = inputs[i] + deltaValues[i + 1];
-            double z = inputs[i] + deltaValues[i + 2];
+            double y = inputs[i + 1] + deltaValues[i + 1];
+            double z = inputs[i + 2] + deltaValues[i + 2];
 
             if (x > 1.0) x = 1.0;
             if (y > 1.0) y = 1.0;
@@ -200,5 +210,17 @@ public class UtilityHelper : MonoBehaviour {
         }
 
         return res; 
+    }
+
+    public static void NormalizeDeltaValues(double[] deltaArray)
+    {
+
+        for(int i = 0; i < deltaArray.Length; i++)
+        {
+            if (deltaArray[i] <= 0.5)
+                deltaArray[i] *= -1; 
+
+            deltaArray[i] /= 10;
+        }
     }
 }
