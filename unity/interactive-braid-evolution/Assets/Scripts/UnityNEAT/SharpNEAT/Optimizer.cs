@@ -12,29 +12,29 @@ using ExperimentTypes;
 public class Optimizer : MonoBehaviour {
 
     // Neat parameters
-    BraidExperiment experiment; 
-    static NeatEvolutionAlgorithm<NeatGenome> _ea;
-    Dictionary<IBlackBox, UnitController> ControllerMap = new Dictionary<IBlackBox, UnitController>();
+    protected BraidExperiment experiment; 
+    protected static NeatEvolutionAlgorithm<NeatGenome> _ea;
+    protected Dictionary<IBlackBox, UnitController> ControllerMap = new Dictionary<IBlackBox, UnitController>();
     public static ANNSetup ANN_SETUP;
 
     // Evolution parameters
     public static int PopulationSize;
     public static uint Generation;
-    private double Fitness;
+    protected double Fitness;
     public int Trials;
     public float TrialDuration;
     public float StoppingFitness;
 
     // Network variables 
-    ModelMessager messenger; 
+    protected ModelMessager messenger; 
 
     // Utility
     public float evolutionSpeed = 1.0f;
     public bool LoadPopulation = true;
     public GameObject Unit;
-    private GameObject UnitContainer;
-    private string popFileSavePath = null; 
-    private string champFileSavePath = null;
+    protected GameObject UnitContainer;
+    protected string popFileSavePath = null; 
+    protected string champFileSavePath = null;
 
 
     void Start ()
@@ -92,7 +92,7 @@ public class Optimizer : MonoBehaviour {
         Debug.Log("------------------- FINISHED SETTING UP EA -------------------------------");
     }
 
-    void ea_UpdateEvent(object sender, EventArgs e)
+    protected void ea_UpdateEvent(object sender, EventArgs e)
     {
 
         Debug.Log("Generation: " + _ea.CurrentGeneration + ", best fitness: " + _ea.Statistics._maxFitness);
@@ -101,7 +101,7 @@ public class Optimizer : MonoBehaviour {
         IECManager.SetGeneration(Generation);
     }
 
-    void ea_PauseEvent(object sender, EventArgs e)
+    protected void ea_PauseEvent(object sender, EventArgs e)
     {     
         ResetTimeScale();
         SaveXMLFiles(); 
@@ -144,7 +144,7 @@ public class Optimizer : MonoBehaviour {
         Destroy(ct.gameObject);
     }
 
-    private TextAsset SetupANNStructure()
+    protected TextAsset SetupANNStructure()
     {
         TextAsset textAsset;
         ANNSetup setup = UIANNSetupDropdown.GetANNSetup();

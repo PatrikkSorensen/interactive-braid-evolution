@@ -18,11 +18,11 @@ public class BraidController : UnitController
     double[] DELTA_ARRAY;
     double[] VECTOR_ARRAY; 
 
-    private IBlackBox neat;
-    private float fitness = 0.0f;
+    protected IBlackBox neat;
+    protected float fitness = 0.0f;
 
     // Message variables 
-    private int braidId; 
+    protected int braidId; 
     ModelMessager messenger;
     public Vector3[] BraidVectors; 
 
@@ -39,7 +39,7 @@ public class BraidController : UnitController
     }
 
     /********************* CONTROLLER SPECIFIC ACTIVATION FUNCTIONS **********************/
-    private void ActivateBraidController()
+    protected void ActivateBraidController()
     {
         switch (Optimizer.ANN_SETUP)
         {
@@ -60,7 +60,7 @@ public class BraidController : UnitController
         messenger.AddVectors(braidId, BraidVectors);
     }
 
-    private void ActivateSimpleBraidController()
+    protected void ActivateSimpleBraidController()
     {
         ISignalArray inputArr = neat.InputSignalArray;
         for (int i = 0; i < INPUT_ARRAY.Length; i++)
@@ -81,7 +81,7 @@ public class BraidController : UnitController
     }
 
 
-    private void ActivateVectorBraidController()
+    protected void ActivateVectorBraidController()
     {
         ISignalArray inputArr = neat.InputSignalArray;
         for (int i = 0; i < INPUT_ARRAY.Length; i += 3)
@@ -101,7 +101,7 @@ public class BraidController : UnitController
         VECTOR_ARRAY = UtilityHelper.MergeArraysFromVectorANN(INPUT_ARRAY, DELTA_ARRAY);
     }
 
-    private void ActivateRandomBraidController()
+    protected void ActivateRandomBraidController()
     {
         messenger.SendRandomBraidArrays(VECTOR_ARRAY_SIZE);
     }
@@ -128,14 +128,14 @@ public class BraidController : UnitController
         }
     }
 
-    private void SetupSimpleANNStructure()
+    protected void SetupSimpleANNStructure()
     {
         SetupANNStructure(5, 1, 2);
         INPUT_ARRAY = UtilityHelper.CreateInputDoubleArray(VECTOR_ARRAY_SIZE);
         INPUT_ARRAY = UtilityHelper.NormalizeInputDoubleArray(INPUT_ARRAY, 0.0f, VECTOR_ARRAY_SIZE * 2); // max and min
     }
 
-    private void SetupVectorANNStructure()
+    protected void SetupVectorANNStructure()
     {
         SetupANNStructure(5, 3, 3); 
 
@@ -145,14 +145,14 @@ public class BraidController : UnitController
             SetANNVectorArray();
     }
 
-    private void SetANNVectorArray()
+    protected void SetANNVectorArray()
     {
         Vector3[] temp = messenger.GetVectors(BraidId);
         INPUT_ARRAY = UtilityHelper.Vector3ToDoubleArray(temp);
         INPUT_ARRAY = UtilityHelper.NormalizeInputVector3Array(INPUT_ARRAY, -10, VECTOR_ARRAY_SIZE * 2);
     }
 
-    private void InitializeVectorANNStructure()
+    protected void InitializeVectorANNStructure()
     {
         //Vector3[] TEMP_ARRAY = UtilityHelper.CreateRandomVectors(-10, 10, VECTOR_ARRAY_SIZE, 2);
         Vector3[] TEMP_ARRAY = UtilityHelper.CreateEmptyVector3Array(VECTOR_ARRAY_SIZE, -10, 10);
@@ -160,7 +160,7 @@ public class BraidController : UnitController
         INPUT_ARRAY = UtilityHelper.NormalizeInputVector3Array(INPUT_ARRAY, -10, VECTOR_ARRAY_SIZE * 2);
     }
 
-    private void SetupANNStructure(int vectorSize, int inputSize, int outputSize)
+    protected void SetupANNStructure(int vectorSize, int inputSize, int outputSize)
     {
         
         VECTOR_ARRAY_SIZE = vectorSize;
@@ -170,7 +170,7 @@ public class BraidController : UnitController
         DELTA_ARRAY = new double[VECTOR_ARRAY_SIZE * 3];
     }
 
-    private void SetupRandomANNStructure()
+    protected void SetupRandomANNStructure()
     {
         VECTOR_ARRAY_SIZE = 12;
     }

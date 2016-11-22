@@ -30,11 +30,6 @@ namespace SharpNeat.EvolutionAlgorithms
         protected ComplexityRegulationMode _complexityRegulationMode;
         protected readonly IComplexityRegulationStrategy _complexityRegulationStrategy;
 
-        // P. SØRENSEN VARIABLES 
-        public bool ReadyForNextGeneration;
-        // END OF P. SØRENSEN VARIABLES
-
-
         public CPPNEvolutionaryAlgorithm()
         {
             _eaParams = new NeatEvolutionAlgorithmParameters();

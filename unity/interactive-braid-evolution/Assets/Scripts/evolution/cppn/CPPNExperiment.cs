@@ -28,7 +28,7 @@ public class CPPNExperiment : INeatExperiment
     int? _complexityThreshold;
     string _description;
     bool _lengthCppnInput;
-    Optimizer m_optimizer;
+    CPPNOptimizer m_optimizer;
 
     public string Name
     {
@@ -137,13 +137,13 @@ public class CPPNExperiment : INeatExperiment
         NeatEvolutionAlgorithm<NeatGenome> ea = new NeatEvolutionAlgorithm<NeatGenome>(_eaParams, speciationStrategy, complexityRegulationStrategy);
 
         // Create IBlackBox evaluator.
-        BraidEvaluator evaluator = new BraidEvaluator(m_optimizer);
+        CPPNEvaluator evaluator = new CPPNEvaluator(m_optimizer);
 
         // Create genome decoder. Decodes to a neural network packaged with an activation scheme that defines a fixed number of activations per evaluation.
         IGenomeDecoder<NeatGenome, IBlackBox> genomeDecoder = CreateGenomeDecoder(10, _lengthCppnInput);
 
         // Create a genome list evaluator. This packages up the genome decoder with the genome evaluator.
-        IGenomeListEvaluator<NeatGenome> innerEvaluator = new BraidListEvaluator<NeatGenome, IBlackBox>(genomeDecoder, evaluator, m_optimizer);
+        IGenomeListEvaluator<NeatGenome> innerEvaluator = new CPPNListEvaluator<NeatGenome, IBlackBox>(genomeDecoder, evaluator, m_optimizer);
 
         // Wrap the list evaluator in a 'selective' evaluator that will only evaluate new genomes. That is, we skip re-evaluating any genomes
         // that were in the population in previous generations (elite genomes). This is determined by examining each genome's evaluation info object.
@@ -221,5 +221,10 @@ public class CPPNExperiment : INeatExperiment
     IActivationFunctionLibrary GetCppnActivationFunctionLibrary()
     {
         return DefaultActivationFunctionLibrary.CreateLibraryCppn();
+    }
+
+    public void SetOptimizer(CPPNOptimizer se)
+    {
+        this.m_optimizer = se;
     }
 }

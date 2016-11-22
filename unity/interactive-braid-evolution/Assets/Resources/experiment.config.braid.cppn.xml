@@ -1,6 +1,6 @@
 <Config>
-  <PopulationSize>500</PopulationSize>
-  <SpecieCount>40</SpecieCount>
+  <PopulationSize>5</PopulationSize>
+  <SpecieCount>5</SpecieCount>
   <ActivationCppn>
     <Scheme>CyclicFixedIters</Scheme>
     <Iters>4</Iters>

@@ -222,12 +222,16 @@ namespace SharpNeat.EvolutionAlgorithms
             /**********************  IEC SPECIFIC CODE BEGINS HERE ******************************/ 
             Logger myLogger = new Logger(new MyLogger());
             myLogger.Log("Some tag", "MyGameClass Start.");
+
+            // FOR TESTING: 
+            ReadyForNextGeneration = true; 
             while (!ReadyForNextGeneration)
             {
                 myLogger.Log("STATUS: " + "waiting for input"); 
                 yield return new WaitForSeconds(2.0f);
             }
 
+            ReadyForNextGeneration = false; 
             /**********************  IEC SPECIFIC CODE ENDS HERE   ******************************/
             yield return Coroutiner.StartCoroutine( _genomeListEvaluator.Evaluate(_genomeList));
 
