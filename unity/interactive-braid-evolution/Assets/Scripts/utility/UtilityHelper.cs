@@ -99,7 +99,7 @@ public class UtilityHelper : MonoBehaviour {
 
             float x = (float)outputs[j] * 10.0f;
             float y = (float)outputs[j + 1] * 10.0f;
-            float z = (float)(inputs[i] * UISliderUpdater.GetValue()); // Has to be made positive
+            float z = (float)(inputs[i] * 10.0f); // Has to be made positive
             braidVectors[i] = new Vector3(x, y, z);
 
             j += 2;

@@ -17,7 +17,6 @@ public class ObjImporter : MonoBehaviour {
 
     void Start()
     {
-        // ObjImporter variables
         filePathToGeometry = Application.dataPath + "/Geometry/Models/";
         shouldImportAll = false;
         shouldImportSingle = false; 
@@ -105,7 +104,7 @@ public class ObjImporter : MonoBehaviour {
 
             // rotation
             Vector3 rotationVector = testModel.rotation.eulerAngles;
-            rotationVector.x = -90.0f;
+            //rotationVector.x = -90.0f;
             testModel.rotation = Quaternion.Euler(rotationVector);
 
             // collision box for selection

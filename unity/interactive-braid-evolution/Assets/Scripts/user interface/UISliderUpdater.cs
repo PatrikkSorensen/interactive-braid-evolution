@@ -28,8 +28,6 @@ public class UISliderUpdater : MonoBehaviour {
 
     internal static int GetValue()
     {
-        //Debug.Log("Returning height: " + sl.value);
-        
-        return (int) sl.value; 
+        return (int) 10.0f; 
     }
 }

@@ -11,7 +11,7 @@ public class IECManager : MonoBehaviour {
     // ui components
     public static GameObject evolveButton;
     //public static GameObject selectionWindow;
-    public static GameObject slider;
+    //public static GameObject slider;
     public static GameObject statusWindowContainer;
     public static GameObject initializeButton;
     public static GameObject dropDown;
@@ -27,7 +27,7 @@ public class IECManager : MonoBehaviour {
         initializeButton      = GameObject.Find("InitializeANNButton");
         evolveButton          = GameObject.Find("EvolveButton");
         //selectionWindow       = GameObject.Find("SelectionWindow"); 
-        slider                = GameObject.FindObjectOfType<UISliderUpdater>().gameObject;
+        //slider                = GameObject.FindObjectOfType<UISliderUpdater>().gameObject;
         statusWindowContainer = GameObject.FindObjectOfType<UIStatusWindow>().gameObject;
         dropDown              = GameObject.Find("ANNSetupDropdown");
         advanceButton         = GameObject.Find("AdvanceGeneration");
