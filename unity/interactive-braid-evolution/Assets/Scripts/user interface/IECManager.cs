@@ -10,7 +10,7 @@ public class IECManager : MonoBehaviour {
 
     // ui components
     public static GameObject evolveButton;
-    public static GameObject selectionWindow;
+    //public static GameObject selectionWindow;
     public static GameObject slider;
     public static GameObject statusWindowContainer;
     public static GameObject initializeButton;
@@ -26,7 +26,7 @@ public class IECManager : MonoBehaviour {
 
         initializeButton      = GameObject.Find("InitializeANNButton");
         evolveButton          = GameObject.Find("EvolveButton");
-        selectionWindow       = GameObject.Find("SelectionWindow"); 
+        //selectionWindow       = GameObject.Find("SelectionWindow"); 
         slider                = GameObject.FindObjectOfType<UISliderUpdater>().gameObject;
         statusWindowContainer = GameObject.FindObjectOfType<UIStatusWindow>().gameObject;
         dropDown              = GameObject.Find("ANNSetupDropdown");
@@ -51,7 +51,7 @@ public class IECManager : MonoBehaviour {
     {
         advanceButton.SetActive(false);
         evolveButton.SetActive(false); 
-        selectionWindow.SetActive(false);
+        //selectionWindow.SetActive(false);
         exitButton.SetActive(false);
         generationCounter.SetActive(false); 
     }
@@ -71,7 +71,7 @@ public class IECManager : MonoBehaviour {
     {
         evolveButton.SetActive(false);
         exitButton.SetActive(false);
-        selectionWindow.SetActive(false);
+        //selectionWindow.SetActive(false);
         advanceButton.SetActive(false);
 
         UIStatusWindow.totalModels = populationSize;
@@ -81,7 +81,7 @@ public class IECManager : MonoBehaviour {
     public static void SetUIToSelectionState()
     {
         evolveButton.SetActive(false);
-        selectionWindow.SetActive(true);
+        //selectionWindow.SetActive(true);
         advanceButton.SetActive(true);
         exitButton.SetActive(true); 
 
@@ -92,7 +92,7 @@ public class IECManager : MonoBehaviour {
     public static void SetUIToExitState()
     {
         evolveButton.SetActive(false);
-        selectionWindow.SetActive(false);
+        //selectionWindow.SetActive(false);
         advanceButton.SetActive(false);
         exitButton.SetActive(false);
 
@@ -104,20 +104,5 @@ public class IECManager : MonoBehaviour {
     public static void SetGeneration(uint generation)
     {
         generationCounter.GetComponentInChildren<Text>().text = "Generation: " + generation.ToString(); 
-    }
-
-
-
-    public static int GetSelectionId()
-    {
-
-        if (!GameObject.FindObjectOfType<UISelectionWindow>() || !UISelectionWindow.current_selected)
-        {
-            Debug.LogError("You tried to get a braid id of a destroyed object"); 
-            return 0;
-        }
-
-        string resultString = Regex.Match(UISelectionWindow.current_selected.name, @"\d+").Value;
-        return (Int32.Parse(resultString));
     }
 }

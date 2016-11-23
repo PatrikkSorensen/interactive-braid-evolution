@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Text.RegularExpressions;
+using System;
 
 public class MaterialScript : MonoBehaviour {
 
@@ -55,9 +57,7 @@ public class MaterialScript : MonoBehaviour {
         r.materials = mats;
         selected = true;
 
-        UISelectionWindow.AddBraid(gameObject);
-
-        GameObject gb = GameObject.Find("unit_" + IECManager.GetSelectionId());
+        GameObject gb = GameObject.Find("unit_" + Regex.Match(gameObject.name, @"\d+").Value);
         gb.GetComponent<BraidController>().SetFitness(10.0f);  
     }
 }
