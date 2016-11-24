@@ -43,6 +43,7 @@ public class ModelMessager : MonoBehaviour {
 
         string s = JsonHelper.CreateJSONFromBraids(m_height, m_populationSize, braids);
         Debug.Log(s);
+        
         sender.SendString(s);
     }
 
