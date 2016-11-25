@@ -14,6 +14,8 @@ using SharpNeat.Phenomes;
 using SharpNeat.SpeciationStrategies;
 using SharpNeat.Domains;
 using SharpNEAT.core;
+using UnityEngine;
+using SharpNeat.Decoders.Neat;
 
 public class CPPNExperiment : INeatExperiment
 {
@@ -22,13 +24,13 @@ public class CPPNExperiment : INeatExperiment
     string _name;
     int _populationSize;
     int _specieCount;
-    NetworkActivationScheme _activationSchemeCppn;
     NetworkActivationScheme _activationScheme;
     string _complexityRegulationStr;
     int? _complexityThreshold;
     string _description;
-    bool _lengthCppnInput;
-    CPPNOptimizer m_optimizer;
+    Optimizer m_optimizer;
+    int _inputCount;
+    int _outputCount;
 
     public string Name
     {
@@ -40,16 +42,14 @@ public class CPPNExperiment : INeatExperiment
         get { return _description; }
     }
 
-    // TODO: Needs to change accordingly to the domain 
     public int InputCount
     {
-        get { return _lengthCppnInput ? 7 : 6; }
+        get { return _inputCount; }
     }
 
-    // TODO: Needs to change accordingly to the domain 
     public int OutputCount
     {
-        get { return 2; }
+        get { return _outputCount; }
     }
 
     public int DefaultPopulationSize
@@ -67,20 +67,34 @@ public class CPPNExperiment : INeatExperiment
         get { return _neatGenomeParams; }
     }
 
+    public void SetOptimizer(Optimizer se)
+    {
+        this.m_optimizer = se;
+    }
+
+
     public void Initialize(string name, XmlElement xmlConfig)
+    {
+        Initialize(name, xmlConfig, 6, 3);
+    }
+
+    public void Initialize(string name, XmlElement xmlConfig, int input, int output)
     {
         _name = name;
         _populationSize = XmlUtils.GetValueAsInt(xmlConfig, "PopulationSize");
         _specieCount = XmlUtils.GetValueAsInt(xmlConfig, "SpecieCount");
-        _activationSchemeCppn = ExperimentUtils.CreateActivationScheme(xmlConfig, "ActivationCppn");
         _activationScheme = ExperimentUtils.CreateActivationScheme(xmlConfig, "Activation");
         _complexityRegulationStr = XmlUtils.TryGetValueAsString(xmlConfig, "ComplexityRegulationStrategy");
         _complexityThreshold = XmlUtils.TryGetValueAsInt(xmlConfig, "ComplexityThreshold");
-        _lengthCppnInput = XmlUtils.GetValueAsBool(xmlConfig, "LengthCppnInput");
+        _description = XmlUtils.TryGetValueAsString(xmlConfig, "Description");
 
         _eaParams = new NeatEvolutionAlgorithmParameters();
         _eaParams.SpecieCount = _specieCount;
-        _neatGenomeParams = new NeatGenomeParameters();
+        _neatGenomeParams = new NeatGenomeParameters(); // Activation functions should be added here? 
+        _neatGenomeParams.FeedforwardOnly = _activationScheme.AcyclicNetwork;
+
+        _inputCount = XmlUtils.GetValueAsInt(xmlConfig, "Inputs");
+        _outputCount = XmlUtils.GetValueAsInt(xmlConfig, "Outputs");
     }
 
     public List<NeatGenome> LoadPopulation(XmlReader xr)
@@ -91,20 +105,43 @@ public class CPPNExperiment : INeatExperiment
 
     public void SavePopulation(XmlWriter xw, IList<NeatGenome> genomeList)
     {
-        // Writing node IDs is not necessary for NEAT.
-        NeatGenomeXmlIO.WriteComplete(xw, genomeList, true);
+        NeatGenomeXmlIO.WriteComplete(xw, genomeList, false);
     }
-
 
     public IGenomeDecoder<NeatGenome, IBlackBox> CreateGenomeDecoder()
     {
-        //NOTE: HARCODED STUFF DUDE
-        return CreateGenomeDecoder(12, _lengthCppnInput);
+        return new NeatGenomeDecoder(_activationScheme);
     }
 
     public IGenomeFactory<NeatGenome> CreateGenomeFactory()
     {
-        return new CppnGenomeFactory(InputCount, OutputCount, GetCppnActivationFunctionLibrary(), _neatGenomeParams);
+        return new CppnGenomeFactory(_inputCount, _outputCount);
+    }
+
+    public NeatEvolutionAlgorithm<NeatGenome> CreateEvolutionAlgorithm(string fileName)
+    {
+        List<NeatGenome> genomeList = null;
+        IGenomeFactory<NeatGenome> genomeFactory = CreateGenomeFactory();
+        try
+        {
+            if (fileName.Contains("/.pop.xml"))
+            {
+                throw new Exception();
+            }
+            using (XmlReader xr = XmlReader.Create(fileName))
+            {
+                genomeList = LoadPopulation(xr);
+            }
+        }
+        catch (Exception e1)
+        {
+            Utility.Log(fileName + " Error loading genome from file!\nLoading aborted.\n"
+                                      + e1.Message + "\nJoe: " + fileName);
+            genomeList = genomeFactory.CreateGenomeList(_populationSize, 0);
+
+        }
+
+        return CreateEvolutionAlgorithm(genomeFactory, genomeList);
     }
 
     public NeatEvolutionAlgorithm<NeatGenome> CreateEvolutionAlgorithm()
@@ -114,117 +151,28 @@ public class CPPNExperiment : INeatExperiment
 
     public NeatEvolutionAlgorithm<NeatGenome> CreateEvolutionAlgorithm(int populationSize)
     {
-        // Create a genome factory with our neat genome parameters object and the appropriate number of input and output neuron genes.
         IGenomeFactory<NeatGenome> genomeFactory = CreateGenomeFactory();
 
-        // Create an initial population of randomly generated genomes.
         List<NeatGenome> genomeList = genomeFactory.CreateGenomeList(populationSize, 0);
 
-        // Create evolution algorithm.
         return CreateEvolutionAlgorithm(genomeFactory, genomeList);
     }
 
     public NeatEvolutionAlgorithm<NeatGenome> CreateEvolutionAlgorithm(IGenomeFactory<NeatGenome> genomeFactory, List<NeatGenome> genomeList)
     {
-        // Create distance metric. Mismatched genes have a fixed distance of 10; for matched genes the distance is their weight difference.
+        Debug.Log("Creating CPPN Experiment");
         IDistanceMetric distanceMetric = new ManhattanDistanceMetric(1.0, 0.0, 10.0);
         ISpeciationStrategy<NeatGenome> speciationStrategy = new KMeansClusteringStrategy<NeatGenome>(distanceMetric);
-
-        // Create complexity regulation strategy.
         IComplexityRegulationStrategy complexityRegulationStrategy = ExperimentUtils.CreateComplexityRegulationStrategy(_complexityRegulationStr, _complexityThreshold);
 
-        // Create the evolution algorithm.
-        NeatEvolutionAlgorithm<NeatGenome> ea = new NeatEvolutionAlgorithm<NeatGenome>(_eaParams, speciationStrategy, complexityRegulationStrategy);
+        BraidNeatEvolutionAlgorithm<NeatGenome> ea = new BraidNeatEvolutionAlgorithm<NeatGenome>(_eaParams, speciationStrategy, complexityRegulationStrategy);
 
-        // Create IBlackBox evaluator.
-        CPPNEvaluator evaluator = new CPPNEvaluator(m_optimizer);
+        // Create black box evaluator       
+        BraidEvaluator evaluator = new BraidEvaluator(m_optimizer);
+        IGenomeDecoder<NeatGenome, IBlackBox> genomeDecoder = CreateGenomeDecoder();
+        IGenomeListEvaluator<NeatGenome> innerEvaluator = new BraidListEvaluator<NeatGenome, IBlackBox>(genomeDecoder, evaluator, m_optimizer);
 
-        // Create genome decoder. Decodes to a neural network packaged with an activation scheme that defines a fixed number of activations per evaluation.
-        IGenomeDecoder<NeatGenome, IBlackBox> genomeDecoder = CreateGenomeDecoder(10, _lengthCppnInput);
-
-        // Create a genome list evaluator. This packages up the genome decoder with the genome evaluator.
-        IGenomeListEvaluator<NeatGenome> innerEvaluator = new CPPNListEvaluator<NeatGenome, IBlackBox>(genomeDecoder, evaluator, m_optimizer);
-
-        // Wrap the list evaluator in a 'selective' evaluator that will only evaluate new genomes. That is, we skip re-evaluating any genomes
-        // that were in the population in previous generations (elite genomes). This is determined by examining each genome's evaluation info object.
-        IGenomeListEvaluator<NeatGenome> selectiveEvaluator = new SelectiveGenomeListEvaluator<NeatGenome>(
-                                                                                innerEvaluator,
-                                                                                SelectiveGenomeListEvaluator<NeatGenome>.CreatePredicate_OnceOnly());
-        // Initialize the evolution algorithm.
-        ea.Initialize(selectiveEvaluator, genomeFactory, genomeList);
-
-        // Finished. Return the evolution algorithm
+        ea.Initialize(innerEvaluator, genomeFactory, genomeList);
         return ea;
-    }
-
-    public int VisualFieldResolution
-    {
-        get { return 10; }
-    }
-
-    public bool LengthCppnInput
-    {
-        get { return _lengthCppnInput; }
-    }
-
-
-    #region Public Methods
-
-    /// <summary>
-    /// Creates a genome decoder. We split this code into a separate  method so that it can be re-used by the problem domain visualization code
-    /// (it needs to decode genomes to phenomes in order to create a visualization).
-    /// </summary>
-    /// <param name="visualFieldResolution">The visual field's pixel resolution, e.g. 11 means 11x11 pixels.</param>
-    /// <param name="lengthCppnInput">Indicates if the CPPNs being decoded have an extra input for specifying connection length.</param>
-    public IGenomeDecoder<NeatGenome, IBlackBox> CreateGenomeDecoder(int visualFieldResolution, bool lengthCppnInput)
-    {
-        // Create two layer 'sandwich' substrate.
-        int pixelCount = visualFieldResolution * visualFieldResolution;
-        double pixelSize = 24;
-        double originPixelXY = -1 + (pixelSize / 2.0);
-
-        SubstrateNodeSet inputLayer = new SubstrateNodeSet(pixelCount);
-        SubstrateNodeSet outputLayer = new SubstrateNodeSet(pixelCount);
-
-        // Node IDs start at 1. (bias node is always zero).
-        uint inputId = 1;
-        uint outputId = (uint)(pixelCount + 1);
-        double yReal = originPixelXY;
-
-        for (int y = 0; y < visualFieldResolution; y++, yReal += pixelSize)
-        {
-            double xReal = originPixelXY;
-            for (int x = 0; x < visualFieldResolution; x++, xReal += pixelSize, inputId++, outputId++)
-            {
-                inputLayer.NodeList.Add(new SubstrateNode(inputId, new double[] { xReal, yReal, -1.0 }));
-                outputLayer.NodeList.Add(new SubstrateNode(outputId, new double[] { xReal, yReal, 1.0 }));
-            }
-        }
-
-        List<SubstrateNodeSet> nodeSetList = new List<SubstrateNodeSet>(2);
-        nodeSetList.Add(inputLayer);
-        nodeSetList.Add(outputLayer);
-
-        // Define connection mappings between layers/sets.
-        List<NodeSetMapping> nodeSetMappingList = new List<NodeSetMapping>(1);
-        nodeSetMappingList.Add(NodeSetMapping.Create(0, 1, (double?)null));
-
-        // Construct substrate.
-        Substrate substrate = new Substrate(nodeSetList, DefaultActivationFunctionLibrary.CreateLibraryNeat(SteepenedSigmoid.__DefaultInstance), 0, 0.2, 5, nodeSetMappingList);
-
-        // Create genome decoder. Decodes to a neural network packaged with an activation scheme that defines a fixed number of activations per evaluation.
-        IGenomeDecoder<NeatGenome, IBlackBox> genomeDecoder = new HyperNeatDecoder(substrate, _activationSchemeCppn, _activationScheme, lengthCppnInput);
-        return genomeDecoder;
-    }
-
-    #endregion
-    IActivationFunctionLibrary GetCppnActivationFunctionLibrary()
-    {
-        return DefaultActivationFunctionLibrary.CreateLibraryCppn();
-    }
-
-    public void SetOptimizer(CPPNOptimizer se)
-    {
-        this.m_optimizer = se;
     }
 }

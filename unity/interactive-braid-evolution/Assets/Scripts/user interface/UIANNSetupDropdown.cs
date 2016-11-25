@@ -12,6 +12,7 @@ public class UIANNSetupDropdown : MonoBehaviour {
     {
         Dropdown dropdown = GameObject.Find("ANNSetupDropdown").GetComponent<Dropdown>();
         ANNSetup currentNetworkSetup = (ANNSetup)dropdown.value;
+        Debug.Log(dropdown.value);
         return currentNetworkSetup;
     }
 }
@@ -23,6 +24,7 @@ namespace ExperimentTypes
         SIMPLE,
         VECTOR_BASED,
         MATERIAL_AND_VECTOR, 
-        RANDOM_VECTORS
+        RANDOM_VECTORS, 
+        CPPN_BASED
     }
 }

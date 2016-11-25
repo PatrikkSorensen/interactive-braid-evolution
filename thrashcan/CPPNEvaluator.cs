@@ -12,7 +12,7 @@ public class CPPNEvaluator : IPhenomeEvaluator<IBlackBox>
     ulong _evalCount;
     bool _stopConditionSatisfied;
 
-    CPPNOptimizer optimizer;
+    Optimizer optimizer;
     FitnessInfo fitness;
 
     Dictionary<IBlackBox, FitnessInfo> dict = new Dictionary<IBlackBox, FitnessInfo>();
@@ -27,7 +27,7 @@ public class CPPNEvaluator : IPhenomeEvaluator<IBlackBox>
         get { return _stopConditionSatisfied; }
     }
 
-    public CPPNEvaluator(CPPNOptimizer se)
+    public CPPNEvaluator(Optimizer se)
     {
         this.optimizer = se;
     }
@@ -36,13 +36,12 @@ public class CPPNEvaluator : IPhenomeEvaluator<IBlackBox>
     {
         if (optimizer != null)
         {
-            float waitTime = 2.0f;
+            float waitTime = 4.0f;
 
             optimizer.Evaluate(box);
             hasEvaluated = false;
-            Debug.Log("Evaluating... " + waitTime + " wait time");
-            while (BraidSelector.ShouldEvaluate())
-                yield return new WaitForSeconds(waitTime);
+            Debug.Log("Evaluating with " + waitTime + " seconds wait time");
+            yield return new WaitForSeconds(waitTime);
 
             optimizer.StopEvaluation(box);
             float fit = optimizer.GetFitness(box);

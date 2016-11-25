@@ -38,7 +38,7 @@ public class BraidController : UnitController
         ActivateBraidController(); 
     }
 
-    /********************* CONTROLLER SPECIFIC ACTIVATION FUNCTIONS **********************/
+    /********************* FUNCTIONS FOR ACTIVATING CONTROLLERS **********************/
     protected void ActivateBraidController()
     {
         switch (Optimizer.ANN_SETUP)
@@ -51,6 +51,9 @@ public class BraidController : UnitController
                 break;
             case ANNSetup.RANDOM_VECTORS:
                 ActivateRandomBraidController();
+                return;
+            case ANNSetup.CPPN_BASED:
+                ActivateCPPNController();
                 return;
             default:
                 break;
@@ -72,14 +75,10 @@ public class BraidController : UnitController
 
             OUTPUT_ARRAY[i] = outputArr[0] * 2 - 1;
             OUTPUT_ARRAY[i + 1] = outputArr[1] * 2 - 1;
-
-            //= (float)outputArr[0] * 2 - 1;
-            //(float)outputArr[1] * 2 - 1;
         }
 
         VECTOR_ARRAY = UtilityHelper.MergeArraysFromSimpleANN(INPUT_ARRAY, OUTPUT_ARRAY); 
     }
-
 
     protected void ActivateVectorBraidController()
     {
@@ -106,7 +105,23 @@ public class BraidController : UnitController
         messenger.SendRandomBraidArrays(VECTOR_ARRAY_SIZE);
     }
 
-    /********************* CONTROLLER SETUP FUNCTIONS **********************/
+    protected void ActivateCPPNController()
+    {
+        ISignalArray inputArr = neat.InputSignalArray;
+
+        inputArr[0] = 0.1f;
+        inputArr[1] = 0.2f;
+        inputArr[2] = 0.3f;
+
+        neat.Activate();
+        ISignalArray outputArr = neat.OutputSignalArray;
+
+        Debug.Log(outputArr[0]);
+        Debug.Log(outputArr[1]);
+        Debug.Log(outputArr[2]);
+    }
+
+    /********************* FUNCTIONS FOR SETTING UP CONTROLLERS **********************/
     public void InitializeBraidControllerVariables(IBlackBox box)
     {
         neat = box;
@@ -138,6 +153,16 @@ public class BraidController : UnitController
     protected void SetupVectorANNStructure()
     {
         SetupANNStructure(5, 3, 3); 
+
+        if (Optimizer.Generation < 1)
+            InitializeVectorANNStructure();
+        else
+            SetANNVectorArray();
+    }
+
+    protected void SetupCPPNStructure()
+    {
+        SetupANNStructure(5, 3, 3);
 
         if (Optimizer.Generation < 1)
             InitializeVectorANNStructure();

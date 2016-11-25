@@ -26,8 +26,7 @@ public class CPPNOptimizer : Optimizer {
 
         // set up experiment
         experiment = new CPPNExperiment();
-        experiment.Initialize("Hello", xmlConfig.DocumentElement); 
-        //experiment.Initialize("Braid Experiment", xmlConfig.DocumentElement, 0, 0);
+        experiment.Initialize("Braid Experiment", xmlConfig.DocumentElement, 0, 0);
         experiment.SetOptimizer(this);
     }
 
@@ -70,7 +69,7 @@ public class CPPNOptimizer : Optimizer {
         }
         if (GUI.Button(new Rect(10, 60, 100, 40), "Stop EA"))
         {
-            StopEA();
+           StopEA();
         }
         if (GUI.Button(new Rect(10, 110, 100, 40), "Run best"))
         {
@@ -79,4 +78,46 @@ public class CPPNOptimizer : Optimizer {
 
         GUI.Button(new Rect(10, Screen.height - 70, 100, 60), string.Format("Generation: {0}\nFitness: {1:0.00}", Generation, 0.0f));
     }
+
+    new void StopEA()
+    {
+
+        if (_ea != null && _ea.RunState == SharpNeat.Core.RunState.Running)
+        {
+            Debug.Log("Stopped!!");
+            SaveXMLFiles(); 
+            _ea.Stop();
+        }
+        else
+        {
+            Debug.Log("Couldn't stop...");
+        }
+    }
+
+    new void SaveXMLFiles()
+    {
+        XmlWriterSettings _xwSettings = new XmlWriterSettings();
+        _xwSettings.Indent = true;
+        Debug.Log("Save xml called");
+        DirectoryInfo dirInf = new DirectoryInfo(Application.persistentDataPath);
+        if (!dirInf.Exists)
+        {
+            Debug.Log("Creating subdirectory");
+            dirInf.Create();
+        }
+        using (XmlWriter xw = XmlWriter.Create(popFileSavePath, _xwSettings))
+        {
+            experiment.SavePopulation(xw, _ea.GenomeList);
+            Debug.Log("population file saved to disk");
+        }
+
+        // Also save the best genome
+        using (XmlWriter xw = XmlWriter.Create(champFileSavePath, _xwSettings))
+        {
+            experiment.SavePopulation(xw, new NeatGenome[] { _ea.CurrentChampGenome });
+            Debug.Log("champions file saved to disk");
+        }
+    }
+
+
 }
