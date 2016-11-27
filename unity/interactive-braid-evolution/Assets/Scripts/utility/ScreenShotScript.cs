@@ -1,20 +1,24 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.IO;
+using UnityEngine.UI;
 
 public class ScreenShotScript : MonoBehaviour {
 
-    public GameObject storyboard;
-
-    string path;
-    int currentId, width, height;
-    bool loadedTexture; 
+    public GameObject storyboardContainer;
+    public GameObject backgroundUI; 
+    private string folderPath;
+    private int currentId, imgWidth, imgHeight;
+    private int uiRawImageWidth, borderOffset; 
+    private bool loadedTexture; 
 
 
     void Start()
     {
-        width = height = 256;
-        path = Application.dataPath + "/screenshot_"; 
+        imgWidth = imgHeight = 256;
+        borderOffset = 12; 
+        uiRawImageWidth = 100; 
+        folderPath = Application.dataPath + "/Resources/StoryboardImages/screenshot_"; 
         currentId = 0;
     }
 
@@ -25,7 +29,13 @@ public class ScreenShotScript : MonoBehaviour {
             TakeScreenshot();
 
         if (Input.GetKeyDown(KeyCode.Y))
-            StartCoroutine(CreateRenderTexture()); 
+            StartCoroutine(CreateRenderTexture());
+
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
+            SetBackgroundSize(); 
+            LoadStoryboardImages();
+        }
     }
 
     void TakeScreenshot()
@@ -41,7 +51,7 @@ public class ScreenShotScript : MonoBehaviour {
     {
         yield return new WaitForEndOfFrame();
 
-        Texture2D tex = new Texture2D(width, height, TextureFormat.RGB24, false);
+        Texture2D tex = new Texture2D(imgWidth, imgHeight, TextureFormat.RGB24, false);
         Rect r = new Rect(Screen.width * 0.5f - 100.0f, Screen.height * 0.50f - 100.0f, Screen.width * 0.50f + 100, Screen.height * 0.50f + 100);
 
         tex.ReadPixels(r, 0, 0);
@@ -50,34 +60,69 @@ public class ScreenShotScript : MonoBehaviour {
         var bytes = tex.EncodeToPNG();
         Destroy(tex);
 
-        File.WriteAllBytes(path + currentId.ToString() + ".png", bytes);
-        currentId++;
+        File.WriteAllBytes(folderPath + currentId.ToString() + ".png", bytes);
 
+        currentId++;
         Debug.Log("Created image with texture rendering!");
-        ChangeStoryboardTexture(); 
     }
 
-    void ChangeStoryboardTexture()
+    void LoadStoryboardImages()
     {
         int id = currentId - 1;
-        byte[] fileData = File.ReadAllBytes(path + id.ToString() + ".png");
-        Texture2D tex = new Texture2D(2, 2);
-        tex.LoadImage(fileData);
+        Texture2D[] images = LoadAllImagesFromFolder(folderPath); 
 
-        Renderer r = storyboard.GetComponent<Renderer>();
-        r.material.mainTexture = tex;
+        for(int i = 0; i < images.Length; i++)
+            CreateRawImageGameobject(images[i]);
+
+        SetUIImagesPosition(); 
         Debug.Log("Changed storyboard texture from disk");
     }
 
-    IEnumerator LoadStoryboardFromWeb()
+    void SetUIImagesPosition()
     {
-        string url = "http://images.earthcam.com/ec_metros/ourcams/fridays.jpg";
-        Renderer r = storyboard.GetComponent<Renderer>();
-        r.material.mainTexture = new Texture2D(4, 4, TextureFormat.DXT1, false);
+        int index = 0;
+        int Xoffset = (int) (backgroundUI.GetComponent<RectTransform>().rect.width / 2) - uiRawImageWidth / 2;
+        Xoffset -= borderOffset; 
 
-        WWW www = new WWW(url);
-        yield return www;
-        www.LoadImageIntoTexture(r.material.mainTexture as Texture2D);
-        Debug.Log("Changed storyboard texture from web");
+        Debug.Log(backgroundUI.GetComponent<RectTransform>().rect.width); 
+
+        foreach(Transform t in storyboardContainer.transform)
+        {
+            int x = (index * 100) - Xoffset;
+            t.gameObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(x, 0);
+            index++;
+        }
+
+        storyboardContainer.transform.position = backgroundUI.transform.position; 
+    }
+
+    void SetBackgroundSize()
+    {
+        float height = 200.0f; 
+        backgroundUI.GetComponent<RectTransform>().sizeDelta = new Vector2(Screen.width * 0.75f, Screen.height * 0.25f);
+    }
+    void CreateRawImageGameobject(Texture2D image)
+    {
+        GameObject gb = new GameObject();
+        gb.AddComponent<RawImage>();
+        gb.GetComponent<RawImage>().texture = image;
+        gb.transform.SetParent(storyboardContainer.transform); 
+    }
+
+    Texture2D[] LoadAllImagesFromFolder(string path)
+    {
+        string[] files = System.IO.Directory.GetFiles(Application.dataPath + "/Resources/StoryboardImages/", "*.png");
+        Texture2D[] images = new Texture2D[files.Length];
+        int index = 0; 
+
+        foreach (string s in files)
+        {
+            byte[] fileData = File.ReadAllBytes(s);
+            Texture2D tex = new Texture2D(2, 2);
+            tex.LoadImage(fileData);
+            images[index++] = tex; 
+        }
+
+        return images; 
     }
 }
