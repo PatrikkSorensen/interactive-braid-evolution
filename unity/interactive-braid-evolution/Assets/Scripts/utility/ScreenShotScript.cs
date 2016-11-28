@@ -7,7 +7,8 @@ public class ScreenShotScript : MonoBehaviour {
 
     public GameObject storyboardContainer;
     public GameObject backgroundUI; 
-    private string folderPath;
+    public static string folderPath;
+    public static string screenShotPrefix; 
     private int currentId, imgWidth, imgHeight;
     private int uiRawImageWidth, borderOffset; 
     private bool loadedTexture; 
@@ -18,7 +19,7 @@ public class ScreenShotScript : MonoBehaviour {
         imgWidth = imgHeight = 256;
         borderOffset = 12; 
         uiRawImageWidth = 100; 
-        folderPath = Application.dataPath + "/Resources/StoryboardImages/screenshot_"; 
+        folderPath = Application.dataPath + "/Resources/StoryboardImages/"; 
         currentId = 0;
     }
 
@@ -40,7 +41,7 @@ public class ScreenShotScript : MonoBehaviour {
 
     void TakeScreenshot()
     {
-        string path = Application.dataPath + "/Screenshot.png";
+        string path = Application.dataPath + screenShotPrefix + ".png";
         Debug.Log("Took screenshot and saved it to: " + path);
         Application.CaptureScreenshot(path);
     }
@@ -60,7 +61,7 @@ public class ScreenShotScript : MonoBehaviour {
         var bytes = tex.EncodeToPNG();
         Destroy(tex);
 
-        File.WriteAllBytes(folderPath + currentId.ToString() + ".png", bytes);
+        File.WriteAllBytes(folderPath + screenShotPrefix + currentId.ToString() + ".png", bytes);
 
         currentId++;
         Debug.Log("Created image with texture rendering!");

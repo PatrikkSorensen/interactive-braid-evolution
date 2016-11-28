@@ -12,7 +12,7 @@ using ExperimentTypes;
 public class Optimizer : MonoBehaviour {
 
     // Neat parameters
-    protected BraidExperiment experiment; 
+    protected CPPNExperiment experiment; 
     protected static NeatEvolutionAlgorithm<NeatGenome> _ea;
     protected Dictionary<IBlackBox, UnitController> ControllerMap = new Dictionary<IBlackBox, UnitController>();
     public static ANNSetup ANN_SETUP;
@@ -54,7 +54,9 @@ public class Optimizer : MonoBehaviour {
         xmlConfig.LoadXml(textAsset.text);
 
         // set up experiment
-        experiment = new BraidExperiment();
+        //experiment = new BraidExperiment();
+        experiment = new CPPNExperiment();
+
         experiment.Initialize("Braid Experiment", xmlConfig.DocumentElement, 0, 0);
         experiment.SetOptimizer(this);
 
@@ -109,13 +111,18 @@ public class Optimizer : MonoBehaviour {
 
     public void StopEA()
     {
+        Debug.Log("Trying to stop!"); 
         IECManager.SetUIToExitState(); 
         BraidSelector.SetShouldEvaluate(false);
         //BraidSelector.SetReadyToProgressEvolution(false); 
 
         if (_ea != null && _ea.RunState == SharpNeat.Core.RunState.Running)
         {
+            Debug.Log("Stopped!!");
             _ea.Stop();
+        } else
+        {
+            Debug.Log("Couldn't stop...");
         }
     }
 
@@ -165,6 +172,11 @@ public class Optimizer : MonoBehaviour {
                 textAsset = (TextAsset)Resources.Load("experiment.config.braid.vector");
                 ANN_SETUP = ANNSetup.RANDOM_VECTORS;
                 break;
+            case ANNSetup.CPPN_BASED:
+                Debug.Log("CPPN Based Setup selected!");
+                textAsset = (TextAsset)Resources.Load("experiment.config.braid.cppn");
+                ANN_SETUP = ANNSetup.CPPN_BASED;
+                break;
             default:
                 Debug.LogError("Something went wrong when getting the network setup");
                 textAsset = (TextAsset)Resources.Load("experiment.config.braid.random");
@@ -213,11 +225,11 @@ public class Optimizer : MonoBehaviour {
     }
 
     // Utility functions: 
-    void SaveXMLFiles()
+    protected void SaveXMLFiles()
     {
         XmlWriterSettings _xwSettings = new XmlWriterSettings();
         _xwSettings.Indent = true;
-
+        Debug.Log("Save xml called"); 
         DirectoryInfo dirInf = new DirectoryInfo(Application.persistentDataPath);
         if (!dirInf.Exists)
         {

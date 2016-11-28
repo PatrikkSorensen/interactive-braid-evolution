@@ -17,7 +17,7 @@ public class UDPSender : MonoBehaviour
 
 	void Start ()
 	{
-        IP = "10.13.1.207";
+        IP = "10.1.45.172";
         port = 8051; 
         remoteEndPoint = new IPEndPoint (IPAddress.Parse (IP), port);
         client = new UdpClient();

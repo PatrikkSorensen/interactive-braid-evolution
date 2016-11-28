@@ -38,7 +38,7 @@ public class BraidController : UnitController
         ActivateBraidController(); 
     }
 
-    /********************* CONTROLLER SPECIFIC ACTIVATION FUNCTIONS **********************/
+    /********************* FUNCTIONS FOR ACTIVATING CONTROLLERS **********************/
     protected void ActivateBraidController()
     {
         switch (Optimizer.ANN_SETUP)
@@ -51,7 +51,10 @@ public class BraidController : UnitController
                 break;
             case ANNSetup.RANDOM_VECTORS:
                 ActivateRandomBraidController();
-                return;
+                break;
+            case ANNSetup.CPPN_BASED:
+                ActivateCPPNController();
+                break;
             default:
                 break;
         }
@@ -72,14 +75,10 @@ public class BraidController : UnitController
 
             OUTPUT_ARRAY[i] = outputArr[0] * 2 - 1;
             OUTPUT_ARRAY[i + 1] = outputArr[1] * 2 - 1;
-
-            //= (float)outputArr[0] * 2 - 1;
-            //(float)outputArr[1] * 2 - 1;
         }
 
         VECTOR_ARRAY = UtilityHelper.MergeArraysFromSimpleANN(INPUT_ARRAY, OUTPUT_ARRAY); 
     }
-
 
     protected void ActivateVectorBraidController()
     {
@@ -101,12 +100,37 @@ public class BraidController : UnitController
         VECTOR_ARRAY = UtilityHelper.MergeArraysFromVectorANN(INPUT_ARRAY, DELTA_ARRAY);
     }
 
+    protected void ActivateCPPNController()
+    {
+        ISignalArray inputArr = neat.InputSignalArray;
+        for (int i = 0; i < INPUT_ARRAY.Length; i += 3)
+        {
+            inputArr[0] = INPUT_ARRAY[i];      // x
+            inputArr[1] = INPUT_ARRAY[i + 1];  // y
+            inputArr[2] = INPUT_ARRAY[i + 2];  // z
+            //inputArr[3] = INPUT_ARRAY[i + 2];  // distance away from center
+
+            neat.Activate();
+            ISignalArray outputArr = neat.OutputSignalArray;
+
+            DELTA_ARRAY[i] += outputArr[0]; // x
+            DELTA_ARRAY[i + 1] += outputArr[1]; // y
+            DELTA_ARRAY[i + 2] += outputArr[2]; // z
+
+            //DELTA_ARRAY[i + 2] += outputArr[2]; // material output
+            //DELTA_ARRAY[i + 2] += outputArr[2]; // radius
+        }
+
+        VECTOR_ARRAY = UtilityHelper.MergeArraysFromVectorANN(INPUT_ARRAY, DELTA_ARRAY);
+
+    }
+
     protected void ActivateRandomBraidController()
     {
         messenger.SendRandomBraidArrays(VECTOR_ARRAY_SIZE);
     }
 
-    /********************* CONTROLLER SETUP FUNCTIONS **********************/
+    /********************* FUNCTIONS FOR SETTING UP CONTROLLERS **********************/
     public void InitializeBraidControllerVariables(IBlackBox box)
     {
         neat = box;
@@ -123,6 +147,9 @@ public class BraidController : UnitController
             case ANNSetup.RANDOM_VECTORS:
                 SetupRandomANNStructure();
                 break;
+            case ANNSetup.CPPN_BASED:
+                SetupCPPNStructure();
+                break;
             default:
                 break;
         }
@@ -138,6 +165,16 @@ public class BraidController : UnitController
     protected void SetupVectorANNStructure()
     {
         SetupANNStructure(5, 3, 3); 
+
+        if (Optimizer.Generation < 1)
+            InitializeVectorANNStructure();
+        else
+            SetANNVectorArray();
+    }
+
+    protected void SetupCPPNStructure()
+    {
+        SetupANNStructure(5, 3, 3);
 
         if (Optimizer.Generation < 1)
             InitializeVectorANNStructure();
