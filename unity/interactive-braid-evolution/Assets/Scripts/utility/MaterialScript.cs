@@ -15,7 +15,7 @@ public class MaterialScript : MonoBehaviour {
 
     void Start()
     {
-
+        Debug.Log("Hello??"); 
         r = GetComponent<MeshRenderer>();
         mats = r.materials;
 
@@ -28,6 +28,7 @@ public class MaterialScript : MonoBehaviour {
     {
         if (!selected)
         {
+
             for (int i = 0; i < mats.Length; i++)
                 mats[i] = hoverMat;
 
@@ -48,8 +49,6 @@ public class MaterialScript : MonoBehaviour {
 
     void OnMouseDown()
     {
-        if (UIStatusWindow.currentStatus != UIStatusWindow.STATUS.SIMULATING)
-            return; 
 
         for (int i = 0; i < mats.Length; i++)
             mats[i] = selectedMat;
