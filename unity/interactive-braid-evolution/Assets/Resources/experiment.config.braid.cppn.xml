@@ -1,4 +1,5 @@
 <Config>
+  <ExperimentType>cppn</ExperimentType>
   <PopulationSize>9</PopulationSize>
   <SpecieCount>3</SpecieCount>
   <Inputs>3</Inputs>

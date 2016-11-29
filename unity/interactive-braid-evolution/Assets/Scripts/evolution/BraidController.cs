@@ -38,7 +38,6 @@ public class BraidController : UnitController
         ActivateBraidController(); 
     }
 
-    /********************* FUNCTIONS FOR ACTIVATING CONTROLLERS **********************/
     protected void ActivateBraidController()
     {
         switch (Optimizer.ANN_SETUP)

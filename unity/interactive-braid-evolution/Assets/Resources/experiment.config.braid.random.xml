@@ -1,6 +1,5 @@
-<?xml version="1.0" encoding="utf-8" ?>
-
     <Config>
+      <ExperimentType>ann</ExperimentType>
       <PopulationSize>5</PopulationSize>
       <SpecieCount>3</SpecieCount>
       <Inputs>3</Inputs>

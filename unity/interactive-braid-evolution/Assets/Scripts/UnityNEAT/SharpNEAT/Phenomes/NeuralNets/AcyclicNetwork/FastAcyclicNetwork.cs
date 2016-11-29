@@ -204,7 +204,11 @@ namespace SharpNeat.Phenomes.NeuralNets
                 // Activate current layer's nodes.
                 layerInfo = _layerInfoArr[layerIdx];
                 for(; nodeIdx < layerInfo._endNodeIdx; nodeIdx++) {
-                    _activationArr[nodeIdx] = _nodeActivationFnArr[nodeIdx].Calculate(_activationArr[nodeIdx], _nodeAuxArgsArr[nodeIdx]);
+                    // THIS IS MODIFIED, REMOVE ASAP
+                    IActivationFunction function = _nodeActivationFnArr[nodeIdx];
+                    double result = function.Calculate(_activationArr[nodeIdx], _nodeAuxArgsArr[nodeIdx]);
+                    _nodeActivationFnArr[nodeIdx].Calculate(_activationArr[nodeIdx], _nodeAuxArgsArr[nodeIdx]);
+                    _activationArr[nodeIdx] = result;
                 }
             }
         }

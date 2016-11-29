@@ -56,10 +56,6 @@ namespace SharpNeat.EvolutionAlgorithms
         protected ComplexityRegulationMode _complexityRegulationMode;
         protected readonly IComplexityRegulationStrategy _complexityRegulationStrategy;
 
-        // P. SØRENSEN VARIABLES 
-        public bool ReadyForNextGeneration; 
-        // END OF P. SØRENSEN VARIABLES
-
         #region Constructors
 
         /// <summary>
@@ -150,7 +146,6 @@ namespace SharpNeat.EvolutionAlgorithms
         {
             base.Initialize(genomeListEvaluator, genomeFactory, genomeList);
             Initialize();
-            ReadyForNextGeneration = false; 
         }
 
         /// <summary>
@@ -189,11 +184,6 @@ namespace SharpNeat.EvolutionAlgorithms
 
         #endregion
 
-        public void SetProgressFlag(bool flag)
-        {
-            ReadyForNextGeneration = flag; 
-        }
-
         #region Evolution Algorithm Main Method [PerformOneGeneration]
 
         /// <summary>
@@ -219,20 +209,6 @@ namespace SharpNeat.EvolutionAlgorithms
             // (otherwise we could just evaluate offspringList).
             _genomeList.AddRange(offspringList);
 
-            /**********************  IEC SPECIFIC CODE BEGINS HERE ******************************/ 
-            Logger myLogger = new Logger(new MyLogger());
-            myLogger.Log("Some tag", "MyGameClass Start.");
-
-            // FOR TESTING: 
-            ReadyForNextGeneration = true; 
-            while (!ReadyForNextGeneration)
-            {
-                myLogger.Log("STATUS: " + "waiting for input"); 
-                yield return new WaitForSeconds(2.0f);
-            }
-
-            ReadyForNextGeneration = false; 
-            /**********************  IEC SPECIFIC CODE ENDS HERE   ******************************/
             yield return Coroutiner.StartCoroutine( _genomeListEvaluator.Evaluate(_genomeList));
 
             // Integrate offspring into species.

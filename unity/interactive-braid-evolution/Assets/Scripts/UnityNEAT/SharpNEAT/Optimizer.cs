@@ -12,6 +12,7 @@ using ExperimentTypes;
 public class Optimizer : MonoBehaviour {
 
     // Neat parameters
+    //protected BraidExperiment experiment; 
     protected CPPNExperiment experiment; 
     protected static NeatEvolutionAlgorithm<NeatGenome> _ea;
     protected Dictionary<IBlackBox, UnitController> ControllerMap = new Dictionary<IBlackBox, UnitController>();

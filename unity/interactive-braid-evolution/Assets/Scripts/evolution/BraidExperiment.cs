@@ -75,11 +75,13 @@ public class BraidExperiment : INeatExperiment
 
     public void Initialize(string name, XmlElement xmlConfig)
     {
+        Debug.Log("Initializing braid experiment");
         Initialize(name, xmlConfig, 6, 3);
     }
 
     public void Initialize(string name, XmlElement xmlConfig, int input, int output)
     {
+        Debug.Log("Initializing braid experiment"); 
         _name = name;
         _populationSize = XmlUtils.GetValueAsInt(xmlConfig, "PopulationSize");
         _specieCount = XmlUtils.GetValueAsInt(xmlConfig, "SpecieCount");

@@ -43,13 +43,8 @@ namespace SharpNeat.Genomes.Neat
         //const double DefaultDeleteConnectionMutationProbability = 0.001;
         //const double DefaultConnectionWeightMutationProbability = 0.888;
 
-        //const double DefaultAddNodeMutationProbability = 0.02;
-        //const double DefaultAddConnectionMutationProbability = 0.05;
-        //const double DefaultNodeAuxStateMutationProbability = 0.05;
-        //const double DefaultDeleteConnectionMutationProbability = 0.004;
-
         // FOR BRAID EXPERIMENT: 
-        const double DefaultAddNodeMutationProbability = 0.1;
+        const double DefaultAddNodeMutationProbability = 0.5;
         const double DefaultAddConnectionMutationProbability = 0.2;
         const double DefaultNodeAuxStateMutationProbability = 0.2;
         const double DefaultDeleteConnectionMutationProbability = 0.2;

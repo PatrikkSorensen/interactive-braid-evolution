@@ -105,7 +105,7 @@ public class CPPNExperiment : INeatExperiment
 
     public void SavePopulation(XmlWriter xw, IList<NeatGenome> genomeList)
     {
-        NeatGenomeXmlIO.WriteComplete(xw, genomeList, false);
+        NeatGenomeXmlIO.WriteComplete(xw, genomeList, true);
     }
 
     public IGenomeDecoder<NeatGenome, IBlackBox> CreateGenomeDecoder()
