@@ -1,6 +1,6 @@
 <Config>
-  <PopulationSize>3</PopulationSize>
-  <SpecieCount>3</SpecieCount>
+  <PopulationSize>9</PopulationSize>
+  <SpecieCount>9</SpecieCount>
   <Inputs>3</Inputs>
   <Outputs>3</Outputs>
 
