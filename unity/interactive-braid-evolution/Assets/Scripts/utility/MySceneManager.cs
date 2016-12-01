@@ -9,4 +9,14 @@ public class MySceneManager : MonoBehaviour {
         SceneManager.LoadScene(SplashScreenManager.sceneIndex); 
     }
 
+    public void LoadSelectedScene(int index)
+    {
+        SceneManager.LoadScene(index);
+    }
+
+    public void LoadSceneFromIndex(int i)
+    {
+        SceneManager.LoadScene(i);
+    }
+
 }
