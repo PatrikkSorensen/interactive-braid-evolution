@@ -1,3 +1,0 @@
-3 inputs: the x, y, z values of a vector 
-outputs: x and z cordinate 
-

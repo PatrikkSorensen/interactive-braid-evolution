@@ -1,4 +1,0 @@
-inputs: y cordinate,  e.g the height cordinate
-outputs: x and z cordinate
-
-this leads to a very simple braids, where the only variation the network can do, is to chose where the next modelling point should be on the x and z axis

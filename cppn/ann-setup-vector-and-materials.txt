@@ -1,3 +1,0 @@
-inputs: x, y, z cordinate, e.g the height cordinate
-outputs: x and z cordinate, and one material attribute
-
