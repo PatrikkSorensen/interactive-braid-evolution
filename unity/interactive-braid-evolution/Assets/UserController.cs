@@ -18,7 +18,7 @@ public class UserController : MonoBehaviour {
             MenuController.ToggleMenu();
 
         if (Input.GetKeyDown(KeyCode.R))
-            SceneManager.LoadScene(0); 
+            SceneManager.LoadScene(3); 
 
         float hor = Input.GetAxis("Horizontal");
         float ver = Input.GetAxis("Vertical");
