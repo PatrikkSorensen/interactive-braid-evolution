@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 using System;
+using DG.Tweening; 
 using System.Text.RegularExpressions;
 
 public class IECManager : MonoBehaviour {
@@ -92,8 +93,15 @@ public class IECManager : MonoBehaviour {
     /*********** END OF UI STATES **********/
     public static void HideUI()
     {
-        statusWindowContainer.SetActive(false); 
-        dropDown.SetActive(false); 
+        DisableAllButtons(); 
+    }
+
+    public static void DisableAllButtons()
+    {
+        initializeButton.SetActive(false);
+        dropDown.GetComponent<Image>().CrossFadeAlpha(0.0f, 0.0f, false);
+        dropDown.GetComponentInChildren<Text>().CrossFadeAlpha(0.0f, 0.0f, false);
+        //dropDown.SetActive(false);
         advanceButton.SetActive(false);
         evolveButton.SetActive(false);
         exitButton.SetActive(false);

@@ -42,7 +42,6 @@ public class UDPReciever : MonoBehaviour
 
     private void DecodeJSON(string jsonString)
     {
-        Debug.Log("Decoding message..."); 
         UDPRecievedMessage msg = new UDPRecievedMessage();
         msg = JsonUtility.FromJson<UDPRecievedMessage>(jsonString);
 

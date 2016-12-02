@@ -61,6 +61,12 @@ namespace SharpNEAT.core
                     Coroutiner.StartCoroutine(m_phenomeEvaluator.Evaluate(phenome));
                 }
 
+                while (!BraidSimulationManager.HasControllersCreatedData())
+                {
+                    Debug.Log("Waiting..."); 
+                    yield return new WaitForSeconds(0.2f);
+                }
+
                 ModelMessager messenger = GameObject.FindObjectOfType<ModelMessager>();
                 messenger.SendMessageToGH();
 
@@ -102,11 +108,6 @@ namespace SharpNEAT.core
                     var fit = fitness;
                     fitness /= m_optimizer.Trials; // Averaged fitness
 
-                    if (fit > m_optimizer.StoppingFitness)
-                    {
-                        //  Utility.Log("Fitness is " + fit + ", stopping now because stopping fitness is " + m_optimizer.StoppingFitness);
-                        //  m_phenomeEvaluator.StopConditionSatisfied = true;
-                    }
                     genome.EvaluationInfo.SetFitness(fitness);
                     genome.EvaluationInfo.AuxFitnessArr = fitnessDict[genome][0]._auxFitnessArr;
                 }

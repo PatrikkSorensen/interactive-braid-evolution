@@ -82,6 +82,7 @@ public class ModelMessager : MonoBehaviour {
 
     public Vector3[] GetVectors(int index)
     {
+        Debug.Log("Index oor: " + index); 
         return m_messageVectors[index];
     }
 }

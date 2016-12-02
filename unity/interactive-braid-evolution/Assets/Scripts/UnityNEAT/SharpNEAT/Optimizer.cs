@@ -154,6 +154,7 @@ public class Optimizer : MonoBehaviour {
 
     protected TextAsset SetupANNStructure()
     {
+        Debug.Log("SetupANNStructure from optimizer here"); 
         TextAsset textAsset;
         ANNSetup setup = UIANNSetupDropdown.GetANNSetup();
         switch (setup)

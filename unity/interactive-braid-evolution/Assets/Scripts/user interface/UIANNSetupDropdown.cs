@@ -14,6 +14,12 @@ public class UIANNSetupDropdown : MonoBehaviour {
         ANNSetup currentNetworkSetup = (ANNSetup)dropdown.value;
         return currentNetworkSetup;
     }
+
+    public static void SetANNSetup(int val)
+    {
+        Dropdown dropdown = GameObject.Find("ANNSetupDropdown").GetComponent<Dropdown>();
+        dropdown.value = val;
+    }
 }
 
 namespace ExperimentTypes

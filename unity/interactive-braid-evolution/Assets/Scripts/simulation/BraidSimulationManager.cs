@@ -1,22 +1,25 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 public class BraidSimulationManager : MonoBehaviour {
 
+    public static int vectorArraysMade; 
     public static int evaluationsMade; 
-    public static int populationSize; 
-    
+    public static int populationSize;
+
+    private void Start()
+    {
+        vectorArraysMade = 0;
+        evaluationsMade = 0; 
+    }
 
     public void SetFlagsFromButton(bool b)
     {
         BraidSelector.SetShouldEvaluate(b);
     }
     
-    public static bool HasControllersEvaluated()
-    {
-        //Debug.Log(evaluationsMade + ", " + populationSize); 
-        return (evaluationsMade == populationSize); 
-    }
+
 
 	public static void AdvanceGeneration()
     {
@@ -28,17 +31,30 @@ public class BraidSimulationManager : MonoBehaviour {
 
         // the ann controllers
         BraidSelector.SetShouldEvaluate(true);
-        //BraidSelector.SetReadyToProgressEvolution(false);
 
         // variable resetting
-        ResetObjImportVariables();
+        ResetSimulationValues();
         IECManager.SetUIToModellingState(populationSize);
 
         Debug.Log("Simulation reset and cleaned up, ready for the next one");
     }
 
-    public static void ResetObjImportVariables()
+    public static bool HasControllersEvaluated()
     {
-        GameObject.FindObjectOfType<UDPReciever>().ResetVariables(); 
+        return (evaluationsMade == populationSize);
+    }
+
+
+    internal static bool HasControllersCreatedData()
+    {
+        Debug.Log(vectorArraysMade + ", " + populationSize); 
+        return (vectorArraysMade == populationSize); 
+    }
+
+    public static void ResetSimulationValues()
+    {
+        GameObject.FindObjectOfType<UDPReciever>().ResetVariables();
+        vectorArraysMade = 0;
+        evaluationsMade = 0;
     }
 }

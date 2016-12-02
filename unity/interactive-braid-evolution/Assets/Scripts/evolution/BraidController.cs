@@ -60,6 +60,8 @@ public class BraidController : UnitController
 
         BraidVectors = UtilityHelper.OutputsToBraidVectors(VECTOR_ARRAY, VECTOR_ARRAY_SIZE);
         messenger.AddVectors(braidId, BraidVectors);
+        Debug.Log("Added vectors..."); 
+        BraidSimulationManager.vectorArraysMade++; 
     }
 
     protected void ActivateSimpleBraidController()

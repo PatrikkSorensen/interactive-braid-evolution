@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement; 
 
 public class UserController : MonoBehaviour {
 
@@ -14,7 +15,10 @@ public class UserController : MonoBehaviour {
 
 	void Update () {
         if (Input.GetKeyDown(KeyCode.Escape))
-            MenuController.ToggleMenu(); 
+            MenuController.ToggleMenu();
+
+        if (Input.GetKeyDown(KeyCode.R))
+            SceneManager.LoadScene(0); 
 
         float hor = Input.GetAxis("Horizontal");
         float ver = Input.GetAxis("Vertical");
