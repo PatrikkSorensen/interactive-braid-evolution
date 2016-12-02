@@ -11,15 +11,13 @@ public class UserController : MonoBehaviour {
         mainMenu.GetComponent<MenuController>(); 
         speed = 0.25f; 
 	}
-	
-	// Update is called once per frame
+
 	void Update () {
         if (Input.GetKeyDown(KeyCode.Escape))
             MenuController.ToggleMenu(); 
 
         float hor = Input.GetAxis("Horizontal");
         float ver = Input.GetAxis("Vertical");
-        Debug.Log("h: " + hor + ", v: " + ver); 
         Vector3 v = Camera.main.transform.forward * ver; 
         transform.Translate(v * speed);
 
