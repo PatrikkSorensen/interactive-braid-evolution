@@ -22,7 +22,6 @@ public class UserController : MonoBehaviour {
         transform.Translate(v * speed);
 
         Vector3 v2 = Camera.main.transform.right * hor;
-        Debug.Log(v2); 
         transform.Translate(v2 * speed);
     }
 }

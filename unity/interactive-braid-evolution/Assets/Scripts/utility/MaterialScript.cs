@@ -15,7 +15,6 @@ public class MaterialScript : MonoBehaviour {
 
     void Start()
     {
-        Debug.Log("Hello??"); 
         r = GetComponent<MeshRenderer>();
         mats = r.materials;
 
