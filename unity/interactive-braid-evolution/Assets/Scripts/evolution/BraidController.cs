@@ -159,7 +159,7 @@ public class BraidController : UnitController
             RADIUS_ARRAY[j] = outputArr[4]; 
         }
 
-        VECTOR_ARRAY = UtilityHelper.MergeArraysFromVectorANN(INPUT_ARRAY, OUTPUT_ARRAY);
+        VECTOR_ARRAY = UtilityHelper.MergeArraysFromVectorANN(INPUT_ARRAY, DELTA_ARRAY);
     }
 
     protected void ActivateRandomBraidController()

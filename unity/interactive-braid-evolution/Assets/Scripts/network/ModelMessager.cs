@@ -107,6 +107,7 @@ public class ModelMessager : MonoBehaviour {
 
     public Vector3[] GetVectors(int index)
     {
+        Debug.Log("Getting vectors for braid: " + index); 
         return m_messageVectors[index];
     }
 }
