@@ -100,8 +100,8 @@ public class CPPNExperiment : INeatExperiment
 
     public List<NeatGenome> LoadPopulation(XmlReader xr)
     {
-        NeatGenomeFactory genomeFactory = (NeatGenomeFactory)CreateGenomeFactory();
-        return NeatGenomeXmlIO.ReadCompleteGenomeList(xr, false, genomeFactory);
+        CppnGenomeFactory genomeFactory = (CppnGenomeFactory)CreateGenomeFactory();
+        return NeatGenomeXmlIO.ReadCompleteGenomeList(xr, true, genomeFactory);
     }
 
     public void SavePopulation(XmlWriter xw, IList<NeatGenome> genomeList)
@@ -138,6 +138,8 @@ public class CPPNExperiment : INeatExperiment
         {
             Utility.Log(fileName + " Error loading genome from file!\nLoading aborted.\n"
                                       + e1.Message + "\nJoe: " + fileName);
+
+            Debug.Log("Created new list of genomes..."); 
             genomeList = genomeFactory.CreateGenomeList(_populationSize, 0);
 
         }

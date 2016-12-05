@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Root>
+  <ActivationFunctions>
+    <Fn id="0" name="Linear" prob="0.25" />
+    <Fn id="1" name="BipolarSigmoid" prob="0.25" />
+    <Fn id="2" name="Gaussian" prob="0.25" />
+    <Fn id="3" name="Sine" prob="0.25" />
+  </ActivationFunctions>
+  <Networks>
+    <Network id="0" birthGen="0" fitness="0">
+      <Nodes>
+        <Node type="bias" id="0" fnId="0" />
+        <Node type="in" id="1" fnId="0" />
+        <Node type="in" id="2" fnId="0" />
+        <Node type="in" id="3" fnId="0" />
+        <Node type="out" id="4" fnId="0" />
+        <Node type="out" id="5" fnId="0" />
+        <Node type="out" id="6" fnId="0" />
+        <Node type="hid" id="19" fnId="2" />
+        <Node type="hid" id="20" fnId="3" />
+      </Nodes>
+      <Connections>
+        <Con id="15" src="1" tgt="19" wght="1.2" />
+        <Con id="20" src="2" tgt="19" wght="-1.2" />
+        <Con id="21" src="3" tgt="20" wght="-1.2" />
+        <Con id="22" src="19" tgt="4" wght="-1.2" />
+        <Con id="23" src="19" tgt="5" wght="-1.2" />
+        <Con id="24" src="20" tgt="6" wght="-1.2" />
+      </Connections>
+    </Network>
+    <Network id="4" birthGen="2" fitness="10">
+      <Nodes>
+        <Node type="bias" id="0" fnId="0" />
+        <Node type="in" id="1" fnId="0" />
+        <Node type="in" id="2" fnId="0" />
+        <Node type="in" id="3" fnId="0" />
+        <Node type="out" id="4" fnId="0" />
+        <Node type="out" id="5" fnId="0" />
+        <Node type="out" id="6" fnId="0" />
+        <Node type="hid" id="19" fnId="2" />
+        <Node type="hid" id="20" fnId="3" />
+      </Nodes>
+      <Connections>
+        <Con id="15" src="1" tgt="19" wght="1.2" />
+        <Con id="20" src="2" tgt="19" wght="-1.2" />
+        <Con id="21" src="3" tgt="20" wght="-1.2" />
+        <Con id="22" src="19" tgt="4" wght="-1.2" />
+        <Con id="23" src="19" tgt="5" wght="-1.2" />
+        <Con id="24" src="20" tgt="6" wght="-1.2" />
+      </Connections>
+    </Network>
+    <Network id="5" birthGen="2" fitness="0">
+      <Nodes>
+        <Node type="bias" id="0" fnId="0" />
+        <Node type="in" id="1" fnId="0" />
+        <Node type="in" id="2" fnId="0" />
+        <Node type="in" id="3" fnId="0" />
+        <Node type="out" id="4" fnId="0" />
+        <Node type="out" id="5" fnId="0" />
+        <Node type="out" id="6" fnId="0" />
+        <Node type="hid" id="19" fnId="0" />
+        <Node type="hid" id="20" fnId="1" />
+      </Nodes>
+      <Connections>
+        <Con id="15" src="1" tgt="19" wght="1.2" />
+        <Con id="20" src="2" tgt="19" wght="-1.2" />
+        <Con id="21" src="3" tgt="20" wght="-1.2" />
+        <Con id="22" src="19" tgt="4" wght="-1.2" />
+        <Con id="23" src="19" tgt="5" wght="-1.2" />
+        <Con id="24" src="20" tgt="6" wght="-1.2" />
+      </Connections>
+    </Network>
+  </Networks>
+</Root>

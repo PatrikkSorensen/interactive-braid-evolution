@@ -34,7 +34,8 @@ public class Optimizer : MonoBehaviour {
     public bool LoadPopulation = true;
     public GameObject Unit;
     protected GameObject UnitContainer;
-    protected string popFileSavePath = null; 
+    protected string popFileSavePath = null;
+    protected string popLoadSavePath = null;
     protected string champFileSavePath = null;
 
 
@@ -42,6 +43,7 @@ public class Optimizer : MonoBehaviour {
     {
         champFileSavePath = Application.dataPath + "/Resources/xml/braid.champ.xml";
         popFileSavePath = Application.dataPath + "/Resources/xml/pop.xml";
+        popLoadSavePath = Application.dataPath + "/Resources/xml/startup_populations/pop.cppn.xml";
     }
 
     public void InitializeEA()
@@ -85,7 +87,8 @@ public class Optimizer : MonoBehaviour {
     public void StartEA()
     {
         Debug.Log("----------------------  SETTING UP EA IN UNITY SCENE ----------------------");
-        _ea = experiment.CreateEvolutionAlgorithm();
+        //_ea = experiment.CreateEvolutionAlgorithm();
+        _ea = experiment.CreateEvolutionAlgorithm(popLoadSavePath);
         _ea.UpdateEvent += new EventHandler(ea_UpdateEvent);
         _ea.PausedEvent += new EventHandler(ea_PauseEvent);
         _ea.StartContinue();
@@ -112,19 +115,11 @@ public class Optimizer : MonoBehaviour {
 
     public void StopEA()
     {
-        Debug.Log("Trying to stop!"); 
         IECManager.SetUIToExitState(); 
         BraidSelector.SetShouldEvaluate(false);
-        //BraidSelector.SetReadyToProgressEvolution(false); 
 
         if (_ea != null && _ea.RunState == SharpNeat.Core.RunState.Running)
-        {
-            Debug.Log("Stopped!!");
             _ea.Stop();
-        } else
-        {
-            Debug.Log("Couldn't stop...");
-        }
     }
 
     public void Evaluate(IBlackBox phenome)
@@ -133,12 +128,10 @@ public class Optimizer : MonoBehaviour {
         GameObject obj = Instantiate(Unit, Unit.transform.position, Unit.transform.rotation) as GameObject;
         BraidController controller = obj.GetComponent<BraidController>();
 
-        /* SPECIFIC TO THE BRAID CONTROLLER EXPERIMENT */ 
         obj.transform.parent = UnitContainer.transform;
         int id = UnitContainer.transform.childCount - 1; 
         obj.name = "unit_" + id;
         controller.BraidId = id;
-        /* END OF SPECIFIC OPERATIONS TO THE BRAID EXPERIMENT */
 
         ControllerMap.Add(phenome, controller);
         controller.CURRENT_GENERATION = (int) _ea.CurrentGeneration; 

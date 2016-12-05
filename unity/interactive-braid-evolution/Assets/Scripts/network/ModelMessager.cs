@@ -44,7 +44,6 @@ public class ModelMessager : MonoBehaviour {
     {
         IECManager.SetUIToModellingState(m_populationSize);
         
-        //Braid[] braids = CreateBraidArray(m_messageVectors);
         Braid[] braids = CreateBraidArray(m_messageVectors, m_materialValues, m_radiusValues); 
 
         string s = JsonHelper.CreateJSONFromBraids(m_height, m_populationSize, braids);
