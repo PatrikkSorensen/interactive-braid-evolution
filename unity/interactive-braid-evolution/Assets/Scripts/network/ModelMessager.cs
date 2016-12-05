@@ -21,6 +21,7 @@ public class ModelMessager : MonoBehaviour {
 
     public void SetupEvolutionParameters(int populationSize)
     {
+        Debug.Log("Set up evolution parameters: " + populationSize);
         m_populationSize = populationSize;
         m_height = UISliderUpdater.GetValue();
 
@@ -95,6 +96,7 @@ public class ModelMessager : MonoBehaviour {
 
     public void AddMaterialArray(int index, double[] array)
     {
+        
         m_materialValues[index] = array; 
     }
 

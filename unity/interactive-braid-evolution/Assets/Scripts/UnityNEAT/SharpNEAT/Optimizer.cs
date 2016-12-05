@@ -43,7 +43,7 @@ public class Optimizer : MonoBehaviour {
     {
         champFileSavePath = Application.dataPath + "/Resources/xml/braid.champ.xml";
         popFileSavePath = Application.dataPath + "/Resources/xml/pop.xml";
-        popLoadSavePath = Application.dataPath + "/Resources/xml/startup_populations/pop.cppn.xml";
+        popLoadSavePath = Application.dataPath + "/Resources/xml/startup_populations/pop.cppn.ver2.xml";
     }
 
     public void InitializeEA()
@@ -153,32 +153,32 @@ public class Optimizer : MonoBehaviour {
         {
             case ANNSetup.SIMPLE:
                 Debug.Log("Simple setup booted up!");
-                textAsset = (TextAsset)Resources.Load("experiment.config.braid.simple");
+                textAsset = (TextAsset)Resources.Load("ExperimentSetups/experiment.config.braid.simple");
                 ANN_SETUP = ANNSetup.SIMPLE;
                 break;
             case ANNSetup.VECTOR_BASED:
                 Debug.Log("Vector Based Setup selected!");
-                textAsset = (TextAsset)Resources.Load("experiment.config.braid.vector");
+                textAsset = (TextAsset)Resources.Load("ExperimentSetups/experiment.config.braid.vector");
                 ANN_SETUP = ANNSetup.VECTOR_BASED;
                 break;
             case ANNSetup.RANDOM_VECTORS:
                 Debug.Log("Vector Based Setup selected!");
-                textAsset = (TextAsset)Resources.Load("experiment.config.braid.vector");
+                textAsset = (TextAsset)Resources.Load("ExperimentSetups/experiment.config.braid.vector");
                 ANN_SETUP = ANNSetup.RANDOM_VECTORS;
                 break;
             case ANNSetup.CPPN_BASED:
                 Debug.Log("CPPN Based Setup selected!");
-                textAsset = (TextAsset)Resources.Load("experiment.config.braid.cppn");
+                textAsset = (TextAsset)Resources.Load("ExperimentSetups/experiment.config.braid.cppn");
                 ANN_SETUP = ANNSetup.CPPN_BASED;
                 break;
             case ANNSetup.CPPN_VER2:
                 Debug.Log("CPPN Ver2 Setup selected!");
-                textAsset = (TextAsset)Resources.Load("experiment.config.braid.cppn.v2");
+                textAsset = (TextAsset)Resources.Load("ExperimentSetups/experiment.config.braid.cppn.v2");
                 ANN_SETUP = ANNSetup.CPPN_VER2;
                 break;
             default:
                 Debug.LogError("Something went wrong when getting the network setup");
-                textAsset = (TextAsset)Resources.Load("experiment.config.braid.random");
+                textAsset = (TextAsset)Resources.Load("ExperimentSetups/experiment.config.braid.random");
                 break;
         }
 

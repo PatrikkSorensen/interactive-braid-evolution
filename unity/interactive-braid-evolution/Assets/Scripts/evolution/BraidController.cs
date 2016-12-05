@@ -64,6 +64,9 @@ public class BraidController : UnitController
         }
 
         BraidVectors = UtilityHelper.OutputsToBraidVectors(VECTOR_ARRAY, VECTOR_ARRAY_SIZE);
+
+        messenger.AddMaterialArray(braidId, MATERIAL_ARRAY);
+        messenger.AddRadiusArray(braidId, RADIUS_ARRAY);
         messenger.AddVectors(braidId, BraidVectors);
         Debug.Log("Added vectors..."); 
         BraidSimulationManager.vectorArraysMade++; 
@@ -139,7 +142,7 @@ public class BraidController : UnitController
         {
             Vector3 v = new Vector3((float) INPUT_ARRAY[i], (float) INPUT_ARRAY[i + 1], (float) INPUT_ARRAY[i + 2]); 
             double distance = UtilityHelper.GetDistanceFromCenter(v, 10.0f, -10.0f);
-            Debug.Log(distance); 
+            //Debug.Log(distance); 
 
             inputArr[0] = INPUT_ARRAY[i];      // x
             inputArr[1] = INPUT_ARRAY[i + 1];  // y
@@ -156,8 +159,6 @@ public class BraidController : UnitController
             RADIUS_ARRAY[j] = outputArr[4]; 
         }
 
-        messenger.AddMaterialArray(braidId, MATERIAL_ARRAY);
-        messenger.AddRadiusArray(braidId, RADIUS_ARRAY);
         VECTOR_ARRAY = UtilityHelper.MergeArraysFromVectorANN(INPUT_ARRAY, OUTPUT_ARRAY);
     }
 
