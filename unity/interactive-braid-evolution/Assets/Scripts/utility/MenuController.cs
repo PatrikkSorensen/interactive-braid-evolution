@@ -3,10 +3,21 @@ using System.Collections;
 
 public class MenuController : MonoBehaviour {
 
+    private static Animator anim;
+
+    private void Start()
+    {
+        anim = GameObject.FindGameObjectWithTag("MainMenu").GetComponent<Animator>();
+
+    }
 
     public static void ToggleMenu()
     {
-        GameObject menu = GameObject.FindGameObjectWithTag("MainMenu");
-        menu.GetComponent<Animator>().SetTrigger("fade"); 
+        anim.SetTrigger("fade");
+    }
+    
+    public void ToggleShortcuts()
+    {
+        anim.SetTrigger("shortcuts");
     }
 }
