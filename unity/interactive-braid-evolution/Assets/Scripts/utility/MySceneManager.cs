@@ -3,11 +3,6 @@ using System.Collections;
 using UnityEngine.SceneManagement;
 
 public class MySceneManager : MonoBehaviour {
-
-    private void Start()
-    {
-        Debug.Log("Scene manager here"); 
-    }
     public void LoadSelectedScene()
     {
         SceneManager.LoadScene(SplashScreenManager.sceneIndex); 

@@ -10,7 +10,10 @@ public class ModelMessager : MonoBehaviour {
     // Message variables
     private int m_populationSize = 1;
     private int m_height = 1; 
+
     private Vector3[][] m_messageVectors;
+    private double[][] m_materialValues;
+    private double[][] m_radiusValues;
 
     void Start () {
         sender = GameObject.FindObjectOfType<UDPSender>(); 
@@ -20,9 +23,11 @@ public class ModelMessager : MonoBehaviour {
     {
         m_populationSize = populationSize;
         m_height = UISliderUpdater.GetValue();
-        m_messageVectors = new Vector3[populationSize][];
-    }
 
+        m_messageVectors = new Vector3[populationSize][];
+        m_materialValues = new double[populationSize][]; 
+        m_radiusValues = new double[populationSize][]; 
+    }
 
 
     public void SendRandomBraidArrays(int populationSize)
@@ -39,7 +44,8 @@ public class ModelMessager : MonoBehaviour {
     {
         IECManager.SetUIToModellingState(m_populationSize);
         
-        Braid[] braids = CreateBraidArray(m_messageVectors);
+        //Braid[] braids = CreateBraidArray(m_messageVectors);
+        Braid[] braids = CreateBraidArray(m_messageVectors, m_materialValues, m_radiusValues); 
 
         string s = JsonHelper.CreateJSONFromBraids(m_height, m_populationSize, braids);
         Debug.Log(s);
@@ -52,12 +58,20 @@ public class ModelMessager : MonoBehaviour {
         Braid[] braids = new Braid[m_populationSize];
 
         for (int i = 0; i < braids.Length; i++)
-        {
-            Braid b = new Braid("braid_" + i.ToString(), braidVectors[i]);
-            braids[i] = b;
-        }
+            braids[i] = new Braid("braid_" + i.ToString(), braidVectors[i]);
+
 
         return braids; 
+    }
+
+    public Braid[] CreateBraidArray(Vector3[][] braidVectors, double[][] braidMaterials, double[][] braidRadius)
+    {
+        Braid[] braids = new Braid[m_populationSize];
+
+        for (int i = 0; i < braids.Length; i++)
+            braids[i] = new Braid("braid_" + i.ToString(), braidVectors[i], braidMaterials[i], braidRadius[i]);
+
+        return braids;
     }
 
     public static Braid[] CreateRandomBraidArray(int populationSize)
@@ -78,6 +92,16 @@ public class ModelMessager : MonoBehaviour {
     public void AddVectors(int index, Vector3[] vectors)
     {
         m_messageVectors[index] = vectors;
+    }
+
+    public void AddMaterialArray(int index, double[] array)
+    {
+        m_materialValues[index] = array; 
+    }
+
+    public void AddRadiusArray(int index, double[] array)
+    {
+        m_radiusValues[index] = array;
     }
 
     public Vector3[] GetVectors(int index)

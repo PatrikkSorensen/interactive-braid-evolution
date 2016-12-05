@@ -95,6 +95,7 @@ public class CPPNExperiment : INeatExperiment
 
         _inputCount = XmlUtils.GetValueAsInt(xmlConfig, "Inputs");
         _outputCount = XmlUtils.GetValueAsInt(xmlConfig, "Outputs");
+        Debug.Log("Initialized with " + InputCount + " inputs and " + _outputCount + " outputs"); 
     }
 
     public List<NeatGenome> LoadPopulation(XmlReader xr)

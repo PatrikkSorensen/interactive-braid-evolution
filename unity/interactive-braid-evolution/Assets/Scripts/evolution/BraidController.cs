@@ -16,7 +16,9 @@ public class BraidController : UnitController
     double[] INPUT_ARRAY;
     double[] OUTPUT_ARRAY;
     double[] DELTA_ARRAY;
-    double[] VECTOR_ARRAY; 
+    double[] VECTOR_ARRAY;
+    double[] MATERIAL_ARRAY;
+    double[] RADIUS_ARRAY; 
 
     protected IBlackBox neat;
     protected float fitness = 0.0f;
@@ -53,6 +55,9 @@ public class BraidController : UnitController
                 break;
             case ANNSetup.CPPN_BASED:
                 ActivateCPPNController();
+                break;
+            case ANNSetup.CPPN_VER2:
+                ActivateCPPNVer2();
                 break;
             default:
                 break;
@@ -126,6 +131,36 @@ public class BraidController : UnitController
 
     }
 
+    protected void ActivateCPPNVer2()
+    {
+        ISignalArray inputArr = neat.InputSignalArray;
+        int i, j;
+        for (i = j = 0; i < INPUT_ARRAY.Length; i += 3, j++)
+        {
+            Vector3 v = new Vector3((float) INPUT_ARRAY[i], (float) INPUT_ARRAY[i + 1], (float) INPUT_ARRAY[i + 2]); 
+            double distance = UtilityHelper.GetDistanceFromCenter(v, 10.0f, -10.0f);
+            Debug.Log(distance); 
+
+            inputArr[0] = INPUT_ARRAY[i];      // x
+            inputArr[1] = INPUT_ARRAY[i + 1];  // y
+            inputArr[2] = INPUT_ARRAY[i + 2];  // z
+            inputArr[3] = distance; 
+
+            neat.Activate();
+            ISignalArray outputArr = neat.OutputSignalArray;
+
+            DELTA_ARRAY[i] += outputArr[0]; 
+            DELTA_ARRAY[i + 1] += outputArr[1]; 
+            DELTA_ARRAY[i + 2] += outputArr[2];
+            MATERIAL_ARRAY[j] = outputArr[3]; 
+            RADIUS_ARRAY[j] = outputArr[4]; 
+        }
+
+        messenger.AddMaterialArray(braidId, MATERIAL_ARRAY);
+        messenger.AddRadiusArray(braidId, RADIUS_ARRAY);
+        VECTOR_ARRAY = UtilityHelper.MergeArraysFromVectorANN(INPUT_ARRAY, OUTPUT_ARRAY);
+    }
+
     protected void ActivateRandomBraidController()
     {
         messenger.SendRandomBraidArrays(VECTOR_ARRAY_SIZE);
@@ -151,7 +186,11 @@ public class BraidController : UnitController
             case ANNSetup.CPPN_BASED:
                 SetupCPPNStructure();
                 break;
+            case ANNSetup.CPPN_VER2:
+                SetupCPPNVer2Structure();
+                break;
             default:
+                Debug.LogError("No braid controller variables has been initialized."); 
                 break;
         }
     }
@@ -173,6 +212,11 @@ public class BraidController : UnitController
             SetANNVectorArray();
     }
 
+    protected void SetupRandomANNStructure()
+    {
+        VECTOR_ARRAY_SIZE = 12;
+    }
+
     protected void SetupCPPNStructure()
     {
         SetupANNStructure(5, 3, 3);
@@ -183,6 +227,20 @@ public class BraidController : UnitController
             SetANNVectorArray();
     }
 
+    protected void SetupCPPNVer2Structure()
+    {
+        SetupANNStructure(5, 4, 5); 
+
+        if (Optimizer.Generation < 1) 
+            InitializeVectorANNStructure();
+        else
+            SetANNVectorArray();
+
+        MATERIAL_ARRAY = new double[VECTOR_ARRAY_SIZE];
+        RADIUS_ARRAY = new double[VECTOR_ARRAY_SIZE];
+    }
+
+
     protected void SetANNVectorArray()
     {
         Vector3[] temp = messenger.GetVectors(BraidId);
@@ -192,11 +250,11 @@ public class BraidController : UnitController
 
     protected void InitializeVectorANNStructure()
     {
-        //Vector3[] TEMP_ARRAY = UtilityHelper.CreateRandomVectors(-10, 10, VECTOR_ARRAY_SIZE, 2);
         Vector3[] TEMP_ARRAY = UtilityHelper.CreateEmptyVector3Array(VECTOR_ARRAY_SIZE, -10, 10);
         INPUT_ARRAY = UtilityHelper.Vector3ToDoubleArray(TEMP_ARRAY);
         INPUT_ARRAY = UtilityHelper.NormalizeInputVector3Array(INPUT_ARRAY, -10, VECTOR_ARRAY_SIZE * 2);
     }
+
 
     protected void SetupANNStructure(int vectorSize, int inputSize, int outputSize)
     {
@@ -208,14 +266,12 @@ public class BraidController : UnitController
         DELTA_ARRAY = new double[VECTOR_ARRAY_SIZE * 3];
     }
 
-    protected void SetupRandomANNStructure()
-    {
-        VECTOR_ARRAY_SIZE = 12;
-    }
+
 
     public void SetFitness(float newFitness) { fitness = newFitness; }
     public override float GetFitness() { return fitness; }
     public override void Stop() { Debug.Log("Stop braidController called"); }
+
     public void DebugNetwork()
     {
         Debug.Log("Debugging network for: " + gameObject.name); 

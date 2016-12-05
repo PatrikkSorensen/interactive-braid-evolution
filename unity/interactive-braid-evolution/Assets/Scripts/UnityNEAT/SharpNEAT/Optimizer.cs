@@ -154,7 +154,6 @@ public class Optimizer : MonoBehaviour {
 
     protected TextAsset SetupANNStructure()
     {
-        Debug.Log("SetupANNStructure from optimizer here"); 
         TextAsset textAsset;
         ANNSetup setup = UIANNSetupDropdown.GetANNSetup();
         switch (setup)
@@ -178,6 +177,11 @@ public class Optimizer : MonoBehaviour {
                 Debug.Log("CPPN Based Setup selected!");
                 textAsset = (TextAsset)Resources.Load("experiment.config.braid.cppn");
                 ANN_SETUP = ANNSetup.CPPN_BASED;
+                break;
+            case ANNSetup.CPPN_VER2:
+                Debug.Log("CPPN Ver2 Setup selected!");
+                textAsset = (TextAsset)Resources.Load("experiment.config.braid.cppn.v2");
+                ANN_SETUP = ANNSetup.CPPN_VER2;
                 break;
             default:
                 Debug.LogError("Something went wrong when getting the network setup");

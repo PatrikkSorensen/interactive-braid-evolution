@@ -22,6 +22,13 @@ public class UtilityHelper : MonoBehaviour {
         return normalizedArray;
     }
 
+    public static double NormalizeDouble(double d, float max, float min)
+    {
+        d += Mathf.Abs(min);
+        d /= (max - min);
+        return d; 
+    }
+
     public static Vector3[] CreateRandomVectors(int min, int max, int size, int yOffset)
     {
         int multiplier = (max + Mathf.Abs(min)) / size; 
@@ -45,12 +52,6 @@ public class UtilityHelper : MonoBehaviour {
         return v;
     }
 
-    #region double array normalizing and creation
-    /// <summary>
-    /// Creates a double array with value i * 2, where i is going from 0 to size
-    /// </summary>
-    /// <param name="size"></param>
-    /// <returns></returns>
     public static double[] CreateInputDoubleArray(int size)
     {
         double[] inputVectors = new double[size];
@@ -60,11 +61,6 @@ public class UtilityHelper : MonoBehaviour {
         return inputVectors;
     }
 
-    /// <summary>
-    /// Normalizes values between min and max in a range of [-1, 1]
-    /// </summary>
-    /// <param name="inputs"></param>
-    /// <returns></returns>
     public static double[] NormalizeInputDoubleArray(double[] inputs, float min, float max)
     {
         double[] normalizedArray = new double[inputs.Length];
@@ -78,7 +74,6 @@ public class UtilityHelper : MonoBehaviour {
 
         return normalizedArray;
     }
-    #endregion
 
     public static Vector3[] OutputsToBraidVectors(double[] outputs, int size)
     {
@@ -87,7 +82,13 @@ public class UtilityHelper : MonoBehaviour {
         return braidVectors;
     }
 
-
+    public static double GetDistanceFromCenter(Vector3 v, float max, float min)
+    {
+        //TODO: This is very hardcoded, could be moved as the fourth dimension when creating vector array
+        double f = v.magnitude * 10;
+        f = NormalizeDouble(f, 17.32f, 0.0f);
+        return f; 
+    }
 
     public static Vector3[] DoubleToBraidVectors(double[] inputs, double[] outputs, int size)
     {
@@ -139,13 +140,6 @@ public class UtilityHelper : MonoBehaviour {
         return doubleArray; 
     }
 
-
-    /// <summary>
-    /// Merges input and output array, so they can be converted to a vector list.
-    /// </summary>
-    /// <param name="arr1">Inputs sent to the ANN</param>
-    /// <param name="arr2">Outputs recieved to the ANN</param>
-    /// <returns></returns>
     public static double[] MergeArraysFromSimpleANN(double[] arr1, double[] arr2)
     {
         int size = arr1.Length + arr2.Length; 
@@ -192,6 +186,37 @@ public class UtilityHelper : MonoBehaviour {
         }
 
         return res; 
+    }
+
+    public static double[] MergeArraysFromCPPNVer2(double[] inputs, double[] deltaValues, double[] matValues, double[] radValues)
+    {
+
+        double[] res = new double[inputs.Length];
+
+        for (int i = 0; i < inputs.Length; i += 3)
+        {
+
+            // TODO: This can be made smarter...
+            //double x = (inputs[i] + deltaValues[i] > 1.0) ? inputs[i] + deltaValues[i] : 1.0; 
+            double x = inputs[i] + deltaValues[i];
+            double y = inputs[i + 1] + deltaValues[i + 1];
+            double z = inputs[i + 2] + deltaValues[i + 2];
+
+            if (x > 1.0) x = 1.0;
+            if (x < -1.0) x = 1.0;
+
+            if (y > 1.0) y = 1.0;
+            if (y > 1.0) y = -1.0;
+
+            if (z > 1.0) z = 1.0;
+            if (z > 1.0) z = -1.0;
+
+            res[i] = x;
+            res[i + 1] = y;
+            res[i + 2] = z;
+        }
+
+        return res;
     }
 
     public static void NormalizeDeltaValues(double[] deltaArray)

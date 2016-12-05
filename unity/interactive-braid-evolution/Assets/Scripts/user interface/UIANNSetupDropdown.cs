@@ -30,6 +30,7 @@ namespace ExperimentTypes
         VECTOR_BASED,
         MATERIAL_AND_VECTOR, 
         RANDOM_VECTORS, 
-        CPPN_BASED
+        CPPN_BASED, 
+        CPPN_VER2
     }
 }

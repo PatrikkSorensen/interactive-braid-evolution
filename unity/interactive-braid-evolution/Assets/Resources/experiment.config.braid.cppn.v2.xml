@@ -1,0 +1,15 @@
+<Config>
+  <PopulationSize>9</PopulationSize>
+  <SpecieCount>9</SpecieCount>
+  <Inputs>4</Inputs>
+  <Outputs>5</Outputs>
+
+  <Activation>
+    <Scheme>Acyclic</Scheme>
+  </Activation>
+  <ComplexityRegulationStrategy>Absolute</ComplexityRegulationStrategy>
+  <ComplexityThreshold>10</ComplexityThreshold>
+  <Description>
+    Interactive-braid-evolution description goes right here!
+  </Description>
+</Config>
