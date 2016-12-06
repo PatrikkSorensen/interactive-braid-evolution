@@ -26,11 +26,6 @@ namespace ExperimentTypes
 {
     public enum ANNSetup
     {
-        SIMPLE,
-        VECTOR_BASED,
-        MATERIAL_AND_VECTOR, 
-        RANDOM_VECTORS, 
-        CPPN_BASED, 
-        CPPN_VER2
+        CPPN 
     }
 }

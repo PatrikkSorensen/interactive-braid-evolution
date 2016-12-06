@@ -21,7 +21,6 @@ public class ModelMessager : MonoBehaviour {
 
     public void SetupEvolutionParameters(int populationSize)
     {
-        Debug.Log("Set up evolution parameters: " + populationSize);
         m_populationSize = populationSize;
         m_height = UISliderUpdater.GetValue();
 
@@ -77,7 +76,6 @@ public class ModelMessager : MonoBehaviour {
     public static Braid[] CreateRandomBraidArray(int populationSize)
     {
         Braid[] braids = new Braid[populationSize];
-        float multiplier = (float)UISliderUpdater.GetValue(); 
         for (int i = 0; i < braids.Length; i++)
         {
             Vector3[] vects = UtilityHelper.CreateRandomVectors(0, 5, 6, 2);  

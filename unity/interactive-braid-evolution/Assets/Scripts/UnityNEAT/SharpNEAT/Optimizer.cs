@@ -51,7 +51,7 @@ public class Optimizer : MonoBehaviour {
         
         // set up network structure from dropdown
         XmlDocument xmlConfig = new XmlDocument();
-        TextAsset textAsset = SetupANNStructure();
+        TextAsset textAsset = (TextAsset)Resources.Load("ExperimentSetups/experiment.config.braid.cppn.v2");
 
         // load in XML
         xmlConfig.LoadXml(textAsset.text);
@@ -76,6 +76,7 @@ public class Optimizer : MonoBehaviour {
             UnitContainer = new GameObject("UnitContainer");
 
         // setup the relevant ui
+        ANN_SETUP = ANNSetup.CPPN;
         IECManager.SetUIToEvolvingState();
         BraidSimulationManager.populationSize = PopulationSize;
         BraidSimulationManager.evaluationsMade = 0; 
@@ -92,9 +93,6 @@ public class Optimizer : MonoBehaviour {
         _ea.UpdateEvent += new EventHandler(ea_UpdateEvent);
         _ea.PausedEvent += new EventHandler(ea_PauseEvent);
         _ea.StartContinue();
-
-        SetTimeScale();
-
         Debug.Log("------------------- FINISHED SETTING UP EA -------------------------------");
     }
 
@@ -109,7 +107,6 @@ public class Optimizer : MonoBehaviour {
 
     protected void ea_PauseEvent(object sender, EventArgs e)
     {     
-        ResetTimeScale();
         SaveXMLFiles(); 
     }
 
@@ -145,64 +142,6 @@ public class Optimizer : MonoBehaviour {
         Destroy(ct.gameObject);
     }
 
-    protected TextAsset SetupANNStructure()
-    {
-        TextAsset textAsset;
-        ANNSetup setup = UIANNSetupDropdown.GetANNSetup();
-        switch (setup)
-        {
-            case ANNSetup.SIMPLE:
-                Debug.Log("Simple setup booted up!");
-                textAsset = (TextAsset)Resources.Load("ExperimentSetups/experiment.config.braid.simple");
-                ANN_SETUP = ANNSetup.SIMPLE;
-                break;
-            case ANNSetup.VECTOR_BASED:
-                Debug.Log("Vector Based Setup selected!");
-                textAsset = (TextAsset)Resources.Load("ExperimentSetups/experiment.config.braid.vector");
-                ANN_SETUP = ANNSetup.VECTOR_BASED;
-                break;
-            case ANNSetup.RANDOM_VECTORS:
-                Debug.Log("Vector Based Setup selected!");
-                textAsset = (TextAsset)Resources.Load("ExperimentSetups/experiment.config.braid.vector");
-                ANN_SETUP = ANNSetup.RANDOM_VECTORS;
-                break;
-            case ANNSetup.CPPN_BASED:
-                Debug.Log("CPPN Based Setup selected!");
-                textAsset = (TextAsset)Resources.Load("ExperimentSetups/experiment.config.braid.cppn");
-                ANN_SETUP = ANNSetup.CPPN_BASED;
-                break;
-            case ANNSetup.CPPN_VER2:
-                Debug.Log("CPPN Ver2 Setup selected!");
-                textAsset = (TextAsset)Resources.Load("ExperimentSetups/experiment.config.braid.cppn.v2");
-                ANN_SETUP = ANNSetup.CPPN_VER2;
-                break;
-            default:
-                Debug.LogError("Something went wrong when getting the network setup");
-                textAsset = (TextAsset)Resources.Load("ExperimentSetups/experiment.config.braid.random");
-                break;
-        }
-
-        return textAsset;
-    }
-
-    public void RunBest()
-    {
-        ResetTimeScale();
-
-        NeatGenome genome = LoadGenome();
-
-        // Get a genome decoder that can convert genomes to phenomes.
-        var genomeDecoder = experiment.CreateGenomeDecoder();
-
-        // Decode the genome into a phenome (neural network).
-        var phenome = genomeDecoder.Decode(genome);
-
-        GameObject obj = Instantiate(Unit, Unit.transform.position, Unit.transform.rotation) as GameObject;
-        UnitController controller = obj.GetComponent<UnitController>();
-
-        ControllerMap.Add(phenome, controller);
-        controller.Activate(phenome);
-    }
 
     public NeatGenome LoadGenome ()
     {
@@ -247,16 +186,5 @@ public class Optimizer : MonoBehaviour {
             experiment.SavePopulation(xw, new NeatGenome[] { _ea.CurrentChampGenome });
             Debug.Log("champions file saved to disk");
         }
-    }
-
-    // time functions
-    void SetTimeScale()
-    {
-        Time.timeScale = evolutionSpeed;
-    }
-
-    void ResetTimeScale()
-    {
-        Time.timeScale = 1; 
     }
 }
