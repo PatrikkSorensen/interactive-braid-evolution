@@ -58,6 +58,11 @@ cppn/src/Backup
 # ================= #
 
 unity/interactive-braid-evolution/Assets/Geometry
+unity/interactive-braid-evolution/Assets/Demigiant/
+unity/interactive-braid-evolution/Assets/Demigiant.meta
+
+unity/interactive-braid-evolution/Assets/JsonDotNet/
+unity/interactive-braid-evolution/Assets/JsonDotNet.meta
 
 unity/interactive-braid-evolution/Assets/Fonts
 #unity/interactive-braid-evolution/Assets/Resources/xml/
