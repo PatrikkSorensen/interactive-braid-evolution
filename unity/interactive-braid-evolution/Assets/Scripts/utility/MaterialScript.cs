@@ -9,9 +9,12 @@ public class MaterialScript : MonoBehaviour {
     public Material hoverMat;
     public Material selectedMat;
 
+    [HideInInspector]
+    public bool selected;
+
     private Material[] mats; 
     private MeshRenderer r;
-    private bool selected; 
+
 
     void Start()
     {

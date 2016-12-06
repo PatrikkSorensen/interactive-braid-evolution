@@ -68,7 +68,6 @@ public class BraidController : UnitController
         messenger.AddMaterialArray(braidId, MATERIAL_ARRAY);
         messenger.AddRadiusArray(braidId, RADIUS_ARRAY);
         messenger.AddVectors(braidId, BraidVectors);
-        Debug.Log("Added vectors..."); 
         BraidSimulationManager.vectorArraysMade++; 
     }
 

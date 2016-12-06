@@ -18,6 +18,37 @@ public class BraidSimulationManager : MonoBehaviour {
 
     }
 
+    public static void AdvanceGeneration()
+    {
+        GameObject[] braids = GameObject.FindGameObjectsWithTag("Braid");
+        string[] braidFiles = new string[populationSize];
+        int index = 0;
+
+        foreach (GameObject braid in braids)
+        {
+            if (braid.GetComponent<MaterialScript>().selected)
+                braidFiles[index] = braid.name;
+            else
+                braidFiles[index] = ""; 
+
+            Destroy(braid);
+            index++; 
+        }
+
+        StoryboardUtility.SaveGenerationData(braidFiles); 
+
+        ResetSimulationValues();
+        IECManager.SetUIToModellingState(populationSize);
+    }
+
+    public static void ResetSimulationValues()
+    {
+        GameObject.FindObjectOfType<UDPReciever>().ResetVariables();
+        vectorArraysMade = 0;
+        evaluationsMade = 0;
+        shouldSimulateGenomes = true;
+    }
+
     public void SetBraidSimulationFromButton(bool b)
     {
         shouldSimulateGenomes = b;
@@ -33,17 +64,6 @@ public class BraidSimulationManager : MonoBehaviour {
         return shouldSimulateGenomes;
     }
 
-    public static void AdvanceGeneration()
-    {
-        GameObject[] braids = GameObject.FindGameObjectsWithTag("Braid");
-        
-        foreach(GameObject braid in braids)
-            Destroy(braid);
-
-        ResetSimulationValues();
-        IECManager.SetUIToModellingState(populationSize);
-    }
-
     public static bool HasControllersEvaluated()
     {
         return (evaluationsMade == populationSize);
@@ -54,11 +74,5 @@ public class BraidSimulationManager : MonoBehaviour {
         return (vectorArraysMade == populationSize); 
     }
 
-    public static void ResetSimulationValues()
-    {
-        GameObject.FindObjectOfType<UDPReciever>().ResetVariables();
-        vectorArraysMade = 0;
-        evaluationsMade = 0;
-        shouldSimulateGenomes = true; 
-    }
+
 }

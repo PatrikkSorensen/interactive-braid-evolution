@@ -29,7 +29,7 @@ public class UserController : MonoBehaviour {
                 BraidSimulationManager.SetShouldBraidsEvaluate(false);
 
         if (Input.GetKeyDown(KeyCode.Q))
-            Camera.main.GetComponent<MouseLook>().SetTarget(sceneCenter.transform.position); 
+            Camera.main.GetComponent<MouseLook>().SetTarget(sceneCenter.transform.position);
 
         AddTranslation(); 
 
