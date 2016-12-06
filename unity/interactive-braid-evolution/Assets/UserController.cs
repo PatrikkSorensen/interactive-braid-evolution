@@ -2,16 +2,15 @@
 using System.Collections;
 using UnityEngine.SceneManagement;
 using System;
+using APP_STATUS;
 
 public class UserController : MonoBehaviour {
 
-    public GameObject mainMenu; 
+    public GameObject mainMenu, sceneCenter; 
     float speed;
     float sprintSpeed; 
     bool sprint; 
 
-
-	// Use this for initialization
 	void Start () {
         mainMenu.GetComponent<MenuController>(); 
         speed = 0.25f;
@@ -26,7 +25,12 @@ public class UserController : MonoBehaviour {
             SceneManager.LoadScene(3);
 
         if (Input.GetKeyDown(KeyCode.Space))
-            FindObjectOfType<BraidSimulationManager>().SetFlagsFromButton(false); 
+            if (UIStatusWindow.currentStatus == STATUS.SIMULATING)
+                BraidSimulationManager.SetShouldBraidsEvaluate(false);
+
+        if (Input.GetKeyDown(KeyCode.Q))
+            Camera.main.GetComponent<MouseLook>().SetTarget(sceneCenter.transform.position); 
+
         AddTranslation(); 
 
     }

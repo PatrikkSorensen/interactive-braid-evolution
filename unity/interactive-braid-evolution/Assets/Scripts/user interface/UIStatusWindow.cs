@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 using System.Text.RegularExpressions;
+using APP_STATUS;
 
 public class UIStatusWindow : MonoBehaviour
 {
@@ -10,14 +11,6 @@ public class UIStatusWindow : MonoBehaviour
     public static STATUS currentStatus;
     public static int modelsImported, totalModels;
 
-    public enum STATUS
-    {
-        UNINITIALIZED,
-        MODELLING,
-        EVOLVING,
-        IMPORTING,
-        SIMULATING
-    }
 
     private static Text t;
     private Regex rgx; 
@@ -83,5 +76,17 @@ public class UIStatusWindow : MonoBehaviour
                 Debug.Log("Nothing happens..."); 
                 break;
         }
+    }
+}
+
+namespace APP_STATUS
+{
+    public enum STATUS
+    {
+        UNINITIALIZED,
+        MODELLING,
+        EVOLVING,
+        IMPORTING,
+        SIMULATING
     }
 }

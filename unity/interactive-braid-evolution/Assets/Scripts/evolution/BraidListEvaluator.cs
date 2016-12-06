@@ -100,12 +100,8 @@ namespace SharpNEAT.core
                     double fitness = 0;
 
                     for (int i = 0; i < m_optimizer.Trials; i++)
-                    {
-
                         fitness += fitnessDict[genome][i]._fitness;
 
-                    }
-                    var fit = fitness;
                     fitness /= m_optimizer.Trials; // Averaged fitness
 
                     genome.EvaluationInfo.SetFitness(fitness);

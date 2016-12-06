@@ -8,35 +8,40 @@ public class BraidSimulationManager : MonoBehaviour {
     public static int evaluationsMade; 
     public static int populationSize;
 
+    public static bool shouldSimulateGenomes;
+
     private void Start()
     {
+        shouldSimulateGenomes = true;
         vectorArraysMade = 0;
         evaluationsMade = 0; 
+
     }
 
-    public void SetFlagsFromButton(bool b)
+    public void SetBraidSimulationFromButton(bool b)
     {
-        BraidSelector.SetShouldEvaluate(b);
+        shouldSimulateGenomes = b;
     }
-    
 
-
-	public static void AdvanceGeneration()
+    public static void SetShouldBraidsEvaluate(bool b)
     {
-        // the actual models
+        shouldSimulateGenomes = b;
+    }
+
+    public static bool ShouldBraidsEvaluate()
+    {
+        return shouldSimulateGenomes;
+    }
+
+    public static void AdvanceGeneration()
+    {
         GameObject[] braids = GameObject.FindGameObjectsWithTag("Braid");
         
         foreach(GameObject braid in braids)
             Destroy(braid);
 
-        // the ann controllers
-        BraidSelector.SetShouldEvaluate(true);
-
-        // variable resetting
         ResetSimulationValues();
         IECManager.SetUIToModellingState(populationSize);
-
-        Debug.Log("Simulation reset and cleaned up, ready for the next one");
     }
 
     public static bool HasControllersEvaluated()
@@ -44,10 +49,8 @@ public class BraidSimulationManager : MonoBehaviour {
         return (evaluationsMade == populationSize);
     }
 
-
-    internal static bool HasControllersCreatedData()
+    public static bool HasControllersCreatedData()
     {
-        Debug.Log(vectorArraysMade + ", " + populationSize); 
         return (vectorArraysMade == populationSize); 
     }
 
@@ -56,5 +59,6 @@ public class BraidSimulationManager : MonoBehaviour {
         GameObject.FindObjectOfType<UDPReciever>().ResetVariables();
         vectorArraysMade = 0;
         evaluationsMade = 0;
+        shouldSimulateGenomes = true; 
     }
 }

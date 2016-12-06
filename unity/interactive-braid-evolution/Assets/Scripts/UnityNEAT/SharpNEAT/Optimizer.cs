@@ -116,7 +116,7 @@ public class Optimizer : MonoBehaviour {
     public void StopEA()
     {
         IECManager.SetUIToExitState(); 
-        BraidSelector.SetShouldEvaluate(false);
+        BraidSimulationManager.SetShouldBraidsEvaluate(false);
 
         if (_ea != null && _ea.RunState == SharpNeat.Core.RunState.Running)
             _ea.Stop();

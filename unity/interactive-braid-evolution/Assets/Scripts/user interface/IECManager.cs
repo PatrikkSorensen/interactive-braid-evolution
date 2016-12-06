@@ -4,7 +4,7 @@ using System.Collections;
 using System;
 using DG.Tweening; 
 using System.Text.RegularExpressions;
-
+using APP_STATUS; 
 public class IECManager : MonoBehaviour {
 
     UDPReciever reciever; 
@@ -53,7 +53,7 @@ public class IECManager : MonoBehaviour {
 
     public static void SetUIToEvolvingState()
     {
-        UIStatusWindow.SetStatus(UIStatusWindow.STATUS.EVOLVING);
+        UIStatusWindow.SetStatus(STATUS.EVOLVING);
         evolveButton.SetActive(true);
 
         Destroy(initializeButton);
@@ -68,7 +68,7 @@ public class IECManager : MonoBehaviour {
         advanceButton.SetActive(false);
 
         UIStatusWindow.totalModels = populationSize;
-        UIStatusWindow.SetStatus(UIStatusWindow.STATUS.MODELLING);
+        UIStatusWindow.SetStatus(STATUS.MODELLING);
     }
 
     public static void SetUIToSelectionState()
@@ -77,7 +77,7 @@ public class IECManager : MonoBehaviour {
         advanceButton.SetActive(true);
         exitButton.SetActive(true); 
 
-        UIStatusWindow.SetStatus(UIStatusWindow.STATUS.SIMULATING);
+        UIStatusWindow.SetStatus(STATUS.SIMULATING);
 
     }
 
@@ -87,7 +87,7 @@ public class IECManager : MonoBehaviour {
         advanceButton.SetActive(false);
         exitButton.SetActive(false);
 
-        UIStatusWindow.SetStatus(UIStatusWindow.STATUS.SIMULATING);
+        UIStatusWindow.SetStatus(STATUS.SIMULATING);
     }
 
     /*********** END OF UI STATES **********/
