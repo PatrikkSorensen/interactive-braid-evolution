@@ -2,7 +2,7 @@
   <PopulationSize>9</PopulationSize>
   <SpecieCount>9</SpecieCount>
   <Inputs>4</Inputs>
-  <Outputs>5</Outputs>
+  <Outputs>4</Outputs>
 
   <Activation>
     <Scheme>Acyclic</Scheme>

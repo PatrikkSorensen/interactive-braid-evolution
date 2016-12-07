@@ -52,13 +52,16 @@ public class UtilityHelper : MonoBehaviour {
         return v;
     }
 
-    public static double[] CreateInputDoubleArray(int size)
+    public static double[] CreateInputDoubleArray(int size, int min, int max)
     {
-        double[] inputVectors = new double[size];
-        for (int i = 0; i < inputVectors.Length; i++)
-            inputVectors[i] = (double)i * 2;
+        int multiplier = (max + Mathf.Abs(min)) / (size - 1);
+        double[] doubles = new double[size];
+        int val = min - multiplier;
 
-        return inputVectors;
+        for (int i = 0; i < size; i++, val += multiplier)
+            doubles[i] = val + multiplier;
+
+        return doubles;
     }
 
     public static double[] NormalizeInputDoubleArray(double[] inputs, float min, float max)
@@ -160,16 +163,16 @@ public class UtilityHelper : MonoBehaviour {
     public static double[] MergeArraysFromVectorANN(double[] inputs, double[] deltaValues)
     {
         
-        double[] res = new double[inputs.Length];
-
-        for(int i = 0; i < inputs.Length; i+=3)
+        double[] res = new double[deltaValues.Length];
+        int i, j; 
+        for(i = 0, j = 0; i < inputs.Length; i++, j += 3)
         {
 
             // TODO: This can be made smarter...
             //double x = (inputs[i] + deltaValues[i] > 1.0) ? inputs[i] + deltaValues[i] : 1.0; 
-            double x = inputs[i] + deltaValues[i];
-            double y = inputs[i + 1] + deltaValues[i + 1];
-            double z = inputs[i + 2] + deltaValues[i + 2];
+            double x = 0.0f + deltaValues[j];
+            double y = inputs[i] + deltaValues[j + 1];
+            double z = 0.0f + deltaValues[j + 2];
 
             if (x > 1.0) x = 1.0;
             if (x < -1.0) x = 1.0;
@@ -180,9 +183,9 @@ public class UtilityHelper : MonoBehaviour {
             if (z > 1.0) z = 1.0;
             if (z > 1.0) z = -1.0;
 
-            res[i] = x;
-            res[i + 1] = y;
-            res[i + 2] = z; 
+            res[j] = x;
+            res[j + 1] = y;
+            res[j + 2] = z; 
         }
 
         return res; 

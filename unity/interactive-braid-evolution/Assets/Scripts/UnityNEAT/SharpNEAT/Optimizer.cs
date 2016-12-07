@@ -7,7 +7,6 @@ using SharpNeat.Genomes.Neat;
 using System;
 using System.Xml;
 using System.IO;
-using ExperimentTypes;
 
 public class Optimizer : MonoBehaviour {
 
@@ -16,7 +15,6 @@ public class Optimizer : MonoBehaviour {
     protected CPPNExperiment experiment; 
     protected static NeatEvolutionAlgorithm<NeatGenome> _ea;
     protected Dictionary<IBlackBox, UnitController> ControllerMap = new Dictionary<IBlackBox, UnitController>();
-    public static ANNSetup ANN_SETUP;
 
     // Evolution parameters
     public static int PopulationSize;
@@ -48,7 +46,6 @@ public class Optimizer : MonoBehaviour {
 
     public void InitializeEA()
     {
-        
         // set up network structure from dropdown
         XmlDocument xmlConfig = new XmlDocument();
         TextAsset textAsset = (TextAsset)Resources.Load("ExperimentSetups/experiment.config.braid.cppn.v2");
@@ -65,58 +62,17 @@ public class Optimizer : MonoBehaviour {
 
         // set up network variables 
         messenger = GameObject.FindObjectOfType<ModelMessager>();
-        if (messenger)
-        {
-            PopulationSize = XmlUtils.GetValueAsInt(xmlConfig.DocumentElement, "PopulationSize");
-            messenger.SetupEvolutionParameters(PopulationSize);
-        }
+        PopulationSize = XmlUtils.GetValueAsInt(xmlConfig.DocumentElement, "PopulationSize");
+        messenger.SetupEvolutionParameters(PopulationSize);
 
         UnitContainer = GameObject.Find("UnitContainer");
         if (!UnitContainer)
             UnitContainer = new GameObject("UnitContainer");
 
         // setup the relevant ui
-        ANN_SETUP = ANNSetup.CPPN;
         IECManager.SetUIToEvolvingState();
         BraidSimulationManager.populationSize = PopulationSize;
         BraidSimulationManager.evaluationsMade = 0; 
-
-    }
-
-
-
-    public void StartEA()
-    {
-        Debug.Log("----------------------  SETTING UP EA IN UNITY SCENE ----------------------");
-        //_ea = experiment.CreateEvolutionAlgorithm();
-        _ea = experiment.CreateEvolutionAlgorithm(popLoadSavePath);
-        _ea.UpdateEvent += new EventHandler(ea_UpdateEvent);
-        _ea.PausedEvent += new EventHandler(ea_PauseEvent);
-        _ea.StartContinue();
-        Debug.Log("------------------- FINISHED SETTING UP EA -------------------------------");
-    }
-
-    protected void ea_UpdateEvent(object sender, EventArgs e)
-    {
-
-        Debug.Log("Generation: " + _ea.CurrentGeneration + ", best fitness: " + _ea.Statistics._maxFitness);
-        Fitness = _ea.Statistics._maxFitness;
-        Generation = _ea.CurrentGeneration;
-        IECManager.SetGeneration(Generation);
-    }
-
-    protected void ea_PauseEvent(object sender, EventArgs e)
-    {     
-        SaveXMLFiles(); 
-    }
-
-    public void StopEA()
-    {
-        IECManager.SetUIToExitState(); 
-        BraidSimulationManager.SetShouldBraidsEvaluate(false);
-
-        if (_ea != null && _ea.RunState == SharpNeat.Core.RunState.Running)
-            _ea.Stop();
     }
 
     public void Evaluate(IBlackBox phenome)
@@ -137,7 +93,6 @@ public class Optimizer : MonoBehaviour {
 
     public void StopEvaluation(IBlackBox box)
     {
-        //Debug.Log("Stopping evaluation"); 
         UnitController ct = ControllerMap[box];
         Destroy(ct.gameObject);
     }
@@ -161,6 +116,36 @@ public class Optimizer : MonoBehaviour {
         }
         return 0;
     }
+
+    public void StartEA()
+    {
+        _ea = experiment.CreateEvolutionAlgorithm(popLoadSavePath);
+        _ea.UpdateEvent += new EventHandler(ea_UpdateEvent);
+        _ea.PausedEvent += new EventHandler(ea_PauseEvent);
+        _ea.StartContinue();
+    }
+
+    protected void ea_UpdateEvent(object sender, EventArgs e)
+    {
+        Fitness = _ea.Statistics._maxFitness;
+        Generation = _ea.CurrentGeneration;
+        IECManager.SetGeneration(Generation);
+    }
+
+    protected void ea_PauseEvent(object sender, EventArgs e)
+    {
+        SaveXMLFiles();
+    }
+
+    public void StopEA()
+    {
+        IECManager.SetUIToExitState();
+        BraidSimulationManager.SetShouldBraidsEvaluate(false);
+
+        if (_ea != null && _ea.RunState == SharpNeat.Core.RunState.Running)
+            _ea.Stop();
+    }
+
 
     // Utility functions: 
     protected void SaveXMLFiles()

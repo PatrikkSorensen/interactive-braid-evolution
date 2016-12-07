@@ -35,7 +35,7 @@ public class BraidSimulationManager : MonoBehaviour {
             index++; 
         }
 
-        StoryboardUtility.SaveGenerationData(braidFiles); 
+        //StoryboardUtility.SaveGenerationData(braidFiles); 
 
         ResetSimulationValues();
         IECManager.SetUIToModellingState(populationSize);
