@@ -25,7 +25,7 @@ public class Optimizer : MonoBehaviour {
     public float StoppingFitness;
 
     // Network variables 
-    protected ModelMessager messenger; 
+    protected ModelMessenger messenger; 
 
     // Utility
     public float evolutionSpeed = 1.0f;
@@ -61,7 +61,7 @@ public class Optimizer : MonoBehaviour {
         experiment.SetOptimizer(this);
 
         // set up network variables 
-        messenger = GameObject.FindObjectOfType<ModelMessager>();
+        messenger = GameObject.FindObjectOfType<ModelMessenger>();
         PopulationSize = XmlUtils.GetValueAsInt(xmlConfig.DocumentElement, "PopulationSize");
         messenger.SetupEvolutionParameters(PopulationSize);
 

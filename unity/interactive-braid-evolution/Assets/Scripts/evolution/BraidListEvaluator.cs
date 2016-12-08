@@ -67,7 +67,7 @@ namespace SharpNEAT.core
                     yield return new WaitForSeconds(0.2f);
                 }
 
-                ModelMessager messenger = GameObject.FindObjectOfType<ModelMessager>();
+                ModelMessenger messenger = GameObject.FindObjectOfType<ModelMessenger>();
                 messenger.SendMessageToGH();
 
                 while (!BraidSimulationManager.HasControllersEvaluated())

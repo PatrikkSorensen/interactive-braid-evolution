@@ -25,6 +25,6 @@ public class BraidNodeList : List<BraidNode> {
 
     public override string ToString()
     {
-        return "Count = " + Count.ToString() + ", root name: " + this.parent.root.data;
+        return "Count = " + Count.ToString() + ", root name: " + this.parent.root.data.name;
     }
 }

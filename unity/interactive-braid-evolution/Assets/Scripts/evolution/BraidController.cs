@@ -18,14 +18,21 @@ public class BraidController : UnitController
     double[] OUTPUT_ARRAY;
     double[] DELTA_ARRAY;
     double[] VECTOR_ARRAY;
-    double[] RADIUS_ARRAY; 
+    double[] RADIUS_ARRAY;
+
+    // new approach
+    List<Vector3> vects = new List<Vector3>();
+    List<BraidNode> brancedNodes = new List<BraidNode>();
+    List<Vector3[]> braidVectors = new List<Vector3[]>();
+
+    int id;
 
     protected IBlackBox neat;
     protected float fitness = 0.0f;
 
     // Message variables 
-    protected int braidId; 
-    ModelMessager messenger;
+    protected int braidId;
+    ModelMessenger messenger;
     public Vector3[] BraidVectors; 
 
     // Braid specific variables
@@ -37,33 +44,115 @@ public class BraidController : UnitController
     public override void Activate(IBlackBox box)
     {
         neat = box;
-        messenger = GameObject.FindObjectOfType<ModelMessager>();
+        messenger = GameObject.FindObjectOfType<ModelMessenger>();
         SetupCPPNController();
         ActivateBraidController(); 
     }
 
     protected void ActivateBraidController()
     {
-        ActivateCPPNSplit(); 
-        BraidVectors = UtilityHelper.OutputsToBraidVectors(VECTOR_ARRAY, VECTOR_ARRAY_SIZE);
+        Debug.Log("Creating braid with this controller"); 
+        BraidNode tree = CreateInputTree();
+        id = 0; 
+        ActivateCPPNSplit(tree, -1.0f);
 
-        messenger.AddRadiusArray(braidId, RADIUS_ARRAY);
-        messenger.AddVectors(braidId, BraidVectors);
+        tree.PrintTree();
+        CreateBraidVectorsFromTree(tree, 0);
+
+        JsonHelper.CreateJSONFromVectors(braidVectors);
+        Braid b = new Braid("braid_" + braidId.ToString(), braidVectors);
+
+        messenger.AddBraid(b, braidId);
         BraidSimulationManager.vectorArraysMade++; 
     }
-    void ActivateCPPNSplit()
+
+    void ActivateCPPNSplit(BraidNode parentNode, float layer)
+    {
+        Vector4 res = CreateOutput(parentNode.data.vector.y, layer); 
+
+        parentNode.data.vector += new Vector3(res.x, res.y, res.z); 
+
+        if (res.w < 0.8f && layer < 1.0f) {
+            layer += 1.5f;
+            Vector4 v = CreateOutput(parentNode.data.vector.y, layer); 
+            BraidNodeData data = new BraidNodeData("ann_node_" + id.ToString(), parentNode.data.vector + new Vector3(v.x, v.y, v.z) * 2);
+            BraidNode b = new BraidNode(data);
+            id++;
+            parentNode.children.Add(b);
+            AttachChildren(b, 5 - b.Depth); 
+        }
+
+        foreach (BraidNode subNode in parentNode.children)
+            ActivateCPPNSplit(subNode, layer);
+    }
+
+    Vector4 CreateOutput(float input, float layer)
     {
         ISignalArray inputArr = neat.InputSignalArray;
+        inputArr[0] = input;
+        inputArr[1] = layer;
+        neat.Activate();
+        ISignalArray outputArr = neat.OutputSignalArray;
+        float x = (float) outputArr[0];
+        float y = (float) outputArr[1];
+        float z = (float) outputArr[2];
+        float branch = (float) outputArr[3];
 
-        double layer = -1.0; 
-        for (int i = 0; i < INPUT_ARRAY.Length; i++)
+        return new Vector4(x, y, z, branch); 
+    }
+
+    void AttachChildren(BraidNode parent, int amount)
+    {
+        BraidNode temp = parent;
+        for (int i = 0; i < amount; i++)
         {
-            inputArr[0] = layer;
-            inputArr[1] = INPUT_ARRAY[i];  
-
-            neat.Activate();
-            ISignalArray outputArr = neat.OutputSignalArray;
+            BraidNode n = new BraidNode(new BraidNodeData("ann_node" + id.ToString(), parent.data.vector + new Vector3(0.0f, i * 2 + 2, 0.0f)));
+            id++;
+            parent.children.Add(n);
+            parent = n;
         }
+    }
+
+    BraidNode CreateInputTree()
+    {
+        BraidNode root = new BraidNode(new BraidNodeData("root", Vector3.zero, 1.5f));
+        BraidNode temp = root;
+        for (int i = 0; i < 5; i++)
+        {
+            BraidNode n = new BraidNode(new BraidNodeData("n" + id.ToString(), new Vector3(0.0f, i * 2 + 2, 0.0f)));
+            id++;
+            temp.children.Add(n);
+            temp = n;
+        }
+
+        return root; 
+    }
+
+    void CreateBraidVectorsFromTree(BraidNode parentNode, int layer)
+    {
+        // add reference branch point to list
+        if (parentNode.children.Count > 1)
+            brancedNodes.Add(parentNode);
+
+        vects.Add(parentNode.data.vector);
+
+        // add reference node vect value to list
+        if (parentNode.children.Count == 0 && brancedNodes.Count != 0)
+        {
+            // get back to last reference point
+            int i = brancedNodes.Count - 1;
+            braidVectors.Add(vects.ToArray());
+            vects.Clear();
+
+            vects.Add(brancedNodes[i].data.vector);
+            brancedNodes.RemoveAt(i);
+        }
+        else if (parentNode.children.Count == 0 && brancedNodes.Count == 0)
+            braidVectors.Add(vects.ToArray());
+
+
+        foreach (BraidNode subNode in parentNode.children)
+            CreateBraidVectorsFromTree(subNode, layer + 1);
     }
 
 
@@ -100,14 +189,6 @@ public class BraidController : UnitController
         INPUT_ARRAY = UtilityHelper.CreateInputDoubleArray(VECTOR_ARRAY_SIZE, -10, 10); 
         INPUT_ARRAY = UtilityHelper.NormalizeInputVector3Array(INPUT_ARRAY, -10, VECTOR_ARRAY_SIZE * 2);
         RADIUS_ARRAY = new double[VECTOR_ARRAY_SIZE];
-    }
-
-
-    void SetANNVectorArray()
-    {
-        Vector3[] temp = messenger.GetVectors(BraidId);
-        INPUT_ARRAY = UtilityHelper.Vector3ToDoubleArray(temp);
-        INPUT_ARRAY = UtilityHelper.NormalizeInputVector3Array(INPUT_ARRAY, -10, VECTOR_ARRAY_SIZE * 2);
     }
 
     void SetupANNStructure(int vectorSize, int inputSize, int outputSize)
