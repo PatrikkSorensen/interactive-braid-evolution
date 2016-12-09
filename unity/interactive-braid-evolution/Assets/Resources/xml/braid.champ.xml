@@ -7,29 +7,25 @@
     <Fn id="3" name="Sine" prob="0.25" />
   </ActivationFunctions>
   <Networks>
-    <Network id="15" birthGen="2" fitness="0">
+    <Network id="13" birthGen="1" fitness="0">
       <Nodes>
         <Node type="bias" id="0" fnId="0" />
         <Node type="in" id="1" fnId="0" />
         <Node type="in" id="2" fnId="0" />
-        <Node type="in" id="3" fnId="0" />
-        <Node type="in" id="4" fnId="0" />
+        <Node type="out" id="3" fnId="0" />
+        <Node type="out" id="4" fnId="0" />
         <Node type="out" id="5" fnId="0" />
         <Node type="out" id="6" fnId="0" />
-        <Node type="out" id="7" fnId="0" />
-        <Node type="out" id="8" fnId="0" />
+        <Node type="hid" id="19" fnId="3" />
       </Nodes>
       <Connections>
-        <Con id="12" src="0" tgt="8" wght="-3.9569736365228891" />
-        <Con id="14" src="1" tgt="6" wght="0.33902425784617662" />
-        <Con id="15" src="1" tgt="7" wght="-2.7565178833901882" />
-        <Con id="16" src="1" tgt="8" wght="-3.8272300874814391" />
-        <Con id="18" src="2" tgt="6" wght="-2.7425127709284425" />
-        <Con id="20" src="2" tgt="8" wght="-0.67988319230315675" />
-        <Con id="21" src="3" tgt="5" wght="-1.8352773692458868" />
-        <Con id="23" src="3" tgt="7" wght="3.9189793402329087" />
-        <Con id="24" src="3" tgt="8" wght="-2.1042967773973942" />
-        <Con id="26" src="4" tgt="6" wght="2.4758734274655581" />
+        <Con id="11" src="1" tgt="3" wght="-3.7446741340681911" />
+        <Con id="13" src="1" tgt="5" wght="-2.1481011668220162" />
+        <Con id="14" src="1" tgt="6" wght="-4.3458694545552135" />
+        <Con id="16" src="2" tgt="4" wght="-3.4934200346469879" />
+        <Con id="17" src="2" tgt="5" wght="-2.1376957930624485" />
+        <Con id="20" src="2" tgt="19" wght="-1.063081044703722" />
+        <Con id="21" src="19" tgt="6" wght="5" />
       </Connections>
     </Network>
   </Networks>

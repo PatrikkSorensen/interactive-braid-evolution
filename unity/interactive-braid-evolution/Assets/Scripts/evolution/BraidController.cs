@@ -37,7 +37,6 @@ public class BraidController : UnitController
     {
         neat = box;
         messenger = GameObject.FindObjectOfType<ModelMessenger>();
-        //SetupCPPNController();
         ActivateBraidController(); 
     }
 
@@ -69,11 +68,10 @@ public class BraidController : UnitController
         if (res.w > 0.5f && layer < 1.0f) {
             layer += 0.5f;
             Vector4 v = CreateOutput(parentNode.data.vector.y, layer);
-            NormalizeOutput(v); 
-
-            BraidNodeData data = new BraidNodeData("ann_node_" + _nodeid.ToString(), parentNode.data.vector + new Vector3(v.x, v.y, v.z));
+            NormalizeOutput(v);
+            float radius = parentNode.data.radius / 2; 
+            BraidNodeData data = new BraidNodeData("ann_node_", parentNode.data.vector + new Vector3(v.x, v.y, v.z), radius, _nodeid++);
             BraidNode b = new BraidNode(data);
-            _nodeid++;
             parentNode.children.Add(b);
             BraidTreeUtility.AttachChildren(b, 5 - b.Depth, _nodeid++); 
         }

@@ -25,9 +25,17 @@ public class BraidNodeData {
         set { _name = value; }
     }
 
-    public BraidNodeData (string name, Vector3 v, float radius = 0.0f)
+    int _id;
+    public int id
     {
-        this.name = name;
+        get { return _id; }
+        set { _id = value; }
+    }
+
+    public BraidNodeData (string name, Vector3 v, float radius = 0.0f, int id = 0)
+    {
+        this.id = id; 
+        this.name = name + id.ToString();
         this.vector = v;
         this.radius = radius; 
     }

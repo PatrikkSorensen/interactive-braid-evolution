@@ -22,47 +22,6 @@ public class UtilityHelper : MonoBehaviour {
         return normalizedArray;
     }
 
-    //public static double NormalizeDouble(double d, float max, float min)
-    //{
-    //    d += Mathf.Abs(min);
-    //    d /= (max - min);
-    //    return d; 
-    //}
-
-    //public static Vector3[] CreateRandomVectors(int min, int max, int size, int yOffset)
-    //{
-    //    int multiplier = (max + Mathf.Abs(min)) / size; 
-    //    Vector3[] v = new Vector3[size];
-
-    //    for (int i = 0, yValue = min; i < size; i++, yValue += multiplier)
-    //        v[i] = new Vector3(Random.Range(min, max), yValue + multiplier, Random.Range(min, max));
-
-    //    return v;
-    //}
-
-    //public static Vector3[] CreateEmptyVector3Array(int size, int min, int max)
-    //{
-    //    int multiplier = (max + Mathf.Abs(min)) / (size - 1);
-    //    Vector3[] v = new Vector3[size];
-    //    int yValue = min - multiplier;
-
-    //    for (int i = 0; i < size; i++, yValue += multiplier)
-    //        v[i] = new Vector3(0.0f, yValue + multiplier, 0.0f);
-
-    //    return v;
-    //}
-
-    //public static double[] CreateInputDoubleArray(int size, int min, int max)
-    //{
-    //    int multiplier = (max + Mathf.Abs(min)) / (size - 1);
-    //    double[] doubles = new double[size];
-    //    int val = min - multiplier;
-
-    //    for (int i = 0; i < size; i++, val += multiplier)
-    //        doubles[i] = val + multiplier;
-
-    //    return doubles;
-    //}
 
     public static double[] NormalizeInputDoubleArray(double[] inputs, float min, float max)
     {

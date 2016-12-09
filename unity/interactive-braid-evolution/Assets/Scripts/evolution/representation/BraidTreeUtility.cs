@@ -14,7 +14,7 @@ public class BraidTreeUtility : MonoBehaviour {
         }
     }
 
-    public static BraidNode CreateInputTree(int size)
+    public static BraidNode CreateInputTree(int size, float radius = 1.5f)
     {
         BraidNode root = new BraidNode(new BraidNodeData("root", Vector3.zero, 1.5f));
         BraidNode temp = root;
