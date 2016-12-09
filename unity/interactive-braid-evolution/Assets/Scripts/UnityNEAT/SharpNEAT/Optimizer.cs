@@ -54,7 +54,6 @@ public class Optimizer : MonoBehaviour {
         xmlConfig.LoadXml(textAsset.text);
 
         // set up experiment
-        //experiment = new BraidExperiment();
         experiment = new CPPNExperiment();
 
         experiment.Initialize("Braid Experiment", xmlConfig.DocumentElement, 0, 0);
@@ -77,7 +76,6 @@ public class Optimizer : MonoBehaviour {
 
     public void Evaluate(IBlackBox phenome)
     {
-        // TODO: Setup ids and stuff in the message object
         GameObject obj = Instantiate(Unit, Unit.transform.position, Unit.transform.rotation) as GameObject;
         BraidController controller = obj.GetComponent<BraidController>();
 

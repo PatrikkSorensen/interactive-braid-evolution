@@ -27,9 +27,6 @@ public class JsonHelper : MonoBehaviour {
 
     public static string CreateJSONFromDataTree(BraidNode root)
     {
-        Debug.Log("Trying to create JSON from data tree");
-
-        var jo = new JObject();
         List<Vector3> vectors = new List<Vector3>(); 
         List<BraidNode> firstStack = new List<BraidNode>();
 

@@ -5,7 +5,6 @@ public class BraidTreeUtility : MonoBehaviour {
 
     public static void AttachChildren(BraidNode parent, int amount, int id)
     {
-        BraidNode temp = parent;
         for (int i = 0; i < amount; i++)
         {
             BraidNode n = new BraidNode(new BraidNodeData("ann_node" + id.ToString(), parent.data.vector + new Vector3(0.0f, i * 2 + 2, 0.0f)));

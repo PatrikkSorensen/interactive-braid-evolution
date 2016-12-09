@@ -90,7 +90,7 @@ public class CPPNExperiment : INeatExperiment
 
         _eaParams = new NeatEvolutionAlgorithmParameters();
         _eaParams.SpecieCount = _specieCount;
-        _neatGenomeParams = new NeatGenomeParameters(); // Activation functions should be added here? 
+        _neatGenomeParams = new NeatGenomeParameters(); 
         _neatGenomeParams.FeedforwardOnly = _activationScheme.AcyclicNetwork;
 
         _inputCount = XmlUtils.GetValueAsInt(xmlConfig, "Inputs");

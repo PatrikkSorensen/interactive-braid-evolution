@@ -9,7 +9,7 @@ public class BraidEvaluator : IPhenomeEvaluator<IBlackBox>
 {
     public bool hasEvaluated = false;
 
-    ulong _evalCount;
+
     bool _stopConditionSatisfied;
 
     Optimizer optimizer;
@@ -19,12 +19,12 @@ public class BraidEvaluator : IPhenomeEvaluator<IBlackBox>
 
     public ulong EvaluationCount
     {
-        get { return _evalCount; }
+        get { return 0; /* no need in braid experiment */ }
     }
 
     public bool StopConditionSatisfied
     {
-        get { return _stopConditionSatisfied; }
+        get { return false /* no need in braid experiment */ ; }
     }
 
     public BraidEvaluator(Optimizer se)

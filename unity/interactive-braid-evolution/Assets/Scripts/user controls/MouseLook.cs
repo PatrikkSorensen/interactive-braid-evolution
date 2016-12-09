@@ -13,19 +13,9 @@ public class MouseLook : MonoBehaviour {
 	public float minimumY = -60F;
 	public float maximumY = 60F;
 	
-	private float sensivityXmemory;
-	private float maximumSmoothX;
-	private float minimumSmoothX;
 	
 	float rotationY = 0F;
 	float rotationX = 0F;
-
-    void Start()
-    {
-        sensivityXmemory = sensitivityX;
-        maximumSmoothX = maximumX - maximumX / 5;
-        minimumSmoothX = minimumX + minimumX / (-5);
-    }
 
     void Update ()
 	{

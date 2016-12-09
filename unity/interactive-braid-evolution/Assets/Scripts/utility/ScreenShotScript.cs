@@ -99,7 +99,6 @@ public class ScreenShotScript : MonoBehaviour {
 
     void SetBackgroundSize()
     {
-        float height = 200.0f; 
         backgroundUI.GetComponent<RectTransform>().sizeDelta = new Vector2(Screen.width * 0.75f, Screen.height * 0.1f);
     }
     void CreateRawImageGameobject(Texture2D image)

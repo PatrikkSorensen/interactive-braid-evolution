@@ -49,8 +49,8 @@ public class UserController : MonoBehaviour {
 
         if (sprint)
         {
-            transform.Translate(v2 * speed * 2);
-            transform.Translate(v * speed * 2);
+            transform.Translate(v2 * speed * sprintSpeed);
+            transform.Translate(v * speed * sprintSpeed);
         }
         else
         {
