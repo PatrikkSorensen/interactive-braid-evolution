@@ -140,6 +140,7 @@ public class CPPNExperiment : INeatExperiment
 
             Debug.Log("Created new list of genomes..."); 
             genomeList = genomeFactory.CreateGenomeList(_populationSize, 0);
+            //genomeFactory.CreateGenomeList()
 
         }
 

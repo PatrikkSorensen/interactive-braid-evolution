@@ -68,13 +68,17 @@ public class BraidController : UnitController
 
     void ActivateCPPNSplit(BraidNode parentNode, float layer)
     {
-        Vector4 res = CreateOutput(parentNode.data.vector.y, layer); 
+        Vector4 res = CreateOutput(parentNode.data.vector.y, layer);
+        res = NormalizeOutput(res); 
+
         parentNode.data.vector += new Vector3(res.x, res.y, res.z); 
 
         // check if we should branch and add new node with attached children
-        if (res.w < 0.8f && layer < 1.0f) {
-            layer += 1.5f;
-            Vector4 v = CreateOutput(parentNode.data.vector.y, layer); 
+        if (res.w > 0.5f && layer < 1.0f) {
+            layer += 0.5f;
+            Vector4 v = CreateOutput(parentNode.data.vector.y, layer);
+            NormalizeOutput(v); 
+
             BraidNodeData data = new BraidNodeData("ann_node_" + id.ToString(), parentNode.data.vector + new Vector3(v.x, v.y, v.z));
             BraidNode b = new BraidNode(data);
             id++;
@@ -87,12 +91,15 @@ public class BraidController : UnitController
             ActivateCPPNSplit(subNode, layer);
     }
 
+
+
     Vector4 CreateOutput(float input, float layer)
     {
         ISignalArray inputArr = neat.InputSignalArray;
-        inputArr[0] = input;
+        inputArr[0] = NormalizeInput(input, 0.0f, 10.0f);
         inputArr[1] = layer;
         neat.Activate();
+
         ISignalArray outputArr = neat.OutputSignalArray;
         float x = (float) outputArr[0];
         float y = (float) outputArr[1];
@@ -100,6 +107,24 @@ public class BraidController : UnitController
         float branch = (float) outputArr[3];
 
         return new Vector4(x, y, z, branch); 
+    }
+
+    Vector4 NormalizeOutput(Vector4 output)
+    {
+        Vector4 newVect = output; 
+        newVect.x *= 10.0f;
+        newVect.y *= 10.0f;
+        newVect.z *= 10.0f;
+
+        return newVect; 
+    }
+
+    float NormalizeInput (float value, float min, float max)
+    {
+        value = (value + Mathf.Abs(min)) / (max - min);
+        value *= 2;
+        value -= 1;
+        return value;  
     }
 
     //void AttachChildren(BraidNode parent, int amount)
