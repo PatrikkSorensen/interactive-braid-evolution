@@ -32,23 +32,22 @@ namespace SharpNeat.Genomes.Neat
         #region Constants
 
         const double DefaultConnectionWeightRange = 5.0;
-        const double DefaultInitialInterconnectionsProportion = 0.05;
+        const double DefaultInitialInterconnectionsProportion = 0.5;
         const double DefaultDisjointExcessGenesRecombineProbability = 0.1;
 
         // High level mutation probabilities
-        //const double DefaultConnectionWeightMutationProbability = 0.988;
-        //const double DefaultAddNodeMutationProbability = 0.001;
-        //const double DefaultAddConnectionMutationProbability = 0.01;
-        //const double DefaultNodeAuxStateMutationProbability = 0.00;
-        //const double DefaultDeleteConnectionMutationProbability = 0.001;
-        //const double DefaultConnectionWeightMutationProbability = 0.888;
+        const double DefaultConnectionWeightMutationProbability = 0.988;
+        const double DefaultAddNodeMutationProbability = 0.001;
+        const double DefaultAddConnectionMutationProbability = 0.01;
+        const double DefaultNodeAuxStateMutationProbability = 0.00;
+        const double DefaultDeleteConnectionMutationProbability = 0.001;
 
-        // FOR BRAID EXPERIMENT: 
-        const double DefaultAddNodeMutationProbability = 0.5;
-        const double DefaultAddConnectionMutationProbability = 0.2;
-        const double DefaultNodeAuxStateMutationProbability = 0.2;
-        const double DefaultDeleteConnectionMutationProbability = 0.2;
-        const double DefaultConnectionWeightMutationProbability = 0.9;
+        //// FOR BRAID EXPERIMENT: 
+        //const double DefaultAddNodeMutationProbability = 0.5;
+        //const double DefaultAddConnectionMutationProbability = 0.2;
+        //const double DefaultNodeAuxStateMutationProbability = 0.2;
+        //const double DefaultDeleteConnectionMutationProbability = 0.2;
+        //const double DefaultConnectionWeightMutationProbability = 0.9;
 
         #endregion
 

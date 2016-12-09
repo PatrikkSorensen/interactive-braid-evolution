@@ -41,7 +41,7 @@ public class Optimizer : MonoBehaviour {
     {
         champFileSavePath = Application.dataPath + "/Resources/xml/braid.champ.xml";
         popFileSavePath = Application.dataPath + "/Resources/xml/pop.xml";
-        popLoadSavePath = Application.dataPath + "/Resources/xml/startup_populations/pop.cppn.ver2.xml";
+        popLoadSavePath = Application.dataPath + "/Resources/xml/startup_populations/pop.cppn.split.xml";
     }
 
     public void InitializeEA()
