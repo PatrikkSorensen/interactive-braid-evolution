@@ -48,7 +48,7 @@ public class Optimizer : MonoBehaviour {
     {
         // set up network structure from dropdown
         XmlDocument xmlConfig = new XmlDocument();
-        TextAsset textAsset = (TextAsset)Resources.Load("ExperimentSetups/experiment.config.braid.cppn.v2");
+        TextAsset textAsset = (TextAsset)Resources.Load("ExperimentSetups/experiment.config.braid.cppn.split");
 
         // load in XML
         xmlConfig.LoadXml(textAsset.text);
