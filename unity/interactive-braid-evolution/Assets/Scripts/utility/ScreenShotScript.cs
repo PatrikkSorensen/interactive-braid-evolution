@@ -16,7 +16,8 @@ public class ScreenShotScript : MonoBehaviour {
 
     void Start()
     {
-        imgWidth = imgHeight = 256;
+        backgroundUI.SetActive(false); 
+        imgWidth = imgHeight = 512;
         borderOffset = 12; 
         uiRawImageWidth = 100; 
         folderPath = Application.dataPath + "/Resources/StoryboardImages/"; 
@@ -37,6 +38,7 @@ public class ScreenShotScript : MonoBehaviour {
             SetBackgroundSize(); 
             LoadStoryboardImages();
         }
+
     }
 
     void TakeScreenshot()
@@ -50,10 +52,12 @@ public class ScreenShotScript : MonoBehaviour {
 
     IEnumerator CreateRenderTexture()
     {
+        GameObject gb = StoryboardUtility.LoadInModel("Some name");
         yield return new WaitForEndOfFrame();
+        
 
         Texture2D tex = new Texture2D(imgWidth, imgHeight, TextureFormat.RGB24, false);
-        Rect r = new Rect(Screen.width * 0.5f - 100.0f, Screen.height * 0.50f - 100.0f, Screen.width * 0.50f + 100, Screen.height * 0.50f + 100);
+        Rect r = new Rect(Screen.width * 0.5f - 200.0f, Screen.height * 0.50f - 200.0f, Screen.width * 0.50f + 100, Screen.height * 0.50f + 100);
 
         tex.ReadPixels(r, 0, 0);
         tex.Apply();
@@ -65,6 +69,7 @@ public class ScreenShotScript : MonoBehaviour {
 
         currentId++;
         Debug.Log("Created image with texture rendering!");
+        Destroy(gb); 
     }
 
     void LoadStoryboardImages()
@@ -99,7 +104,8 @@ public class ScreenShotScript : MonoBehaviour {
 
     void SetBackgroundSize()
     {
-        backgroundUI.GetComponent<RectTransform>().sizeDelta = new Vector2(Screen.width * 0.75f, Screen.height * 0.1f);
+        backgroundUI.SetActive(true); 
+        backgroundUI.GetComponent<RectTransform>().sizeDelta = new Vector2(Screen.width * 0.75f, Screen.height * 0.2f);
     }
     void CreateRawImageGameobject(Texture2D image)
     {
