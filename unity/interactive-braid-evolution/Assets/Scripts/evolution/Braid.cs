@@ -7,10 +7,10 @@ public class Braid
     public string name;
     public Vector3[] vectors;
     public List<Vector3[]> vectors2; 
-    public double[] mat_values;
-    public double[] rad_values; 
+    public float[] mat_values;
+    public float[] rad_values; 
 
-    public Braid(string newName, Vector3[] newVectors, double[] newMatValues = null, double[] newRadValues = null)
+    public Braid(string newName, Vector3[] newVectors, float[] newMatValues = null, float[] newRadValues = null)
     {
         this.name = newName;
         this.vectors = newVectors;
@@ -18,7 +18,7 @@ public class Braid
         this.rad_values = newRadValues;  
     }
 
-    public Braid(string newName, List<Vector3[]> newVectors, double[] newMatValues = null, double[] newRadValues = null)
+    public Braid(string newName, List<Vector3[]> newVectors, float[] newMatValues = null, float[] newRadValues = null)
     {
         this.name = newName;
         this.vectors2 = newVectors;

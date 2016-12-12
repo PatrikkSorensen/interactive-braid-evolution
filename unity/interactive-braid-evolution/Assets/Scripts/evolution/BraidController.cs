@@ -11,11 +11,13 @@ public class BraidController : UnitController
     // Evolution specific variables 
     public int CURRENT_GENERATION; 
     public int TREE_SIZE;
+    public float MAIN_RADIUS; 
 
     // Braid node tree specific variables
     List<Vector3> vects = new List<Vector3>();
     List<BraidNode> brancedNodes = new List<BraidNode>();
     List<Vector3[]> braidVectors = new List<Vector3[]>();
+    List<float> radiusValues = new List<float>(); 
 
     int _nodeid;
 
@@ -42,16 +44,18 @@ public class BraidController : UnitController
 
     protected void ActivateBraidController()
     {
-        Debug.Log("Creating braid with this controller"); 
-        BraidNode tree = BraidTreeUtility.CreateInputTree(5);
-        _nodeid = 0; 
+        Debug.Log("Creating braid with this controller");
+        TREE_SIZE = 5;
+        MAIN_RADIUS = 1.0f; 
+        _nodeid = 0;
+
+        BraidNode tree = BraidTreeUtility.CreateInputTree(TREE_SIZE, MAIN_RADIUS);
         ActivateCPPNSplit(tree, -1.0f);
 
         tree.PrintTree();
         CreateBraidVectorsFromTree(tree, 0);
 
-        JsonHelper.CreateJSONFromVectors(braidVectors);
-        Braid b = new Braid("braid_" + braidId.ToString(), braidVectors);
+        Braid b = new Braid("braid_" + braidId.ToString(), braidVectors, null, radiusValues.ToArray());
 
         messenger.AddBraid(b, braidId);
         BraidSimulationManager.vectorArraysMade++; 
@@ -62,19 +66,16 @@ public class BraidController : UnitController
         Vector4 res = CreateOutput(parentNode.data.vector.y, layer);
         res = NormalizeOutput(res); 
 
-        parentNode.data.vector += new Vector3(res.x, res.y, res.z); 
-
         // check if we should branch and add new node with attached children
-        if (res.w > 0.5f && layer < 1.0f) {
-            layer += 0.5f;
-            Vector4 v = CreateOutput(parentNode.data.vector.y, layer);
-            NormalizeOutput(v);
-            float radius = parentNode.data.radius / 2; 
-            BraidNodeData data = new BraidNodeData("ann_node_", parentNode.data.vector + new Vector3(v.x, v.y, v.z), radius, _nodeid++);
-            BraidNode b = new BraidNode(data);
+        if (res.w > 0.8f && layer < 1.0f)
+        {
+            layer += 1.0f;
+            BraidNode b = CreateNewNode(parentNode.data.vector.y, layer); 
             parentNode.children.Add(b);
-            BraidTreeUtility.AttachChildren(b, 5 - b.Depth, _nodeid++); 
+            BraidTreeUtility.AttachChildren(b, TREE_SIZE - b.Depth, _nodeid++);
         }
+
+        parentNode.data.vector += new Vector3(res.x, res.y, res.z);
 
         // recursion for the win 
         foreach (BraidNode subNode in parentNode.children)
@@ -82,16 +83,29 @@ public class BraidController : UnitController
     }
 
 
+    BraidNode CreateNewNode(float yValue, float layer)
+    {
+        Vector4 v = CreateOutput(yValue, layer);
+        NormalizeOutput(v);
+        Vector3 segment_vector = new Vector3(0.0f, yValue, 0.0f) + new Vector3(v.x, v.y, v.z); 
+        BraidNodeData data = new BraidNodeData("ann_node_", new Vector3(0.0f, yValue, 0.0f) , 1.0f, _nodeid++);
+        BraidNode b = new BraidNode(data);
+
+        return b;
+    }
+
 
     Vector4 CreateOutput(float input, float layer)
     {
         ISignalArray inputArr = neat.InputSignalArray;
-        inputArr[0] = NormalizeInput(input, 0.0f, 10.0f);
+        double yVal = NormalizeInput(input, 0.0f, 10.0f);
+
+        inputArr[0] = yVal; 
         inputArr[1] = layer;
         neat.Activate();
 
         ISignalArray outputArr = neat.OutputSignalArray;
-        float x = (float) outputArr[0];
+        float x = (float)outputArr[0];
         float y = (float) outputArr[1];
         float z = (float) outputArr[2];
         float branch = (float) outputArr[3];
@@ -123,6 +137,7 @@ public class BraidController : UnitController
         if (parentNode.children.Count > 1)
             brancedNodes.Add(parentNode);
 
+        radiusValues.Add(parentNode.data.radius); 
         vects.Add(parentNode.data.vector);
 
         // add reference node vect value to list
@@ -136,9 +151,8 @@ public class BraidController : UnitController
             vects.Add(brancedNodes[i].data.vector);
             brancedNodes.RemoveAt(i);
         }
-        else if (parentNode.children.Count == 0 && brancedNodes.Count == 0)
+        else if (parentNode.children.Count == 0 && brancedNodes.Count == 0) 
             braidVectors.Add(vects.ToArray());
-
 
         foreach (BraidNode subNode in parentNode.children)
             CreateBraidVectorsFromTree(subNode, layer + 1);

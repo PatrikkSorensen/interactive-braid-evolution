@@ -58,10 +58,10 @@ public class JsonHelper : MonoBehaviour {
         }
 
         Braid[] braids = new Braid[9];
-        double[] radiusArray = new double[9];
+        float[] radiusArray = new float[9];
 
         for (int i = 0; i < 9; i++)
-            radiusArray[i] = 1.0; 
+            radiusArray[i] = 1.0f; 
 
         for (int i = 0; i < 9; i++)
             braids[i] = new Braid("braid_" + i.ToString(), vectors.ToArray(), null, radiusArray); 
@@ -77,10 +77,8 @@ public class JsonHelper : MonoBehaviour {
         for (int i = 0; i < 9; i++)
             radiusArray[i] = 1.0;
 
-        
-
-        for (int i = 0; i < 9; i++)
-            braids[i] = new Braid("braid_" + i.ToString(), braidVectors, null, radiusArray);
+        //for (int i = 0; i < 9; i++)
+        //    braids[i] = new Braid("braid_" + i.ToString(), braidVectors, null, radiusArray);
 
 
         return CreateJSONFromBraids(9, braids);

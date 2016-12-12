@@ -33,6 +33,8 @@ public class ModelMessenger : MonoBehaviour {
 
     public void AddBraid(Braid b, int id)
     {
+        if (id > m_braidList.Length)
+            Debug.Log("Error: Braid array out or range: " + id); 
         m_braidList[id] = b; 
     }
 }
