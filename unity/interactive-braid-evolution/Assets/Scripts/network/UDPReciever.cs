@@ -22,7 +22,8 @@ public class UDPReciever : MonoBehaviour
     {
         public int should_import;
         public int num_models;
-        public int models_created; 
+        public int models_created;
+        public int id; 
     }
 
     void Start ()
@@ -48,12 +49,23 @@ public class UDPReciever : MonoBehaviour
         if (msg.models_created > num_models_imported)
         {
             objImporter.StartImportSingleModel(num_models_imported);
-            //Debug.Log("exported models: " + msg.models_created + " , imported models: " + num_models_imported);
             num_models_imported++;
         } 
 
         if (msg.models_created == Optimizer.PopulationSize)
             hasImportedAllModels = true; 
+    }
+
+    private void DecodeJSONSingleModel(string jsonString)
+    {
+        UDPRecievedMessage msg = new UDPRecievedMessage();
+        msg = JsonUtility.FromJson<UDPRecievedMessage>(jsonString);
+
+        if (msg.should_import == 1)
+        {
+            objImporter.StartImportSingleModel("cita_braid_" + msg.id.ToString()); 
+            Debug.Log("Should import");
+        } 
     }
 
     // Unity Application Quit Function
@@ -85,8 +97,10 @@ public class UDPReciever : MonoBehaviour
                 //Debug.Log (">> " + text);
 
                 // hot model import object
-                DecodeJSON(text); 
-                
+                //DecodeJSON(text);
+                DecodeJSONSingleModel(text);
+
+
             } catch (Exception err) {
 				print (err.ToString ());
 			}

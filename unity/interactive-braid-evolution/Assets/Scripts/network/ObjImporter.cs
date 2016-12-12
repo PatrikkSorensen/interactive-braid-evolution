@@ -14,6 +14,7 @@ public class ObjImporter : MonoBehaviour {
     private string filePathToGeometry;
     private int m_num_models;
     private int m_curr_index;
+    private string m_file_name; 
 
     void Start()
     {
@@ -24,11 +25,12 @@ public class ObjImporter : MonoBehaviour {
 
     void Update()
     {
-        if (shouldImportAll) {
-            StartCoroutine(ImportAllModels());
-        } else if (shouldImportSingle)
+        if (shouldImportSingle && m_file_name != "")
         {
-            StartCoroutine(ImportModel(m_curr_index)); 
+            StartCoroutine(ImportModel(m_file_name)); 
+        } else if(shouldImportSingle)
+        {
+            StartCoroutine(ImportModel(m_curr_index));
         }
     }
 
@@ -46,35 +48,41 @@ public class ObjImporter : MonoBehaviour {
         m_curr_index = i; 
     }
 
-    // Assumes file prefix is "braid_" and that models have been exported 
-    IEnumerator ImportAllModels()
+    public void StartImportSingleModel(string file)
     {
-        Debug.Log("Starting to import models...");
-        shouldImportAll = false;
-        for(int i = 0; i < m_num_models; i++)
+        shouldImportSingle = true;
+        m_file_name = file; 
+    }
+
+
+    IEnumerator ImportModel(string file)
+    {
+        m_file_name = ""; 
+        shouldImportSingle = false;
+        string objFileName = Application.dataPath + "/Geometry/Models/" + file + ".obj";
+        GameObject[] models = ObjReader.use.ConvertFile(objFileName, true);
+        GameObject curr_model;
+
+        if (models == null)
+            Debug.LogWarning("No model imported from obj importer...");
+        else
         {
-            string objFileName = filePathToGeometry + "/braid_" + i.ToString() + ".obj";
-            GameObject[] curr_model = ObjReader.use.ConvertFile(objFileName, true); // Has to be an array because...? 
+            curr_model = models[0];
+            // names and id
+            curr_model.name = file;
+            curr_model.tag = "Braid";
 
-            if(curr_model != null)
-            {
-                Debug.Log(objFileName + " was found");
+            // position
+            Transform testModel = curr_model.transform;
+            Vector3 v = Vector3.zero; 
 
-                // position
-                Transform testModel = curr_model[0].transform;
-                testModel.position = FindSpawnPosition();
-
-                // rotation
-                //Vector3 rotationVector = testModel.rotation.eulerAngles;
-                //rotationVector.x = -90.0f;
-                //testModel.rotation = Quaternion.Euler(rotationVector);
-
-            } else
-            {
-                Debug.LogError("The model " + objFileName + " could not be found."); 
-            }
-            yield return new WaitForSeconds(1.0f); 
+            // tweening
+            testModel.position = v + Vector3.up * offsetY;
+            testModel.DOMove(v, tweenDuration);
         }
+
+
+        yield return new WaitForSeconds(0.1f); 
     }
 
     IEnumerator ImportModel(int index)
@@ -129,4 +137,36 @@ public class ObjImporter : MonoBehaviour {
     {
         return spawnPositions[index].position; 
     }
+
+    // Assumes file prefix is "braid_" and that models have been exported 
+    //IEnumerator ImportAllModels()
+    //{
+    //    Debug.Log("Starting to import models...");
+    //    shouldImportAll = false;
+    //    for(int i = 0; i < m_num_models; i++)
+    //    {
+    //        string objFileName = filePathToGeometry + "/braid_" + i.ToString() + ".obj";
+    //        GameObject[] curr_model = ObjReader.use.ConvertFile(objFileName, true); // Has to be an array because...? 
+
+    //        if(curr_model != null)
+    //        {
+    //            Debug.Log(objFileName + " was found");
+
+    //            // position
+    //            Transform testModel = curr_model[0].transform;
+    //            testModel.position = FindSpawnPosition();
+
+    //            // rotation
+    //            //Vector3 rotationVector = testModel.rotation.eulerAngles;
+    //            //rotationVector.x = -90.0f;
+    //            //testModel.rotation = Quaternion.Euler(rotationVector);
+
+    //        } else
+    //        {
+    //            Debug.LogError("The model " + objFileName + " could not be found."); 
+    //        }
+    //        yield return new WaitForSeconds(1.0f); 
+    //    }
+    //}
+
 }
