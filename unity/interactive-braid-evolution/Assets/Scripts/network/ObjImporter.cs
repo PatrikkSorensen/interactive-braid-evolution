@@ -81,7 +81,7 @@ public class ObjImporter : MonoBehaviour {
             testModel.DOMove(v, tweenDuration);
         }
 
-
+        FindObjectOfType<CITARepresentationTester>().PerformBranchedBraidsTest();
         yield return new WaitForSeconds(0.1f); 
     }
 
