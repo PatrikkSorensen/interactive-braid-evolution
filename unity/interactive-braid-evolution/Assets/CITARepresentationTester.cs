@@ -78,7 +78,7 @@ public class CITARepresentationTester : MonoBehaviour {
         braidVectors.Add(branch2);
         braidVectors.Add(branch3);
 
-        Braid b = new Braid("cita_braid", braidVectors);
+        Braid b = new Braid("cita_braid", m_id, braidVectors);
 
         var jo = new JObject();
         jo.Add("id", m_id++);

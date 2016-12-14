@@ -25,6 +25,16 @@ public class JsonHelper : MonoBehaviour {
         return json; 
     }
 
+    public static string CreateJSONFromSingleBraid(Braid b)
+    {
+        // Add it all to the json object
+        var jo = new JObject();
+        jo.Add("braid", JToken.FromObject(b));
+        var json = jo.ToString();
+
+        return json;
+    }
+
     public static string CreateJSONFromDataTree(BraidNode root)
     {
         List<Vector3> vectors = new List<Vector3>(); 
@@ -64,7 +74,7 @@ public class JsonHelper : MonoBehaviour {
             radiusArray[i] = 1.0f; 
 
         for (int i = 0; i < 9; i++)
-            braids[i] = new Braid("braid_" + i.ToString(), vectors.ToArray(), null, radiusArray); 
+            braids[i] = new Braid("braid_", i, vectors.ToArray(), null, radiusArray); 
 
         return CreateJSONFromBraids(9, braids, 10); 
     }

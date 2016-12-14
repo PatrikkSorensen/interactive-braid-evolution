@@ -9,15 +9,17 @@ public class ObjImporter : MonoBehaviour {
     public bool shouldImportSingle; 
     public Transform[] spawnPositions;
     public float tweenDuration = 2.0f;
-    public float offsetY = -10.0f; 
+    public float offsetY = -10.0f;
+    public Material braidMaterial; 
 
     private string filePathToGeometry;
     private int m_num_models;
     private int m_curr_index;
-    private string m_file_name; 
-
+    private string m_file_name;
+    private int spawn_id; 
     void Start()
     {
+        spawn_id = 0; 
         filePathToGeometry = Application.dataPath + "/Geometry/Models/";
         shouldImportAll = false;
         shouldImportSingle = false; 
@@ -71,17 +73,26 @@ public class ObjImporter : MonoBehaviour {
             // names and id
             curr_model.name = file;
             curr_model.tag = "Braid";
+            curr_model.GetComponent<MeshRenderer>().material = braidMaterial;
 
             // position
             Transform testModel = curr_model.transform;
-            Vector3 v = Vector3.zero; 
-
+            Vector3 v = FindSpawnPosition();
+            Debug.Log("Spawning braid at: " + v);  
             // tweening
             testModel.position = v + Vector3.up * offsetY;
             testModel.DOMove(v, tweenDuration);
+
+            // collision box for selection
+            curr_model.AddComponent<BoxCollider>();
+
+            // components and other scripts
+            curr_model.AddComponent<Rotate>();
+            curr_model.AddComponent<MaterialScript>();
         }
 
-        FindObjectOfType<CITARepresentationTester>().PerformBranchedBraidsTest();
+        //FindObjectOfType<CITARepresentationTester>().PerformBranchedBraidsTest();
+        FindObjectOfType<ModelMessenger>().modelling = false; 
         yield return new WaitForSeconds(0.1f); 
     }
 
@@ -126,11 +137,19 @@ public class ObjImporter : MonoBehaviour {
         yield return new WaitForSeconds(0.02f);
     }
 
-    Vector3 FindSpawnPosition()
+    Vector3 FindRandomSpawnPosition()
     {
         int index = Random.Range(0, spawnPositions.Length);
         Vector3 position = spawnPositions[index].position;
         return position; 
+    }
+
+    Vector3 FindSpawnPosition()
+    {
+        if (spawn_id >= spawnPositions.Length)
+            spawn_id = 0; 
+
+        return spawnPositions[spawn_id++].position; 
     }
 
     Vector3 FindSpawnPosition(int index)

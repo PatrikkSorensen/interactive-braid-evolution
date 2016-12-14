@@ -52,10 +52,10 @@ public class BraidController : UnitController
         BraidNode tree = BraidTreeUtility.CreateInputTree(TREE_SIZE, MAIN_RADIUS);
         ActivateCPPNSplit(tree, -1.0f);
 
-        tree.PrintTree();
+        //tree.PrintTree();
         CreateBraidVectorsFromTree(tree, 0);
 
-        Braid b = new Braid("braid_" + braidId.ToString(), braidVectors, null, radiusValues.ToArray());
+        Braid b = new Braid("braid_", braidId, braidVectors, null, radiusValues.ToArray());
 
         messenger.AddBraid(b, braidId);
         BraidSimulationManager.vectorArraysMade++; 

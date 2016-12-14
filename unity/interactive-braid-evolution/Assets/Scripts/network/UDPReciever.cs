@@ -63,7 +63,7 @@ public class UDPReciever : MonoBehaviour
 
         if (msg.should_import == 1)
         {
-            objImporter.StartImportSingleModel("cita_braid_" + msg.id.ToString()); 
+            objImporter.StartImportSingleModel("braid_" + msg.id.ToString()); 
             Debug.Log("Should import");
         } 
     }
@@ -86,6 +86,7 @@ public class UDPReciever : MonoBehaviour
 	// receive thread function
 	private void ReceiveData ()
 	{
+        Debug.Log("Recieving data"); 
         client = new UdpClient (port);
 		while (true) {
 			try {
