@@ -69,7 +69,7 @@ public class BraidController : UnitController
         // check if we should branch and add new node with attached children
         if (res.w > 0.8f && layer < 1.0f)
         {
-            layer += 1.0f;
+            layer += 0.5f;
             BraidNode b = CreateNewNode(parentNode.data.vector.y, layer); 
             parentNode.children.Add(b);
             BraidTreeUtility.AttachChildren(b, TREE_SIZE - b.Depth, _nodeid++);
@@ -99,6 +99,9 @@ public class BraidController : UnitController
     {
         ISignalArray inputArr = neat.InputSignalArray;
         double yVal = NormalizeInput(input, 0.0f, 10.0f);
+
+        if(layer > 1.0)
+            layer = 1.0f;
 
         inputArr[0] = yVal; 
         inputArr[1] = layer;

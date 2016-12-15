@@ -27,12 +27,12 @@ namespace SharpNeat.EvolutionAlgorithms
         #region Constants
 
         const int DefaultSpecieCount = 10;
-        const double DefaultElitismProportion = 0.2;
-        const double DefaultSelectionProportion = 0.2;
+        const double DefaultElitismProportion = 0.1;
+        const double DefaultSelectionProportion = 0.1;
 
-        const double DefaultOffspringAsexualProportion = 0.5;
-        const double DefaultOffspringSexualProportion = 0.5;
-        const double DefaultInterspeciesMatingProportion = 0.01;
+        const double DefaultOffspringAsexualProportion = 0.4;
+        const double DefaultOffspringSexualProportion = 0.8;
+        const double DefaultInterspeciesMatingProportion = 0.1;
 
         const int DefaultDestFitnessMovingAverageHistoryLength = 100;
         const int DefgaultMeanSpecieChampFitnessMovingAverageHistoryLength = 100;

@@ -58,20 +58,24 @@ namespace SharpNEAT.core
                         fitnessDict.Add(genome, new FitnessInfo[m_optimizer.Trials]);
 
                     dict.Add(genome, phenome);
-                    Coroutiner.StartCoroutine(m_phenomeEvaluator.Evaluate(phenome));
+                    Coroutiner.StartCoroutine(m_phenomeEvaluator.Evaluate(phenome)); 
                 }
+
+                Debug.Log("Done creating phenomes...");
 
                 while (!BraidSimulationManager.HasControllersCreatedData())
                 {
-                    Debug.Log("Waiting..."); 
-                    yield return new WaitForSeconds(0.2f);
+                    Debug.Log("Waiting on controllers..."); 
+                    yield return new WaitForSeconds(0.1f);
                 }
 
                 ModelMessenger messenger = GameObject.FindObjectOfType<ModelMessenger>();
                 messenger.SendMessageToGH();
 
                 while (!BraidSimulationManager.HasControllersEvaluated())
-                    yield return new WaitForSeconds(0.2f);
+                {
+                    yield return new WaitForSeconds(0.1f);
+                }
 
                 BraidSimulationManager.AdvanceGeneration(); 
 

@@ -105,6 +105,11 @@ namespace SharpNeat.Network
             _nodeDepthById[nodeData._id] = depth;
             foreach(uint targetId in nodeData._tgtNodes)
             {
+                if (depth > 15000)
+                {
+                    break;
+                }
+
                 TraverseNode(_networkConnectivityData.GetNodeDataById(targetId), depth + 1);
             }
         }

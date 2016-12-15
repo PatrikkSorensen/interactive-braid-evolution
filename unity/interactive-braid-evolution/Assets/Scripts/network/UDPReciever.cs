@@ -86,7 +86,6 @@ public class UDPReciever : MonoBehaviour
 	// receive thread function
 	private void ReceiveData ()
 	{
-        Debug.Log("Recieving data"); 
         client = new UdpClient (port);
 		while (true) {
 			try {

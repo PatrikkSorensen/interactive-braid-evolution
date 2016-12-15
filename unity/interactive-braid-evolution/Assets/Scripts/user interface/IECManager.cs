@@ -64,7 +64,7 @@ public class IECManager : MonoBehaviour {
     internal static void SetUIToModellingState(int populationSize)
     {
         evolveButton.SetActive(false);
-        exitButton.SetActive(false);
+        exitButton.SetActive(true);
         advanceButton.SetActive(false);
 
         UIStatusWindow.totalModels = populationSize;

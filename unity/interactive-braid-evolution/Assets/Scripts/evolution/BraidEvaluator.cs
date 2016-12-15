@@ -37,9 +37,12 @@ public class BraidEvaluator : IPhenomeEvaluator<IBlackBox>
         if (optimizer != null)
         {
             optimizer.Evaluate(box);
-            hasEvaluated = false; 
+            hasEvaluated = false;
             while (BraidSimulationManager.ShouldBraidsEvaluate())
-                yield return new WaitForSeconds(0.1f);
+            {
+                //Debug.Log("Evaluating"); 
+                yield return new WaitForSeconds(1.1f);
+            }
 
             optimizer.StopEvaluation(box);
             float fit = optimizer.GetFitness(box);
