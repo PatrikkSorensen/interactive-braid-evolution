@@ -46,7 +46,7 @@ public class BraidController : UnitController
     {
         Debug.Log("Creating braid with this controller");
         TREE_SIZE = 5;
-        MAIN_RADIUS = 1.0f; 
+        MAIN_RADIUS = 2.5f; 
         _nodeid = 0;
 
         BraidNode tree = BraidTreeUtility.CreateInputTree(TREE_SIZE, MAIN_RADIUS);
@@ -67,7 +67,7 @@ public class BraidController : UnitController
         res = NormalizeOutput(res); 
 
         // check if we should branch and add new node with attached children
-        if (res.w > 0.8f && layer < 1.0f)
+        if (res.w > 0.5f && layer < 1.0f)
         {
             layer += 0.5f;
             BraidNode b = CreateNewNode(parentNode.data.vector.y, layer); 
