@@ -45,7 +45,7 @@ public class BraidController : UnitController
     protected void ActivateBraidController()
     {
         Debug.Log("Creating braid with this controller");
-        TREE_SIZE = 5;
+        TREE_SIZE = 15;
         MAIN_RADIUS = 2.5f; 
         _nodeid = 0;
 
@@ -67,7 +67,7 @@ public class BraidController : UnitController
         res = NormalizeOutput(res); 
 
         // check if we should branch and add new node with attached children
-        if (res.w > 0.5f && layer < 1.0f)
+        if (res.w > 0.8f && layer < 1.0f)
         {
             layer += 0.5f;
             BraidNode b = CreateNewNode(parentNode.data.vector.y, layer); 
@@ -98,7 +98,7 @@ public class BraidController : UnitController
     Vector4 CreateOutput(float input, float layer)
     {
         ISignalArray inputArr = neat.InputSignalArray;
-        double yVal = NormalizeInput(input, 0.0f, 10.0f);
+        double yVal = NormalizeInput(input, 0.0f, TREE_SIZE * 2);
 
         if(layer > 1.0)
             layer = 1.0f;

@@ -5,8 +5,6 @@ public class BraidTreeUtility : MonoBehaviour {
 
     public static void AttachChildren(BraidNode parent, int amount, int id)
     {
-        if (amount > 5)
-            Debug.Log("Children breaks normalization function"); 
         for (int i = 0; i < amount; i++)
         {
             float radius = parent.parent.data.radius / 2.0f; 

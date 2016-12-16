@@ -105,7 +105,7 @@ namespace SharpNeat.Network
             _nodeDepthById[nodeData._id] = depth;
             foreach(uint targetId in nodeData._tgtNodes)
             {
-                if (depth > 15000)
+                if (depth > 10000)
                 {
                     break;
                 }
