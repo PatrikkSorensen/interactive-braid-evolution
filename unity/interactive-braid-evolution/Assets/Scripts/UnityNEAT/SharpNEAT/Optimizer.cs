@@ -71,7 +71,13 @@ public class Optimizer : MonoBehaviour {
         // setup the relevant ui
         IECManager.SetUIToEvolvingState();
         BraidSimulationManager.populationSize = PopulationSize;
-        BraidSimulationManager.evaluationsMade = 0; 
+        BraidSimulationManager.evaluationsMade = 0;
+
+        // clean up folders
+        FindObjectOfType<StoryboardUtility>().CleanUpFolders(); 
+        
+        // start the EA 
+        StartEA(); 
     }
 
     public void Evaluate(IBlackBox phenome)

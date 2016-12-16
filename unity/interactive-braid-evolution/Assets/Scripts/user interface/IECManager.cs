@@ -7,8 +7,11 @@ using System.Text.RegularExpressions;
 using APP_STATUS; 
 public class IECManager : MonoBehaviour {
 
-    UDPReciever reciever; 
+    UDPReciever reciever;
 
+    // ui animator
+    private static Animator uiAnim;
+    private static Animator exitAnim; 
     // ui components
     public static GameObject evolveButton;
     public static GameObject statusWindowContainer;
@@ -32,6 +35,9 @@ public class IECManager : MonoBehaviour {
         loadDropdown          = GameObject.Find("LoadDropDown");
         generationCounter        = GameObject.Find("GenerationCounter"); 
         SetStartUI();
+
+        uiAnim = GameObject.Find("- ui v2").GetComponent<Animator>();
+        exitAnim = GameObject.Find("- exit canvas").GetComponent<Animator>(); 
     }
 
     private void Update()
@@ -46,15 +52,15 @@ public class IECManager : MonoBehaviour {
     /*********** UI STATES **********/
     public static void SetStartUI()
     {
-        advanceButton.SetActive(false);
-        evolveButton.SetActive(false); 
+        //advanceButton.SetActive(false);
+        //evolveButton.SetActive(false); 
         exitButton.SetActive(false);
     }
 
     public static void SetUIToEvolvingState()
     {
         UIStatusWindow.SetStatus(STATUS.EVOLVING);
-        evolveButton.SetActive(true);
+        //evolveButton.SetActive(true);
 
         Destroy(initializeButton);
         Destroy(dropDown);
@@ -63,7 +69,7 @@ public class IECManager : MonoBehaviour {
 
     internal static void SetUIToModellingState(int populationSize)
     {
-        evolveButton.SetActive(false);
+        //evolveButton.SetActive(false);
         exitButton.SetActive(true);
         advanceButton.SetActive(false);
 
@@ -83,11 +89,14 @@ public class IECManager : MonoBehaviour {
 
     public static void SetUIToExitState()
     {
-        evolveButton.SetActive(false);
-        advanceButton.SetActive(false);
-        exitButton.SetActive(false);
+        //evolveButton.SetActive(false);
+        //advanceButton.SetActive(false);
+        //exitButton.SetActive(false);
 
         UIStatusWindow.SetStatus(STATUS.SIMULATING);
+        uiAnim.SetTrigger("advance");
+        exitAnim.SetTrigger("advance");
+        FindObjectOfType<UserController>().DisableController(); 
     }
 
     /*********** END OF UI STATES **********/
@@ -98,12 +107,12 @@ public class IECManager : MonoBehaviour {
 
     public static void DisableAllButtons()
     {
-        initializeButton.SetActive(false);
-        dropDown.GetComponent<Image>().CrossFadeAlpha(0.0f, 0.0f, false);
-        dropDown.GetComponentInChildren<Text>().CrossFadeAlpha(0.0f, 0.0f, false);
+        //initializeButton.SetActive(false);
+        //dropDown.GetComponent<Image>().CrossFadeAlpha(0.0f, 0.0f, false);
+        //dropDown.GetComponentInChildren<Text>().CrossFadeAlpha(0.0f, 0.0f, false);
         //dropDown.SetActive(false);
         advanceButton.SetActive(false);
-        evolveButton.SetActive(false);
+        //evolveButton.SetActive(false);
         exitButton.SetActive(false);
     }
 

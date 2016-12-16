@@ -1,29 +1,65 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEditor;
-
+using System.IO;
 
 public class StoryboardUtility : MonoBehaviour
 {
 
-    public static void SaveGenerationData(string[] fileNames)
-    {
-        Debug.Log("Copying " + fileNames.Length + " models");
+    private string filePath;
 
-        foreach (string s in fileNames)
+    private void Start()
+    {
+        filePath = "C:/Users/pves/Desktop/braid-evolution/unity/interactive-braid-evolution/Assets/Geometry/SavedModels"; 
+    }
+    private void Update()
+    {
+
+        if (Input.GetKeyDown(KeyCode.Q))
+            StartStoryBoardStep(); 
+    }
+
+    public void CleanUpFolders ()
+    {
+        System.IO.DirectoryInfo di = new DirectoryInfo(filePath);
+
+        foreach (FileInfo file in di.GetFiles())
         {
-            Debug.Log(s); 
-            if (s != "")
-                CopyModel(s);
+            file.Delete();
+        }
+        foreach (DirectoryInfo dir in di.GetDirectories())
+        {
+            dir.Delete(true);
         }
     }
 
-    public static void CopyModel(string name)
+    public static void SaveGenerationData(string[] fileNames, int generation)
     {
-        string sourcePath = Application.dataPath + "/Geometry/Models/" + name + ".obj";
-        string destPath = Application.dataPath + "/Geometry/SavedModels/" + name + ".obj"; 
+        Debug.Log("Copying " + fileNames.Length + " models. Generation: " + generation);
 
-        System.IO.File.Copy(sourcePath, destPath);
+        foreach (string s in fileNames)
+        {
+            //Debug.Log(s); 
+            if (s != "")
+                CopyModel(s, generation);
+        }
+    }
+
+    public static void CopyModel(string name, int folder)
+    {
+
+        string sourcePath = Application.dataPath + "/Geometry/Models/" + name + ".obj";
+        string destPath = Application.dataPath + "/Geometry/SavedModels/" + folder.ToString(); 
+
+        if(File.Exists(destPath))
+        {
+            Debug.Log("Folder already exists!"); 
+        } else
+        {
+            Directory.CreateDirectory(destPath); 
+        }
+
+        File.Copy(sourcePath, destPath + "/" + name + ".obj");
         Debug.Log("Copied file from " + sourcePath + " to: " + destPath + " with name: " + name); 
     }
 
@@ -35,4 +71,18 @@ public class StoryboardUtility : MonoBehaviour
         curr_model[0].transform.position = Vector3.zero + new Vector3(-1.0f, 0.0f, 0.0f);
         return curr_model[0]; 
     }
+
+    public void StartStoryBoardStep()
+    {
+        Debug.Log("Creating storyboard"); 
+        // create storyboard
+
+        // trigger anim 
+
+        // save xml 
+
+        // return to splash 
+    }
+
+
 }

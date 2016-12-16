@@ -64,7 +64,7 @@ public class UDPReciever : MonoBehaviour
         if (msg.should_import == 1)
         {
             objImporter.StartImportSingleModel("braid_" + msg.id.ToString()); 
-            Debug.Log("Should import");
+            //Debug.Log("Should import");
         } 
     }
 

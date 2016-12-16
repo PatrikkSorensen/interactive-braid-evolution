@@ -78,7 +78,7 @@ public class ObjImporter : MonoBehaviour {
             // position
             Transform testModel = curr_model.transform;
             Vector3 v = FindSpawnPosition();
-            Debug.Log("Spawning braid at: " + v);  
+
             // tweening
             testModel.position = v + Vector3.up * offsetY;
             testModel.DOMove(v, tweenDuration);

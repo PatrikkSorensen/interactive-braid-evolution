@@ -38,7 +38,7 @@ public class UserController : MonoBehaviour {
             BraidSimulationManager.SetShouldBraidsEvaluate(false);
 
 
-                if (Input.GetKeyDown(KeyCode.Q))
+        if (Input.GetKeyDown(KeyCode.Q))
             Camera.main.GetComponent<MouseLook>().SetTarget(sceneCenter.transform.position);
 
         AddTranslation(); 
@@ -67,5 +67,10 @@ public class UserController : MonoBehaviour {
             transform.Translate(v2 * speed);
             transform.Translate(v * speed);
         }
+    }
+
+    public void DisableController()
+    {
+        Destroy(gameObject.GetComponent<UserController>()); 
     }
 }

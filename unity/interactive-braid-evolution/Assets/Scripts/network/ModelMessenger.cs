@@ -42,9 +42,9 @@ public class ModelMessenger : MonoBehaviour {
 
     public void SendBraidToGH()
     {
-        Debug.Log("Sending braid!"); 
+        //Debug.Log("Sending braid!"); 
         string message = JsonHelper.CreateJSONFromSingleBraid(braids[0]);
-        Debug.Log(message);
+        //Debug.Log(message);
         sender.SendString(message);
         modelling = true; 
         braids.RemoveAt(0); 
@@ -63,7 +63,7 @@ public class ModelMessenger : MonoBehaviour {
 
     public void AddBraid(Braid b, int id)
     {
-        Debug.Log("Added data for braid!"); 
+        //Debug.Log("Added data for braid!"); 
         //if (id > m_braidList.Length)
         //    Debug.Log("Error: Braid array out or range: " + id); 
         //m_braidList[id] = b;

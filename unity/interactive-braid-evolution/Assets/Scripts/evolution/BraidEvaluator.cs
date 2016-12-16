@@ -41,7 +41,7 @@ public class BraidEvaluator : IPhenomeEvaluator<IBlackBox>
             while (BraidSimulationManager.ShouldBraidsEvaluate())
             {
                 //Debug.Log("Evaluating"); 
-                yield return new WaitForSeconds(1.1f);
+                yield return new WaitForSeconds(0.2f);
             }
 
             optimizer.StopEvaluation(box);

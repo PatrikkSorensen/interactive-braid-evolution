@@ -17,8 +17,8 @@ public class UIANNSetupDropdown : MonoBehaviour {
 
     public static void SetANNSetup(int val)
     {
-        Dropdown dropdown = GameObject.Find("ANNSetupDropdown").GetComponent<Dropdown>();
-        dropdown.value = val;
+        //Dropdown dropdown = GameObject.Find("ANNSetupDropdown").GetComponent<Dropdown>();
+        //dropdown.value = val;
     }
 }
 

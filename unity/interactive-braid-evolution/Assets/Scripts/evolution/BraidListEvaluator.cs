@@ -66,7 +66,7 @@ namespace SharpNEAT.core
                 while (!BraidSimulationManager.HasControllersCreatedData())
                 {
                     Debug.Log("Waiting on controllers..."); 
-                    yield return new WaitForSeconds(0.1f);
+                    yield return new WaitForSeconds(0.05f);
                 }
 
                 ModelMessenger messenger = GameObject.FindObjectOfType<ModelMessenger>();
@@ -74,7 +74,7 @@ namespace SharpNEAT.core
 
                 while (!BraidSimulationManager.HasControllersEvaluated())
                 {
-                    yield return new WaitForSeconds(0.1f);
+                    yield return new WaitForSeconds(0.05f);
                 }
 
                 BraidSimulationManager.AdvanceGeneration(); 
