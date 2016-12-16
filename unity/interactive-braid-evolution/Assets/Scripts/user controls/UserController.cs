@@ -24,6 +24,9 @@ public class UserController : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.R))
             SceneManager.LoadScene(3);
 
+        //if (Input.GetKeyDown(KeyCode.T))
+        //    FindObjectOfType<Optimizer>().StopEA(); 
+
         // TODO: INTEGRATE ME.... PLAESE?
         //if (Input.GetKeyDown(KeyCode.Space))
         //    if (UIStatusWindow.currentStatus == STATUS.SIMULATING)
@@ -71,6 +74,7 @@ public class UserController : MonoBehaviour {
 
     public void DisableController()
     {
-        Destroy(gameObject.GetComponent<UserController>()); 
+        Destroy(gameObject.GetComponent<UserController>());
+        Destroy(FindObjectOfType<MouseLook>());
     }
 }

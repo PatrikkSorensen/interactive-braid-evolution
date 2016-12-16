@@ -6,13 +6,13 @@ using UnityEngine.UI;
 public class ScreenShotScript : MonoBehaviour {
 
     public GameObject storyboardContainer;
-    public GameObject backgroundUI; 
+    public GameObject backgroundUI;
+    public Material braidMat;  
     public static string folderPath;
     public static string screenShotPrefix; 
     private int currentId, imgWidth, imgHeight;
     private int uiRawImageWidth, borderOffset; 
     private bool loadedTexture; 
-
 
     void Start()
     {
@@ -20,41 +20,61 @@ public class ScreenShotScript : MonoBehaviour {
         imgWidth = imgHeight = 512;
         borderOffset = 12; 
         uiRawImageWidth = 100; 
-        folderPath = Application.dataPath + "/Resources/StoryboardImages/"; 
+        folderPath = Application.dataPath + "/Geometry/StoryboardImages/"; 
         currentId = 0;
     }
 
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.X))
-            TakeScreenshot();
+        //if (Input.GetKeyDown(KeyCode.X))
+        //    TakeScreenshot();
 
-        if (Input.GetKeyDown(KeyCode.Y))
-            StartCoroutine(CreateRenderTexture());
+        //if (Input.GetKeyDown(KeyCode.Y))
+        //    StartCoroutine(CreateRenderTexture());
 
         if (Input.GetKeyDown(KeyCode.Z))
         {
-            SetBackgroundSize(); 
-            LoadStoryboardImages();
+            SetBackgroundSize();
+            CreateStoryboardUI();
         }
 
     }
 
-    void TakeScreenshot()
-    {
-        string path = Application.dataPath + screenShotPrefix + ".png";
-        Debug.Log("Took screenshot and saved it to: " + path);
-        Application.CaptureScreenshot(path);
-    }
+    //void TakeScreenshot()
+    //{
+    //    string path = Application.dataPath + screenShotPrefix + ".png";
+    //    Debug.Log("Took screenshot and saved it to: " + path);
+    //    Application.CaptureScreenshot(path);
+    //}
 
 
 
-    IEnumerator CreateRenderTexture()
-    {
-        GameObject gb = StoryboardUtility.LoadInModel("Some name");
-        yield return new WaitForEndOfFrame();
+    //IEnumerator CreateRenderTexture(GameObject gb)
+    //{
+    //    yield return new WaitForEndOfFrame();
         
+
+    //    Texture2D tex = new Texture2D(imgWidth, imgHeight, TextureFormat.RGB24, false);
+    //    Rect r = new Rect(Screen.width * 0.5f - 200.0f, Screen.height * 0.50f - 200.0f, Screen.width * 0.50f + 100, Screen.height * 0.50f + 100);
+
+    //    tex.ReadPixels(r, 0, 0);
+    //    tex.Apply();
+
+    //    var bytes = tex.EncodeToPNG();
+    //    Destroy(tex);
+
+    //    File.WriteAllBytes(folderPath + screenShotPrefix + currentId.ToString() + ".png", bytes);
+
+    //    currentId++;
+    //    Debug.Log("Created image with texture rendering!");
+    //    Destroy(gb); 
+    //}
+
+    public IEnumerator CreateRenderTexture(GameObject gb)
+    {
+        gb.GetComponent<Renderer>().material = braidMat; 
+        yield return new WaitForEndOfFrame();
 
         Texture2D tex = new Texture2D(imgWidth, imgHeight, TextureFormat.RGB24, false);
         Rect r = new Rect(Screen.width * 0.5f - 200.0f, Screen.height * 0.50f - 200.0f, Screen.width * 0.50f + 100, Screen.height * 0.50f + 100);
@@ -72,9 +92,8 @@ public class ScreenShotScript : MonoBehaviour {
         Destroy(gb); 
     }
 
-    void LoadStoryboardImages()
+    public void CreateStoryboardUI()
     {
-        int id = currentId - 1;
         Texture2D[] images = LoadAllImagesFromFolder(folderPath); 
 
         for(int i = 0; i < images.Length; i++)
@@ -90,7 +109,7 @@ public class ScreenShotScript : MonoBehaviour {
         int Xoffset = (int) (backgroundUI.GetComponent<RectTransform>().rect.width / 2) - uiRawImageWidth / 2;
         Xoffset -= borderOffset; 
 
-        Debug.Log(backgroundUI.GetComponent<RectTransform>().rect.width); 
+        //Debug.Log(backgroundUI.GetComponent<RectTransform>().rect.width); 
 
         foreach(Transform t in storyboardContainer.transform)
         {
@@ -117,7 +136,7 @@ public class ScreenShotScript : MonoBehaviour {
 
     Texture2D[] LoadAllImagesFromFolder(string path)
     {
-        string[] files = System.IO.Directory.GetFiles(Application.dataPath + "/Resources/StoryboardImages/", "*.png");
+        string[] files = Directory.GetFiles(Application.dataPath + "/Geometry/StoryboardImages/", "*.png");
         Texture2D[] images = new Texture2D[files.Length];
         int index = 0; 
 

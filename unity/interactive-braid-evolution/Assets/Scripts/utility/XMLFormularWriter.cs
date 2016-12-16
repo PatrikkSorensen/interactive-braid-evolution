@@ -11,6 +11,8 @@ public class XMLFormularWriter : MonoBehaviour {
     }
 
 
+
+
     void SaveInfo() {
         XmlDocument doc = new XmlDocument();
         XmlElement el = (XmlElement)doc.AppendChild(doc.CreateElement("info"));

@@ -39,6 +39,7 @@ public class Optimizer : MonoBehaviour {
 
     void Start ()
     {
+
         champFileSavePath = Application.dataPath + "/Resources/xml/braid.champ.xml";
         popFileSavePath = Application.dataPath + "/Resources/xml/pop.xml";
         popLoadSavePath = Application.dataPath + "/Resources/xml/startup_populations/pop.cppn.split.xml";
@@ -46,6 +47,7 @@ public class Optimizer : MonoBehaviour {
 
     public void InitializeEA()
     {
+
         // set up network structure from dropdown
         XmlDocument xmlConfig = new XmlDocument();
         TextAsset textAsset = (TextAsset)Resources.Load("ExperimentSetups/experiment.config.braid.cppn.split");
@@ -74,9 +76,10 @@ public class Optimizer : MonoBehaviour {
         BraidSimulationManager.evaluationsMade = 0;
 
         // clean up folders
-        FindObjectOfType<StoryboardUtility>().CleanUpFolders(); 
-        
+        FindObjectOfType<StoryboardUtility>().CleanUpFolders();
+
         // start the EA 
+        Generation = 0;
         StartEA(); 
     }
 
@@ -143,11 +146,15 @@ public class Optimizer : MonoBehaviour {
 
     public void StopEA()
     {
-        IECManager.SetUIToExitState();
-        BraidSimulationManager.SetShouldBraidsEvaluate(false);
+
 
         if (_ea != null && _ea.RunState == SharpNeat.Core.RunState.Running)
+        {
             _ea.Stop();
+            Debug.Log("Stoping EA");
+            IECManager.SetUIToExitState();
+            BraidSimulationManager.SetShouldBraidsEvaluate(false);
+        }
     }
 
 

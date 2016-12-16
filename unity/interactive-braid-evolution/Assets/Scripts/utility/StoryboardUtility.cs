@@ -1,16 +1,21 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic; 
 using UnityEditor;
 using System.IO;
 
 public class StoryboardUtility : MonoBehaviour
 {
 
-    private string filePath;
+    private string modelPath;
+    private string screenshotPath; 
+    private ScreenShotScript ssScript; 
 
     private void Start()
     {
-        filePath = "C:/Users/pves/Desktop/braid-evolution/unity/interactive-braid-evolution/Assets/Geometry/SavedModels"; 
+
+        screenshotPath = "C:/Users/pves/Desktop/braid-evolution/unity/interactive-braid-evolution/Assets/Geometry/StoryboardImages/";
+        ssScript = FindObjectOfType<ScreenShotScript>();
     }
     private void Update()
     {
@@ -21,16 +26,21 @@ public class StoryboardUtility : MonoBehaviour
 
     public void CleanUpFolders ()
     {
-        System.IO.DirectoryInfo di = new DirectoryInfo(filePath);
+        modelPath = "C:/Users/pves/Desktop/braid-evolution/unity/interactive-braid-evolution/Assets/Geometry/TempModels/";
+        DirectoryInfo di = new DirectoryInfo(modelPath);
 
         foreach (FileInfo file in di.GetFiles())
         {
+            Debug.Log("Some file here? " + file.FullName);
             file.Delete();
         }
         foreach (DirectoryInfo dir in di.GetDirectories())
         {
+            Debug.Log("Some dir here? " + dir.FullName); 
             dir.Delete(true);
         }
+
+        Debug.Log("Done deleting.."); 
     }
 
     public static void SaveGenerationData(string[] fileNames, int generation)
@@ -49,7 +59,7 @@ public class StoryboardUtility : MonoBehaviour
     {
 
         string sourcePath = Application.dataPath + "/Geometry/Models/" + name + ".obj";
-        string destPath = Application.dataPath + "/Geometry/SavedModels/" + folder.ToString(); 
+        string destPath = Application.dataPath + "/Geometry/TempModels/" + folder.ToString(); 
 
         if(File.Exists(destPath))
         {
@@ -65,16 +75,16 @@ public class StoryboardUtility : MonoBehaviour
 
     public static GameObject LoadInModel(string path)
     {
-        Debug.Log("Loading in model.."); 
-        string objFileName = Application.dataPath + "/Resources/StoryboardImages/Pig_obj.txt";
-        GameObject[] curr_model = ObjReader.use.ConvertFile(objFileName, true); // Has to be an array because...? 
-        curr_model[0].transform.position = Vector3.zero + new Vector3(-1.0f, 0.0f, 0.0f);
+        Debug.Log("Loading in model..");
+        GameObject[] curr_model = ObjReader.use.ConvertFile(path, true); // Has to be an array because...? 
         return curr_model[0]; 
     }
 
     public void StartStoryBoardStep()
     {
-        Debug.Log("Creating storyboard"); 
+        Debug.Log("Creating storyboard");
+
+        StartCoroutine(CreateScreenShots());
         // create storyboard
 
         // trigger anim 
@@ -82,6 +92,47 @@ public class StoryboardUtility : MonoBehaviour
         // save xml 
 
         // return to splash 
+    }
+
+    public IEnumerator CreateScreenShots()
+    {
+        List<FileInfo> storyboardModels = LoadModels(modelPath);
+        ScreenShotScript ssScript = FindObjectOfType<ScreenShotScript>();
+
+        foreach (FileInfo f in storyboardModels)
+        {
+            // load model 
+            GameObject gb = LoadInModel(f.FullName);
+
+            // take screenshot
+            StartCoroutine(ssScript.CreateRenderTexture(gb));
+            yield return new WaitForSeconds(0.2f);
+
+            Debug.Log("Creating new screenshot!"); 
+        }
+
+
+
+        // load in screenshots 
+        ssScript.CreateStoryboardUI(); 
+
+    }
+
+    public List<FileInfo> LoadModels(string filePath)
+    {
+        List<FileInfo> files = new List<FileInfo>(); 
+        DirectoryInfo di = new DirectoryInfo(filePath);
+
+        foreach (DirectoryInfo dir in di.GetDirectories())
+        {
+            foreach(FileInfo file in dir.GetFiles())
+            {
+                if (!file.Name.Contains(".obj.meta"))
+                    files.Add(file); 
+            }
+        }
+
+        return files; 
     }
 
 

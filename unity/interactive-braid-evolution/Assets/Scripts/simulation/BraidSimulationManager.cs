@@ -7,6 +7,7 @@ public class BraidSimulationManager : MonoBehaviour {
     public static int vectorArraysMade; 
     public static int evaluationsMade; 
     public static int populationSize;
+    public static int generation; 
 
     public static bool shouldSimulateGenomes;
 
@@ -14,12 +15,17 @@ public class BraidSimulationManager : MonoBehaviour {
     {
         shouldSimulateGenomes = true;
         vectorArraysMade = 0;
-        evaluationsMade = 0; 
-
+        evaluationsMade = 0;
+        generation = 0; 
     }
 
     public static void AdvanceGeneration()
     {
+        if(GameObject.FindObjectOfType<UIStatusWindow>() == null)
+        {
+            Debug.Log("No ui window, so wont perform another run");
+            return; 
+        }
         GameObject[] braids = GameObject.FindGameObjectsWithTag("Braid");
         string[] braidFiles = new string[populationSize];
         int index = 0;
@@ -35,7 +41,7 @@ public class BraidSimulationManager : MonoBehaviour {
             index++; 
         }
 
-        StoryboardUtility.SaveGenerationData(braidFiles, (int) Optimizer.Generation); 
+        StoryboardUtility.SaveGenerationData(braidFiles, generation++); 
 
         ResetSimulationValues();
         IECManager.SetUIToModellingState(populationSize);
