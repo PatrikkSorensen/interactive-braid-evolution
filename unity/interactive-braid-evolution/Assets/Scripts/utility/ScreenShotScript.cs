@@ -7,7 +7,7 @@ public class ScreenShotScript : MonoBehaviour {
 
     public GameObject storyboardContainer;
     public GameObject backgroundUI;
-    public Material braidMat;  
+
     public static string folderPath;
     public static string screenShotPrefix; 
     private int currentId, imgWidth, imgHeight;
@@ -27,11 +27,6 @@ public class ScreenShotScript : MonoBehaviour {
 
     void Update()
     {
-        //if (Input.GetKeyDown(KeyCode.X))
-        //    TakeScreenshot();
-
-        //if (Input.GetKeyDown(KeyCode.Y))
-        //    StartCoroutine(CreateRenderTexture());
 
         if (Input.GetKeyDown(KeyCode.Z))
         {
@@ -41,39 +36,8 @@ public class ScreenShotScript : MonoBehaviour {
 
     }
 
-    //void TakeScreenshot()
-    //{
-    //    string path = Application.dataPath + screenShotPrefix + ".png";
-    //    Debug.Log("Took screenshot and saved it to: " + path);
-    //    Application.CaptureScreenshot(path);
-    //}
-
-
-
-    //IEnumerator CreateRenderTexture(GameObject gb)
-    //{
-    //    yield return new WaitForEndOfFrame();
-        
-
-    //    Texture2D tex = new Texture2D(imgWidth, imgHeight, TextureFormat.RGB24, false);
-    //    Rect r = new Rect(Screen.width * 0.5f - 200.0f, Screen.height * 0.50f - 200.0f, Screen.width * 0.50f + 100, Screen.height * 0.50f + 100);
-
-    //    tex.ReadPixels(r, 0, 0);
-    //    tex.Apply();
-
-    //    var bytes = tex.EncodeToPNG();
-    //    Destroy(tex);
-
-    //    File.WriteAllBytes(folderPath + screenShotPrefix + currentId.ToString() + ".png", bytes);
-
-    //    currentId++;
-    //    Debug.Log("Created image with texture rendering!");
-    //    Destroy(gb); 
-    //}
-
     public IEnumerator CreateRenderTexture(GameObject gb)
     {
-        gb.GetComponent<Renderer>().material = braidMat; 
         yield return new WaitForEndOfFrame();
 
         Texture2D tex = new Texture2D(imgWidth, imgHeight, TextureFormat.RGB24, false);
@@ -89,7 +53,7 @@ public class ScreenShotScript : MonoBehaviour {
 
         currentId++;
         Debug.Log("Created image with texture rendering!");
-        Destroy(gb); 
+        Destroy(gb);
     }
 
     public void CreateStoryboardUI()
@@ -101,6 +65,7 @@ public class ScreenShotScript : MonoBehaviour {
 
         SetUIImagesPosition(); 
         Debug.Log("Changed storyboard texture from disk");
+        GameObject.Find("- ui storyboard").GetComponent<Animator>().SetTrigger("advance"); 
     }
 
     void SetUIImagesPosition()
@@ -108,8 +73,6 @@ public class ScreenShotScript : MonoBehaviour {
         int index = 0;
         int Xoffset = (int) (backgroundUI.GetComponent<RectTransform>().rect.width / 2) - uiRawImageWidth / 2;
         Xoffset -= borderOffset; 
-
-        //Debug.Log(backgroundUI.GetComponent<RectTransform>().rect.width); 
 
         foreach(Transform t in storyboardContainer.transform)
         {

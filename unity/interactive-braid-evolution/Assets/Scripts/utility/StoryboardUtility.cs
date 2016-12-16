@@ -3,13 +3,16 @@ using System.Collections;
 using System.Collections.Generic; 
 using UnityEditor;
 using System.IO;
+using DG.Tweening; 
 
 public class StoryboardUtility : MonoBehaviour
 {
 
     private string modelPath;
     private string screenshotPath; 
-    private ScreenShotScript ssScript; 
+    private ScreenShotScript ssScript;
+    private float rotateTime;
+    public Material braidMat;
 
     private void Start()
     {
@@ -83,7 +86,6 @@ public class StoryboardUtility : MonoBehaviour
     public void StartStoryBoardStep()
     {
         Debug.Log("Creating storyboard");
-
         StartCoroutine(CreateScreenShots());
         // create storyboard
 
@@ -98,20 +100,22 @@ public class StoryboardUtility : MonoBehaviour
     {
         List<FileInfo> storyboardModels = LoadModels(modelPath);
         ScreenShotScript ssScript = FindObjectOfType<ScreenShotScript>();
-
+        rotateTime = 1.0f;
         foreach (FileInfo f in storyboardModels)
         {
             // load model 
             GameObject gb = LoadInModel(f.FullName);
 
             // take screenshot
+            gb.transform.position = Camera.main.transform.position + new Vector3(0.0f, 0.0f, 30.0f);
+            gb.GetComponent<Renderer>().material = braidMat;
+            gb.transform.DORotate(new Vector3(0.0f, 45.0f, 0.0f), rotateTime); 
+            yield return new WaitForSeconds(rotateTime); 
             StartCoroutine(ssScript.CreateRenderTexture(gb));
             yield return new WaitForSeconds(0.2f);
 
             Debug.Log("Creating new screenshot!"); 
         }
-
-
 
         // load in screenshots 
         ssScript.CreateStoryboardUI(); 

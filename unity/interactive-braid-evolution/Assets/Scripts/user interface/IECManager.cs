@@ -98,16 +98,24 @@ public class IECManager : MonoBehaviour {
 
     public static void SetUIToExitState()
     {
-        //evolveButton.SetActive(false);
-        //advanceButton.SetActive(false);
-        Debug.Log("Setting ui to exit");
+        // Destroy ui
         Destroy(FindObjectOfType<UIStatusWindow>().gameObject); //.SetActive(false);
         Destroy(exitButton); 
 
-        UIStatusWindow.SetStatus(STATUS.SIMULATING);
+        // Set ui animations
         uiAnim.SetTrigger("advance");
         exitAnim.SetTrigger("advance");
+
+        // disable user movement and move him to origin
         FindObjectOfType<UserController>().DisableController();
+        GameObject user = GameObject.Find("User");
+        user.transform.DOMove(Vector3.zero, 4.0f);
+        Camera.main.transform.DORotate(Vector3.zero, 4.0f);
+
+        // destroy braids 
+        GameObject[] braids = GameObject.FindGameObjectsWithTag("Braid");
+        foreach(GameObject braid in braids)
+            Destroy(braid); 
     }
 
     /*********** END OF UI STATES **********/
