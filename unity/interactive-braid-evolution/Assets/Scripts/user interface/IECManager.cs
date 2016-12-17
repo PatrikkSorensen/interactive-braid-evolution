@@ -34,36 +34,15 @@ public class IECManager : MonoBehaviour {
         exitButton            = GameObject.Find("ExitButton");
         loadDropdown          = GameObject.Find("LoadDropDown");
         generationCounter        = GameObject.Find("GenerationCounter"); 
-        SetStartUI();
 
         uiAnim = GameObject.Find("- ui v2").GetComponent<Animator>();
         exitAnim = GameObject.Find("- exit canvas").GetComponent<Animator>(); 
     }
 
-    private void Update()
-    {
-        //if (reciever.hasImportedAllModels)
-        //{
-        //    //SetUIToSelectionState();
-        //    reciever.hasImportedAllModels = false;
-        //}
-    }
 
-    
-    public void PerformExitStep()
-    {
-        Debug.Log("Performing exit loop"); 
-        FindObjectOfType<StoryboardUtility>().StartStoryBoardStep(); 
-    }
+
 
     ///*********** UI STATES **********/
-    public static void SetStartUI()
-    {
-        //advanceButton.SetActive(false);
-        //evolveButton.SetActive(false); 
-        //exitButton.SetActive(false);
-
-    }
 
     public static void SetUIToEvolvingState()
     {
@@ -126,7 +105,7 @@ public class IECManager : MonoBehaviour {
 
     public static void DisableAllButtons()
     {
-        advanceButton.SetActive(false);
+        //advanceButton.SetActive(false);
         exitButton.SetActive(false);
     }
 

@@ -30,18 +30,24 @@ public class StoryboardUtility : MonoBehaviour
     public void CleanUpFolders ()
     {
         modelPath = "C:/Users/pves/Desktop/braid-evolution/unity/interactive-braid-evolution/Assets/Geometry/TempModels/";
+
         DirectoryInfo di = new DirectoryInfo(modelPath);
 
         foreach (FileInfo file in di.GetFiles())
-        {
-            Debug.Log("Some file here? " + file.FullName);
             file.Delete();
-        }
+
         foreach (DirectoryInfo dir in di.GetDirectories())
-        {
-            Debug.Log("Some dir here? " + dir.FullName); 
             dir.Delete(true);
-        }
+
+
+        di = new DirectoryInfo(screenshotPath);
+
+        foreach (FileInfo file in di.GetFiles())
+            file.Delete();
+
+        foreach (DirectoryInfo dir in di.GetDirectories())
+            dir.Delete(true);
+
 
         Debug.Log("Done deleting.."); 
     }
@@ -127,6 +133,7 @@ public class StoryboardUtility : MonoBehaviour
         List<FileInfo> files = new List<FileInfo>(); 
         DirectoryInfo di = new DirectoryInfo(filePath);
 
+
         foreach (DirectoryInfo dir in di.GetDirectories())
         {
             foreach(FileInfo file in dir.GetFiles())
@@ -136,6 +143,7 @@ public class StoryboardUtility : MonoBehaviour
             }
         }
 
+        FindObjectOfType<XMLFormularWriter>().SaveModels(files.ToArray()); 
         return files; 
     }
 

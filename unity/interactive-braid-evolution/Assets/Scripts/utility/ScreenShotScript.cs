@@ -64,6 +64,7 @@ public class ScreenShotScript : MonoBehaviour {
             CreateRawImageGameobject(images[i]);
 
         SetUIImagesPosition(); 
+
         Debug.Log("Changed storyboard texture from disk");
         GameObject.Find("- ui storyboard").GetComponent<Animator>().SetTrigger("advance"); 
     }
@@ -100,6 +101,8 @@ public class ScreenShotScript : MonoBehaviour {
     Texture2D[] LoadAllImagesFromFolder(string path)
     {
         string[] files = Directory.GetFiles(Application.dataPath + "/Geometry/StoryboardImages/", "*.png");
+        FindObjectOfType<XMLFormularWriter>().SaveImages(files); 
+
         Texture2D[] images = new Texture2D[files.Length];
         int index = 0; 
 

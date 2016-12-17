@@ -7,7 +7,7 @@
     <Fn id="3" name="Sine" prob="0.25" />
   </ActivationFunctions>
   <Networks>
-    <Network id="82" birthGen="10" fitness="10">
+    <Network id="19" birthGen="2" fitness="0">
       <Nodes>
         <Node type="bias" id="0" fnId="0" />
         <Node type="in" id="1" fnId="0" />
@@ -16,27 +16,17 @@
         <Node type="out" id="4" fnId="0" />
         <Node type="out" id="5" fnId="0" />
         <Node type="out" id="6" fnId="0" />
-        <Node type="hid" id="34" fnId="3" />
-        <Node type="hid" id="37" fnId="2" />
-        <Node type="hid" id="61" fnId="3" />
-        <Node type="hid" id="73" fnId="2" />
+        <Node type="hid" id="28" fnId="3" />
+        <Node type="hid" id="32" fnId="2" />
       </Nodes>
       <Connections>
-        <Con id="7" src="0" tgt="3" wght="0.88283750601112843" />
-        <Con id="10" src="0" tgt="6" wght="0.20290998988048892" />
-        <Con id="15" src="2" tgt="3" wght="0.954804664477706" />
-        <Con id="16" src="2" tgt="4" wght="-1.4511689674109221" />
-        <Con id="17" src="2" tgt="5" wght="1.9847170133143663" />
-        <Con id="18" src="2" tgt="6" wght="0.96761219895627937" />
-        <Con id="36" src="34" tgt="6" wght="1.9977329251980078" />
-        <Con id="38" src="1" tgt="37" wght="-1.9488539207320179" />
-        <Con id="39" src="37" tgt="5" wght="2" />
-        <Con id="62" src="1" tgt="61" wght="-0.962053744122386" />
-        <Con id="63" src="61" tgt="3" wght="2" />
-        <Con id="74" src="1" tgt="73" wght="-2" />
-        <Con id="75" src="73" tgt="34" wght="2" />
-        <Con id="83" src="0" tgt="37" wght="-2" />
-        <Con id="102" src="2" tgt="34" wght="-0.13722438365221024" />
+        <Con id="8" src="0" tgt="4" wght="-0.36124689690768719" />
+        <Con id="16" src="2" tgt="4" wght="-0.18377355858683586" />
+        <Con id="18" src="2" tgt="6" wght="-0.21573485806584358" />
+        <Con id="29" src="1" tgt="28" wght="1.9017516113817692" />
+        <Con id="30" src="28" tgt="3" wght="2" />
+        <Con id="33" src="1" tgt="32" wght="1.5359516199678183" />
+        <Con id="34" src="32" tgt="4" wght="2" />
       </Connections>
     </Network>
   </Networks>
