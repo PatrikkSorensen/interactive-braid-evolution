@@ -76,7 +76,7 @@ public class Optimizer : MonoBehaviour {
         BraidSimulationManager.evaluationsMade = 0;
 
         // clean up folders
-        FindObjectOfType<StoryboardUtility>().CleanUpFolders();
+        FindObjectOfType<StoryboardUtility>().InitializeStoryboardUtility();
 
         // start the EA 
         Generation = 0;

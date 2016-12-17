@@ -51,14 +51,26 @@ public class MaterialScript : MonoBehaviour {
 
     void OnMouseDown()
     {
+        if (!selected)
+        {
+            for (int i = 0; i < mats.Length; i++)
+                mats[i] = selectedMat;
 
-        for (int i = 0; i < mats.Length; i++)
-            mats[i] = selectedMat;
+            r.materials = mats;
+            selected = true;
 
-        r.materials = mats;
-        selected = true;
+            GameObject gb = GameObject.Find("unit_" + Regex.Match(gameObject.name, @"\d+").Value);
+            gb.GetComponent<BraidController>().SetFitness(10.0f);
+        } else
+        {
+            for (int i = 0; i < mats.Length; i++)
+                mats[i] = startMat;
 
-        GameObject gb = GameObject.Find("unit_" + Regex.Match(gameObject.name, @"\d+").Value);
-        gb.GetComponent<BraidController>().SetFitness(10.0f);  
+            r.materials = mats;
+            selected = false;
+
+            GameObject gb = GameObject.Find("unit_" + Regex.Match(gameObject.name, @"\d+").Value);
+            gb.GetComponent<BraidController>().SetFitness(0.0f);
+        }
     }
 }

@@ -28,6 +28,12 @@ public class UIStatusWindow : MonoBehaviour
 
     void Update()
     {
+        if (modelsImported == totalModels)
+        {
+            modelsImported = 0; 
+            SetStatus(STATUS.SIMULATING);
+        }
+
         if (Time.time > nextActionTime)
         {
             nextActionTime += period;

@@ -63,13 +63,12 @@ public class ObjImporter : MonoBehaviour {
         shouldImportSingle = false;
         string objFileName = Application.dataPath + "/Geometry/Models/" + file + ".obj";
         GameObject[] models = ObjReader.use.ConvertFile(objFileName, true);
-        GameObject curr_model;
+        GameObject curr_model = models[0];
 
         if (models == null)
             Debug.LogWarning("No model imported from obj importer...");
         else
         {
-            curr_model = models[0];
             // names and id
             curr_model.name = file;
             curr_model.tag = "Braid";
@@ -89,9 +88,11 @@ public class ObjImporter : MonoBehaviour {
             // components and other scripts
             curr_model.AddComponent<Rotate>();
             curr_model.AddComponent<MaterialScript>();
-        }
 
-        //FindObjectOfType<CITARepresentationTester>().PerformBranchedBraidsTest();
+            // ui 
+            Debug.Log("imported..."); 
+            UIStatusWindow.modelsImported++; 
+        }
         
         yield return new WaitForSeconds(0.05f);
         FindObjectOfType<ModelMessenger>().modelling = false;

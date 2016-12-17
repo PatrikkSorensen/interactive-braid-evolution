@@ -42,9 +42,7 @@ public class ModelMessenger : MonoBehaviour {
 
     public void SendBraidToGH()
     {
-        //Debug.Log("Sending braid!"); 
         string message = JsonHelper.CreateJSONFromSingleBraid(braids[0]);
-        //Debug.Log(message);
         sender.SendString(message);
         modelling = true; 
         braids.RemoveAt(0); 

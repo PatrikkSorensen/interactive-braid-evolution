@@ -24,12 +24,17 @@ public class GestureDetector : MonoBehaviour
     {
         //PointingTowards();
 
-        if (DetectFist())
-            MoveObjectToHand();
+        if (!DetectFist())
+            SelectBraid();
 
-        //DetectSwipeGesture(); 
+
 
     }
+
+    void SelectBraid ()
+    {
+        //Debug.Log("I should select some braid!"); 
+    } 
 
     void DetectPointMotion()
     {
@@ -75,17 +80,7 @@ public class GestureDetector : MonoBehaviour
                     }
                 m_shouldDrag = false;
                 return false; 
-            } else if(hand.IsRight)
-            {
-                foreach (Finger f in hand.Fingers)
-                    if (f.IsExtended)
-                    {
-                        m_shouldDrag = true;
-                        return true;
-                    }
-                m_shouldDrag = false;
-                return false;
-            }
+            } 
 
         m_shouldDrag = true; 
         return true; 

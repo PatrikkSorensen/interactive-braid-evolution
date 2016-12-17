@@ -13,24 +13,13 @@ public class StoryboardUtility : MonoBehaviour
     private ScreenShotScript ssScript;
     private float rotateTime;
     public Material braidMat;
-
-    private void Start()
+    public void InitializeStoryboardUtility ()
     {
-
-        screenshotPath = "C:/Users/pves/Desktop/braid-evolution/unity/interactive-braid-evolution/Assets/Geometry/StoryboardImages/";
         ssScript = FindObjectOfType<ScreenShotScript>();
-    }
-    private void Update()
-    {
-
-        if (Input.GetKeyDown(KeyCode.Q))
-            StartStoryBoardStep(); 
-    }
-
-    public void CleanUpFolders ()
-    {
+        screenshotPath = "C:/Users/pves/Desktop/braid-evolution/unity/interactive-braid-evolution/Assets/Geometry/StoryboardImages/";
         modelPath = "C:/Users/pves/Desktop/braid-evolution/unity/interactive-braid-evolution/Assets/Geometry/TempModels/";
 
+        // clean and delete files and folders with temp models
         DirectoryInfo di = new DirectoryInfo(modelPath);
 
         foreach (FileInfo file in di.GetFiles())
@@ -39,7 +28,7 @@ public class StoryboardUtility : MonoBehaviour
         foreach (DirectoryInfo dir in di.GetDirectories())
             dir.Delete(true);
 
-
+        // clean and delete files and folders with temp images
         di = new DirectoryInfo(screenshotPath);
 
         foreach (FileInfo file in di.GetFiles())
@@ -47,9 +36,6 @@ public class StoryboardUtility : MonoBehaviour
 
         foreach (DirectoryInfo dir in di.GetDirectories())
             dir.Delete(true);
-
-
-        Debug.Log("Done deleting.."); 
     }
 
     public static void SaveGenerationData(string[] fileNames, int generation)

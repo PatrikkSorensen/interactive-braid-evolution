@@ -24,22 +24,9 @@ public class UserController : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.R))
             SceneManager.LoadScene(3);
 
-        //if (Input.GetKeyDown(KeyCode.T))
-        //    FindObjectOfType<Optimizer>().StopEA(); 
-
-        // TODO: INTEGRATE ME.... PLAESE?
-        //if (Input.GetKeyDown(KeyCode.Space))
-        //    if (UIStatusWindow.currentStatus == STATUS.SIMULATING)
-        //    {
-        //        BraidSimulationManager.SetShouldBraidsEvaluate(false);
-        //    } else
-        //    {
-        //        Debug.Log("You cant advance generation because we are still simulating"); 
-        //    }
-
         if (Input.GetKeyDown(KeyCode.Space))
-            BraidSimulationManager.SetShouldBraidsEvaluate(false);
-
+            if (UIStatusWindow.currentStatus == STATUS.SIMULATING)
+                BraidSimulationManager.SetShouldBraidsEvaluate(false);
 
         if (Input.GetKeyDown(KeyCode.Q))
             Camera.main.GetComponent<MouseLook>().SetTarget(sceneCenter.transform.position);
