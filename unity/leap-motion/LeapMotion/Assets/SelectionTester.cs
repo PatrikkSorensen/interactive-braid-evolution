@@ -5,11 +5,6 @@ public class SelectionTester : MonoBehaviour {
 
 	public void Selected()
     {
-        Debug.Log("I am selected!"); 
-    }
-
-    public void HELLO()
-    {
-        Debug.Log("Hello");
+        Debug.Log(gameObject.name + "I am selected!"); 
     }
 }
