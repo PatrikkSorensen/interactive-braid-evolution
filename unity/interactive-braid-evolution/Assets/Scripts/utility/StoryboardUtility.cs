@@ -13,6 +13,7 @@ public class StoryboardUtility : MonoBehaviour
     private ScreenShotScript ssScript;
     private float rotateTime;
     public Material braidMat;
+    public static int m_generation; 
 
     public void InitializeStoryboardUtility ()
     {
@@ -48,6 +49,8 @@ public class StoryboardUtility : MonoBehaviour
             //Debug.Log(s); 
             if (s != "")
                 CopyModel(s, generation);
+
+            m_generation = generation; 
         }
     }
 
@@ -80,15 +83,23 @@ public class StoryboardUtility : MonoBehaviour
     {
         Dictionary<int, FileInfo[]> storyboardModels = LoadModels(modelPath);
         ScreenShotScript ssScript = FindObjectOfType<ScreenShotScript>();
-        rotateTime = 0.25f;
+        rotateTime = 0.35f;
 
-        foreach(int key in storyboardModels.Keys)
+        Vector3 offset;
+
+        if (GameObject.Find("LeapEventSystem"))
+            offset = new Vector3(0.0f, 0.0f, 20.0f); 
+        else
+            offset = new Vector3(0.0f, 0.0f, 100.0f);
+
+        foreach (int key in storyboardModels.Keys)
         {
             foreach(FileInfo f in storyboardModels[key])
             {
                 GameObject gb = LoadInModel(f.FullName);
 
-                gb.transform.position = Camera.main.transform.position + new Vector3(0.0f, 0.0f, 30.0f);
+
+                gb.transform.position = Camera.main.transform.position + offset;
                 gb.GetComponent<Renderer>().material = braidMat;
                 gb.transform.DORotate(new Vector3(0.0f, 45.0f, 0.0f), rotateTime);
                 yield return new WaitForSeconds(rotateTime);

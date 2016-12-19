@@ -77,7 +77,9 @@ public class XMLFormularWriter : MonoBehaviour {
 
     private void CreateXML() {
 
-        string m_author, m_braidName, m_feedback;
+        string m_author, m_braidName, m_feedback, m_generations;
+
+        m_generations = StoryboardUtility.m_generation.ToString(); 
 
         if (authorInfo)
             m_author = authorInfo.text;
@@ -99,7 +101,8 @@ public class XMLFormularWriter : MonoBehaviour {
    
         el.AppendChild(doc.CreateElement("author")).InnerText = m_author;
         el.AppendChild(doc.CreateElement("braidname")).InnerText = m_braidName;
-        el.AppendChild(doc.CreateElement("feedback")).InnerText = m_feedback; 
+        el.AppendChild(doc.CreateElement("feedback")).InnerText = m_feedback;
+        el.AppendChild(doc.CreateElement("generations")).InnerText = m_generations; 
 
         savePath = path + m_author + "/";
 
