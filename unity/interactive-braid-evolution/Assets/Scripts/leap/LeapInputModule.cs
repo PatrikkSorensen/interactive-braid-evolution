@@ -164,7 +164,7 @@ namespace Leap.Unity.InputModule
         protected override void Start()
         {
             base.Start();
-            gd = GameObject.Find("- leap experiment").GetComponent<GestureDetector>();
+            gd = GameObject.Find("- leap scene").GetComponent<GestureDetector>();
             shouldDrag = gd.shouldDrag; 
             if (LeapDataProvider == null)
             {

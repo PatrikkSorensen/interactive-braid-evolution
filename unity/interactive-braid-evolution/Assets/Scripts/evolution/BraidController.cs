@@ -44,7 +44,7 @@ public class BraidController : UnitController
 
     protected void ActivateBraidController()
     {
-        //Debug.Log("Creating braid with this controller");
+        Debug.Log("Creating braid with this controller");
         TREE_SIZE = 10;
         MAIN_RADIUS = 2.5f; 
         _nodeid = 0;

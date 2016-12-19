@@ -10,8 +10,11 @@ public class IECManager : MonoBehaviour {
     UDPReciever reciever;
 
     // ui animator
-    private static Animator uiAnim;
-    private static Animator exitAnim; 
+    public Animator uiAnim;
+    public Animator exitAnim;
+    private static Animator m_uiAnim;
+    private static Animator m_exitAnim;
+
     // ui components
     public static GameObject evolveButton;
     public static GameObject statusWindowContainer;
@@ -33,21 +36,20 @@ public class IECManager : MonoBehaviour {
         advanceButton         = GameObject.Find("AdvanceGeneration");
         exitButton            = GameObject.Find("ExitButton");
         loadDropdown          = GameObject.Find("LoadDropDown");
-        generationCounter        = GameObject.Find("GenerationCounter"); 
+        generationCounter        = GameObject.Find("GenerationCounter");
 
-        uiAnim = GameObject.Find("- ui v2").GetComponent<Animator>();
-        exitAnim = GameObject.Find("- exit canvas").GetComponent<Animator>(); 
+        if (uiAnim)
+            m_uiAnim = uiAnim;
+
+        if (exitAnim)
+            m_exitAnim = exitAnim; 
     }
-
-
-
 
     ///*********** UI STATES **********/
 
     public static void SetUIToEvolvingState()
     {
         UIStatusWindow.SetStatus(STATUS.EVOLVING);
-        //evolveButton.SetActive(true);
 
         Destroy(initializeButton);
         Destroy(dropDown);
@@ -56,10 +58,8 @@ public class IECManager : MonoBehaviour {
 
     internal static void SetUIToModellingState(int populationSize)
     {
-        Debug.Log("Modelling state UI"); 
-        //evolveButton.SetActive(false);
-        exitButton.SetActive(true);
-        //advanceButton.SetActive(false);
+        if(exitButton)
+            exitButton.SetActive(true);
 
         UIStatusWindow.totalModels = populationSize;
         UIStatusWindow.SetStatus(STATUS.MODELLING);
@@ -72,7 +72,6 @@ public class IECManager : MonoBehaviour {
         exitButton.SetActive(true);
 
         UIStatusWindow.SetStatus(STATUS.SIMULATING);
-
     }
 
     public static void SetUIToExitState()
@@ -82,8 +81,8 @@ public class IECManager : MonoBehaviour {
         Destroy(exitButton); 
 
         // Set ui animations
-        uiAnim.SetTrigger("advance");
-        exitAnim.SetTrigger("advance");
+        m_uiAnim.SetTrigger("advance");
+        m_exitAnim.SetTrigger("advance");
 
         // disable user movement and move him to origin
         FindObjectOfType<UserController>().DisableController();

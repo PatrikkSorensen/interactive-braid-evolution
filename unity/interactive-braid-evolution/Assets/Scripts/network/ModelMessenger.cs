@@ -50,7 +50,7 @@ public class ModelMessenger : MonoBehaviour {
 
     public void SendMessageToGH()
     {
-        Debug.Log("Starting to send messages..."); 
+        Debug.Log("Starting to send messages, currently have: " + braids.Count); 
         StartSendingMessages = true;
         IECManager.SetUIToModellingState(m_populationSize);
 

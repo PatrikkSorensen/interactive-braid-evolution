@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using System.Collections.Generic;
 using Leap;
 using Leap.Unity;
+using APP_STATUS;
 
 public class GestureDetector : MonoBehaviour
 {
@@ -43,7 +44,7 @@ public class GestureDetector : MonoBehaviour
         }
 
         float distance = Vector3.Distance(v1, v2);
-        Debug.Log(distance);
+        //Debug.Log(distance);
 
         if (distance < advanceThreshold)
             return true;
@@ -53,7 +54,9 @@ public class GestureDetector : MonoBehaviour
 
     public void AdvanceGeneration()
     {
-        Debug.Log("Advancing generation");
+        // need more time operations, so we dont queue up, and user gets time to react
+        if (UIStatusWindow.currentStatus == STATUS.SIMULATING)
+                BraidSimulationManager.SetShouldBraidsEvaluate(false);
     }
 
     void DetectPointMotion()
