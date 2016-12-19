@@ -511,7 +511,7 @@ namespace Leap.Unity.InputModule
                                     if (PointEvents[whichPointer].pointerDrag)
                                     {
                                         IDragHandler Dragger = PointEvents[whichPointer].pointerDrag.GetComponent<IDragHandler>();
-                                        Debug.Log("I am sending drag events to: " + PointEvents[whichPointer].pointerDrag.name);
+                                        //Debug.Log("I am sending drag events to: " + PointEvents[whichPointer].pointerDrag.name);
                                         if (Dragger != null)
                                         {
                                             if (Dragger is EventTrigger && PointEvents[whichPointer].pointerDrag.transform.parent)
