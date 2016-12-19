@@ -163,17 +163,14 @@ public class Optimizer : MonoBehaviour {
     {
         XmlWriterSettings _xwSettings = new XmlWriterSettings();
         _xwSettings.Indent = true;
-        Debug.Log("Save xml called"); 
         DirectoryInfo dirInf = new DirectoryInfo(Application.persistentDataPath);
         if (!dirInf.Exists)
         {
-            Debug.Log("Creating subdirectory");
             dirInf.Create();
         }
         using (XmlWriter xw = XmlWriter.Create(popFileSavePath, _xwSettings))
         {
             experiment.SavePopulation(xw, _ea.GenomeList);
-            Debug.Log("population file saved to disk");
         }
 
         // Also save the best genome

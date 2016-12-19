@@ -12,7 +12,7 @@ public class XMLFormularWriter : MonoBehaviour {
     public Text braidName;
     public Text feedback;
 
-    public string savePath;
+    public static string savePath;
     string path;
 
 
@@ -31,24 +31,68 @@ public class XMLFormularWriter : MonoBehaviour {
         CreateXML();
     }
 
-    public void SaveImages(string[] filePaths)
+    public static void SaveModelsAndImages ()
     {
-        Debug.Log("Saved all images: "); 
-        Directory.CreateDirectory(savePath + "images");
-        int id = 0;
-        foreach (string image in filePaths) {
-            string dest = savePath + "images/" + id.ToString() + ".png";
-            Debug.Log(dest);
-            File.Copy(image, dest);
-            id++; 
+        SaveImages(); 
+        SaveModels();
+    }
+
+    private static void DirectoryCopy(string sourceDirName, string destDirName, bool copySubDirs)
+    {
+        // Get the subdirectories for the specified directory.
+        DirectoryInfo dir = new DirectoryInfo(sourceDirName);
+
+        if (!dir.Exists)
+        {
+            throw new DirectoryNotFoundException(
+                "Source directory does not exist or could not be found: "
+                + sourceDirName);
+        }
+
+        DirectoryInfo[] dirs = dir.GetDirectories();
+        // If the destination directory doesn't exist, create it.
+        if (!Directory.Exists(destDirName))
+        {
+            Directory.CreateDirectory(destDirName);
+        }
+
+        // Get the files in the directory and copy them to the new location.
+        FileInfo[] files = dir.GetFiles();
+        foreach (FileInfo file in files)
+        {
+            string temppath = Path.Combine(destDirName, file.Name);
+            file.CopyTo(temppath, false);
+        }
+
+        // If copying subdirectories, copy them and their contents to new location.
+        if (copySubDirs)
+        {
+            foreach (DirectoryInfo subdir in dirs)
+            {
+                string temppath = Path.Combine(destDirName, subdir.Name);
+                DirectoryCopy(subdir.FullName, temppath, copySubDirs);
+            }
         }
     }
 
     private void CreateXML() {
 
-        string m_author = authorInfo.text;
-        string m_braidName = braidName.text;
-        string m_feedback = feedback.text; 
+        string m_author, m_braidName, m_feedback;
+
+        if (authorInfo)
+            m_author = authorInfo.text;
+        else
+            m_author = "0";
+
+        if (braidName)
+            m_braidName = braidName.text;
+        else
+            m_braidName = "0";
+
+        if (feedback)
+            m_feedback = feedback.text;
+        else
+            m_feedback = "0"; 
 
         XmlDocument doc = new XmlDocument();
         XmlElement el = (XmlElement)doc.AppendChild(doc.CreateElement("info"));
@@ -74,18 +118,15 @@ public class XMLFormularWriter : MonoBehaviour {
         Debug.Log("Saved xml to: " + savePath); 
     }
 
-    public void SaveModels(FileInfo[] files)
+    public static void SaveModels()
     {
-        string modelSavePath = savePath + "models/"; 
-        Directory.CreateDirectory(modelSavePath);
-        int id = 0; 
-        foreach (FileInfo f in files)
-        {
-            f.CopyTo(modelSavePath + id.ToString() + ".obj");
-            //File.Copy(f.FullName, modelSavePath);
-            id++; 
-        }
+        string source = "C:/Users/pves/Desktop/braid-evolution/unity/interactive-braid-evolution/Assets/Geometry/TempModels/";
+        DirectoryCopy(source, savePath + "models/", true);
+    }
 
-        Debug.Log("Saved " + files.Length + " models to: " + modelSavePath); 
+    public static void SaveImages()
+    {
+        string source = "C:/Users/pves/Desktop/braid-evolution/unity/interactive-braid-evolution/Assets/Geometry/StoryboardImages/";
+        DirectoryCopy(source, savePath + "images/", true);
     }
 }

@@ -21,6 +21,8 @@ public class BraidSimulationManager : MonoBehaviour {
 
     public static void AdvanceGeneration()
     {
+        Debug.Log("Advancing generation!"); 
+
         if(GameObject.FindObjectOfType<UIStatusWindow>() == null)
         {
             Debug.Log("No ui window, so wont perform another run");

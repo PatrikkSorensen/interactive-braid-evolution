@@ -77,16 +77,25 @@ public class IECManager : MonoBehaviour {
     public static void SetUIToExitState()
     {
         // Destroy ui
-        Destroy(FindObjectOfType<UIStatusWindow>().gameObject); //.SetActive(false);
-        Destroy(exitButton); 
+        if (FindObjectOfType<UIStatusWindow>())
+        {
+            Destroy(FindObjectOfType<UIStatusWindow>().gameObject); //.SetActive(false);
+            Destroy(exitButton);
+        }
 
         // Set ui animations
         m_uiAnim.SetTrigger("advance");
-        m_exitAnim.SetTrigger("advance");
+
+        if(GameObject.Find("LeapEventSystem"))
+            m_exitAnim.SetTrigger("leap_advance");
+        else
+            m_exitAnim.SetTrigger("advance");
 
         // disable user movement and move him to origin
-        FindObjectOfType<UserController>().DisableController();
         GameObject user = GameObject.Find("User");
+        if(user.GetComponent<UserController>())
+            FindObjectOfType<UserController>().DisableController();
+
         user.transform.DOMove(Vector3.zero, 4.0f);
         Camera.main.transform.DORotate(Vector3.zero, 4.0f);
 

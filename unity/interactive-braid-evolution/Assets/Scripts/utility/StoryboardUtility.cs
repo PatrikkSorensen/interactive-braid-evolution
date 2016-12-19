@@ -13,6 +13,7 @@ public class StoryboardUtility : MonoBehaviour
     private ScreenShotScript ssScript;
     private float rotateTime;
     public Material braidMat;
+
     public void InitializeStoryboardUtility ()
     {
         ssScript = FindObjectOfType<ScreenShotScript>();
@@ -57,69 +58,58 @@ public class StoryboardUtility : MonoBehaviour
         string destPath = Application.dataPath + "/Geometry/TempModels/" + folder.ToString(); 
 
         if(File.Exists(destPath))
-        {
             Debug.Log("Folder already exists!"); 
-        } else
-        {
+        else
             Directory.CreateDirectory(destPath); 
-        }
 
         File.Copy(sourcePath, destPath + "/" + name + ".obj");
-        Debug.Log("Copied file from " + sourcePath + " to: " + destPath + " with name: " + name); 
     }
 
     public static GameObject LoadInModel(string path)
     {
-        Debug.Log("Loading in model..");
-        GameObject[] curr_model = ObjReader.use.ConvertFile(path, true); // Has to be an array because...? 
+        GameObject[] curr_model = ObjReader.use.ConvertFile(path, true); 
         return curr_model[0]; 
     }
 
     public void StartStoryBoardStep()
     {
-        Debug.Log("Creating storyboard");
         StartCoroutine(CreateScreenShots());
-        // create storyboard
-
-        // trigger anim 
-
-        // save xml 
-
-        // return to splash 
     }
 
     public IEnumerator CreateScreenShots()
     {
-        List<FileInfo> storyboardModels = LoadModels(modelPath);
+        Dictionary<int, FileInfo[]> storyboardModels = LoadModels(modelPath);
         ScreenShotScript ssScript = FindObjectOfType<ScreenShotScript>();
-        rotateTime = 1.0f;
-        foreach (FileInfo f in storyboardModels)
+        rotateTime = 0.25f;
+
+        foreach(int key in storyboardModels.Keys)
         {
-            // load model 
-            GameObject gb = LoadInModel(f.FullName);
+            foreach(FileInfo f in storyboardModels[key])
+            {
+                GameObject gb = LoadInModel(f.FullName);
 
-            // take screenshot
-            gb.transform.position = Camera.main.transform.position + new Vector3(0.0f, 0.0f, 30.0f);
-            gb.GetComponent<Renderer>().material = braidMat;
-            gb.transform.DORotate(new Vector3(0.0f, 45.0f, 0.0f), rotateTime); 
-            yield return new WaitForSeconds(rotateTime); 
-            StartCoroutine(ssScript.CreateRenderTexture(gb));
-            yield return new WaitForSeconds(0.2f);
+                gb.transform.position = Camera.main.transform.position + new Vector3(0.0f, 0.0f, 30.0f);
+                gb.GetComponent<Renderer>().material = braidMat;
+                gb.transform.DORotate(new Vector3(0.0f, 45.0f, 0.0f), rotateTime);
+                yield return new WaitForSeconds(rotateTime);
 
-            Debug.Log("Creating new screenshot!"); 
+                // take screenshot
+                StartCoroutine(ssScript.CreateRenderTexture(gb, key));
+                yield return new WaitForSeconds(0.2f);
+            }
         }
 
-        // load in screenshots 
         ssScript.CreateStoryboardUI(); 
 
     }
 
-    public List<FileInfo> LoadModels(string filePath)
+    public Dictionary<int, FileInfo[]> LoadModels(string filePath)
     {
+        Dictionary<int, FileInfo[]> models = new Dictionary<int, FileInfo[]>(); 
         List<FileInfo> files = new List<FileInfo>(); 
         DirectoryInfo di = new DirectoryInfo(filePath);
 
-
+        int i = 0; 
         foreach (DirectoryInfo dir in di.GetDirectories())
         {
             foreach(FileInfo file in dir.GetFiles())
@@ -127,10 +117,12 @@ public class StoryboardUtility : MonoBehaviour
                 if (!file.Name.Contains(".obj.meta"))
                     files.Add(file); 
             }
+            models.Add(i, files.ToArray());
+            files.Clear(); 
+            i++;
         }
 
-        FindObjectOfType<XMLFormularWriter>().SaveModels(files.ToArray()); 
-        return files; 
+        return models; 
     }
 
 

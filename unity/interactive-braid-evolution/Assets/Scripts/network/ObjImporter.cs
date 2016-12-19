@@ -76,11 +76,12 @@ public class ObjImporter : MonoBehaviour {
 
             // position
             Transform testModel = curr_model.transform;
-            Vector3 v = FindSpawnPosition();
+            Transform t = FindSpawnPosition();
+            curr_model.transform.SetParent(t);
 
             // tweening
-            testModel.position = v + Vector3.up * offsetY;
-            testModel.DOMove(v, tweenDuration);
+            testModel.position = t.position + Vector3.up * offsetY;
+            testModel.DOMove(t.position, tweenDuration);
 
             // collision box for selection
             curr_model.AddComponent<BoxCollider>();
@@ -100,7 +101,7 @@ public class ObjImporter : MonoBehaviour {
 
     IEnumerator ImportModel(int index)
     {
-        //Debug.Log("Starting to import a single model with index: " + index);
+        Debug.Log("Starting to import a single model with index: " + index);
         shouldImportSingle = false;
         string objFileName = Application.dataPath + "/Geometry/Models/braid_" + index.ToString() + ".obj";
         GameObject[] models = ObjReader.use.ConvertFile(objFileName, true);
@@ -117,11 +118,12 @@ public class ObjImporter : MonoBehaviour {
 
             // position
             Transform testModel = curr_model.transform;
-            Vector3 v = FindSpawnPosition(index);
+            Transform t = FindSpawnPosition(index);
+            curr_model.transform.SetParent(t); 
 
             // tweening
-            testModel.position = v + Vector3.up * offsetY;
-            testModel.DOMove(v, tweenDuration);
+            testModel.position = t.position + Vector3.up * offsetY;
+            testModel.DOMove(t.position, tweenDuration);
 
             // rotation
             Vector3 rotationVector = testModel.rotation.eulerAngles;
@@ -146,48 +148,16 @@ public class ObjImporter : MonoBehaviour {
         return position; 
     }
 
-    Vector3 FindSpawnPosition()
+    Transform FindSpawnPosition()
     {
         if (spawn_id >= spawnPositions.Length)
             spawn_id = 0; 
 
-        return spawnPositions[spawn_id++].position; 
+        return spawnPositions[spawn_id++]; 
     }
 
-    Vector3 FindSpawnPosition(int index)
+    Transform FindSpawnPosition(int index)
     {
-        return spawnPositions[index].position; 
+        return spawnPositions[index]; 
     }
-
-    // Assumes file prefix is "braid_" and that models have been exported 
-    //IEnumerator ImportAllModels()
-    //{
-    //    Debug.Log("Starting to import models...");
-    //    shouldImportAll = false;
-    //    for(int i = 0; i < m_num_models; i++)
-    //    {
-    //        string objFileName = filePathToGeometry + "/braid_" + i.ToString() + ".obj";
-    //        GameObject[] curr_model = ObjReader.use.ConvertFile(objFileName, true); // Has to be an array because...? 
-
-    //        if(curr_model != null)
-    //        {
-    //            Debug.Log(objFileName + " was found");
-
-    //            // position
-    //            Transform testModel = curr_model[0].transform;
-    //            testModel.position = FindSpawnPosition();
-
-    //            // rotation
-    //            //Vector3 rotationVector = testModel.rotation.eulerAngles;
-    //            //rotationVector.x = -90.0f;
-    //            //testModel.rotation = Quaternion.Euler(rotationVector);
-
-    //        } else
-    //        {
-    //            Debug.LogError("The model " + objFileName + " could not be found."); 
-    //        }
-    //        yield return new WaitForSeconds(1.0f); 
-    //    }
-    //}
-
 }

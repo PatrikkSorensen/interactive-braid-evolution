@@ -4,9 +4,11 @@ using System.Collections.Generic;
 using Leap;
 using Leap.Unity;
 using APP_STATUS;
+using DG.Tweening; 
 
-public class GestureDetector : MonoBehaviour
+public class LeapUser : MonoBehaviour
 {
+    public float timeBeforeAdvance; 
     public float advanceThreshold; 
     LeapProvider provider;
     
@@ -19,6 +21,7 @@ public class GestureDetector : MonoBehaviour
 
     void Start()
     {
+        timeBeforeAdvance = 2.0f; 
         provider = FindObjectOfType<LeapProvider>() as LeapProvider;
     }
 
@@ -26,11 +29,21 @@ public class GestureDetector : MonoBehaviour
     {
         m_shouldDrag = true; 
         if (AdvanceGenerationGesture())
-            AdvanceGeneration(); 
+            AdvanceGeneration();
+
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            FindObjectOfType<Optimizer>().StopEA();
+            Destroy(GameObject.Find("User"));
+            Destroy(GameObject.Find("ScrollingCanvas"));
+            Destroy(GameObject.Find("CapsuleHand_L"));
+            Destroy(GameObject.Find("CapsuleHand_R"));
+        }
     }
 
     bool AdvanceGenerationGesture()
     {
+        // need more time operations, so we dont queue up, and user gets time to react
         Frame frame = provider.CurrentFrame;
         Vector3 v1, v2;
 
@@ -54,7 +67,6 @@ public class GestureDetector : MonoBehaviour
 
     public void AdvanceGeneration()
     {
-        // need more time operations, so we dont queue up, and user gets time to react
         if (UIStatusWindow.currentStatus == STATUS.SIMULATING)
                 BraidSimulationManager.SetShouldBraidsEvaluate(false);
     }

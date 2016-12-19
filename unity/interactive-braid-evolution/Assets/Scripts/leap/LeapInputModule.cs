@@ -13,7 +13,7 @@ namespace Leap.Unity.InputModule
     public class LeapInputModule : BaseInputModule
     {
         // own variables
-        GestureDetector gd; 
+        LeapUser gd; 
         bool shouldDrag; 
         //General Interaction Parameters
         [Header(" Interaction Setup")]
@@ -164,7 +164,7 @@ namespace Leap.Unity.InputModule
         protected override void Start()
         {
             base.Start();
-            gd = GameObject.Find("- leap scene").GetComponent<GestureDetector>();
+            gd = FindObjectOfType<LeapUser>();
             shouldDrag = gd.shouldDrag; 
             if (LeapDataProvider == null)
             {

@@ -21,23 +21,11 @@ public class LeapSelector : MonoBehaviour {
 
     public void SetBraidObject ()
     {
-        braid = renderCamera.transform.GetChild(0).gameObject;
+        Debug.Log("Setting new braid object"); 
+        braid = renderCamera.transform.GetChild(0).GetChild(0).gameObject;
         r = braid.GetComponentInChildren<MeshRenderer>();
         mats = r.materials;
     }
-
-	//public void Clicked ()
- //   {
- //       if (!braid)
- //           SetBraidObject();
-
- //       for (int i = 0; i < mats.Length; i++)
- //           mats[i] = hoverMat;
-
- //       r.materials = mats;
-
- //       Debug.Log(gameObject.name + " was clicked!"); 
- //   }
 
     public void Clicked()
     {
@@ -52,8 +40,17 @@ public class LeapSelector : MonoBehaviour {
             r.materials = mats;
             selected = true;
 
-            //GameObject gb = GameObject.Find("unit_" + Regex.Match(gameObject.name, @"\d+").Value);
-            //gb.GetComponent<BraidController>().SetFitness(10.0f);
+            GameObject gb = GameObject.Find("unit_" + Regex.Match(gameObject.name, @"\d+").Value);
+            GameObject gb2 = GameObject.Find("braid_" + Regex.Match(gameObject.name, @"\d+").Value);
+
+            if (gb2.GetComponentInChildren<MaterialScript>())
+            {
+                Debug.Log("Setting materialscript to selected"); 
+                gb2.GetComponentInChildren<MaterialScript>().selected = true;
+            }
+            //Debug.Log(Regex.Match(gameObject.name, @"\d+").Value); 
+            //Debug.Log("Trying to find: " + gb.name); 
+            gb.GetComponent<BraidController>().SetFitness(10.0f);
         }
         else
         {

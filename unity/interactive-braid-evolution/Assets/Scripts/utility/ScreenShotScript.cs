@@ -2,6 +2,7 @@
 using System.Collections;
 using System.IO;
 using UnityEngine.UI;
+using System;
 
 public class ScreenShotScript : MonoBehaviour {
 
@@ -36,8 +37,14 @@ public class ScreenShotScript : MonoBehaviour {
 
     }
 
-    public IEnumerator CreateRenderTexture(GameObject gb)
+    public IEnumerator CreateRenderTexture(GameObject gb, int generation)
     {
+        string directoryPath = folderPath + generation.ToString();
+        string fileDest = directoryPath + "/" + screenShotPrefix + currentId.ToString() + ".png";
+
+        if (!Directory.Exists(directoryPath))
+            Directory.CreateDirectory(folderPath + generation.ToString()); 
+
         yield return new WaitForEndOfFrame();
 
         Texture2D tex = new Texture2D(imgWidth, imgHeight, TextureFormat.RGB24, false);
@@ -47,25 +54,29 @@ public class ScreenShotScript : MonoBehaviour {
         tex.Apply();
 
         var bytes = tex.EncodeToPNG();
-        Destroy(tex);
-
-        File.WriteAllBytes(folderPath + screenShotPrefix + currentId.ToString() + ".png", bytes);
+        Destroy(tex); 
+        File.WriteAllBytes(fileDest, bytes);
 
         currentId++;
-        Debug.Log("Created image with texture rendering!");
         Destroy(gb);
     }
 
     public void CreateStoryboardUI()
     {
-        Texture2D[] images = LoadAllImagesFromFolder(folderPath); 
 
-        for(int i = 0; i < images.Length; i++)
-            CreateRawImageGameobject(images[i]);
+        Texture2D[] images;
+        int index = 0; 
+        foreach (string d in Directory.GetDirectories(folderPath))
+        {
+            images = LoadAllImagesFromFolder(d, index++);
+            for (int i = 0; i < images.Length; i++)
+                CreateRawImageGameobject(images[i]);
+        }
 
-        SetUIImagesPosition(); 
-
-        Debug.Log("Changed storyboard texture from disk");
+        SetUIImagesPosition();
+        XMLFormularWriter.SaveModels();
+        XMLFormularWriter.SaveImages(); 
+         
         GameObject.Find("- ui storyboard").GetComponent<Animator>().SetTrigger("advance"); 
     }
 
@@ -98,10 +109,10 @@ public class ScreenShotScript : MonoBehaviour {
         gb.transform.SetParent(storyboardContainer.transform); 
     }
 
-    Texture2D[] LoadAllImagesFromFolder(string path)
+    Texture2D[] LoadAllImagesFromFolder(string path, int generation)
     {
-        string[] files = Directory.GetFiles(Application.dataPath + "/Geometry/StoryboardImages/", "*.png");
-        FindObjectOfType<XMLFormularWriter>().SaveImages(files); 
+        string[] files = Directory.GetFiles(path, "*.png");
+        //FindObjectOfType<XMLFormularWriter>().SaveModelsAndImages(files, generation);
 
         Texture2D[] images = new Texture2D[files.Length];
         int index = 0; 
@@ -113,6 +124,8 @@ public class ScreenShotScript : MonoBehaviour {
             tex.LoadImage(fileData);
             images[index++] = tex; 
         }
+
+
 
         return images; 
     }
