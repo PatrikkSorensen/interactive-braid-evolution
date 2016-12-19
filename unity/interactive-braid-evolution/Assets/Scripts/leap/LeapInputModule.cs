@@ -13,6 +13,7 @@ namespace Leap.Unity.InputModule
     public class LeapInputModule : BaseInputModule
     {
         // own variables
+        GestureDetector gd; 
         bool shouldDrag; 
         //General Interaction Parameters
         [Header(" Interaction Setup")]
@@ -163,7 +164,8 @@ namespace Leap.Unity.InputModule
         protected override void Start()
         {
             base.Start();
-            shouldDrag = FindObjectOfType<GestureDetector>().shouldDrag;
+            gd = GameObject.Find("- leap experiment").GetComponent<GestureDetector>();
+            shouldDrag = gd.shouldDrag; 
             if (LeapDataProvider == null)
             {
                 LeapDataProvider = FindObjectOfType<LeapProvider>();
@@ -273,7 +275,7 @@ namespace Leap.Unity.InputModule
         void Update()
         {
             curFrame = LeapDataProvider.CurrentFrame;
-            shouldDrag = FindObjectOfType<GestureDetector>().shouldDrag;
+            shouldDrag = gd.shouldDrag;
             if (Camera.main != null)
             {
                 Quaternion HeadYaw = Quaternion.Euler(0f, Camera.main.transform.rotation.eulerAngles.y, 0f);

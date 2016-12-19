@@ -6,8 +6,9 @@ using Leap.Unity;
 
 public class GestureDetector : MonoBehaviour
 {
+    public float advanceThreshold; 
     LeapProvider provider;
-
+    
     private bool m_shouldDrag; 
     public bool shouldDrag
     {
@@ -22,19 +23,38 @@ public class GestureDetector : MonoBehaviour
 
     void Update()
     {
-        //PointingTowards();
-
-        if (!DetectFist())
-            SelectBraid();
-
-
-
+        m_shouldDrag = true; 
+        if (AdvanceGenerationGesture())
+            AdvanceGeneration(); 
     }
 
-    void SelectBraid ()
+    bool AdvanceGenerationGesture()
     {
-        //Debug.Log("I should select some braid!"); 
-    } 
+        Frame frame = provider.CurrentFrame;
+        Vector3 v1, v2;
+
+        if (frame.Hands.Count == 2)
+        {
+            v1 = frame.Hands[0].PalmPosition.Normalized.ToVector3();
+            v2 = frame.Hands[1].PalmPosition.Normalized.ToVector3(); 
+        } else
+        {
+            return false; 
+        }
+
+        float distance = Vector3.Distance(v1, v2);
+        Debug.Log(distance);
+
+        if (distance < advanceThreshold)
+            return true;
+        else
+            return false; 
+    }
+
+    public void AdvanceGeneration()
+    {
+        Debug.Log("Advancing generation");
+    }
 
     void DetectPointMotion()
     {
