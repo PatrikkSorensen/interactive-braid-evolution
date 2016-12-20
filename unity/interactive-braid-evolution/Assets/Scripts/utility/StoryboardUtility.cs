@@ -101,7 +101,7 @@ public class StoryboardUtility : MonoBehaviour
 
                 gb.transform.position = Camera.main.transform.position + offset;
                 gb.GetComponent<Renderer>().material = braidMat;
-                gb.transform.DORotate(new Vector3(0.0f, 45.0f, 0.0f), rotateTime);
+                gb.transform.DORotate(new Vector3(15.0f, 45.0f, 15.0f), rotateTime);
                 yield return new WaitForSeconds(rotateTime);
 
                 // take screenshot
